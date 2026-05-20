@@ -19,4 +19,3 @@ public class DecodedNumber {
         return nextIndex;
     }
 }
-
