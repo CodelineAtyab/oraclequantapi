@@ -7,7 +7,7 @@ public class MeasurementParser {
     public List<Integer> parseMeasurements(String input) {
     }
 
-    private int readEncodedNumber(String input) {
+    private DecodedNumber readEncodedNumber(String input, int currentIndex) {
     }
 
 }
