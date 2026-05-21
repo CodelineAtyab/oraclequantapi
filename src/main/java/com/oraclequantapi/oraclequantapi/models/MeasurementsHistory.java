@@ -9,6 +9,7 @@ import java.time.LocalDateTime;
 @Table(name = "MEASUREMENT_TABLE")
 public class MeasurementsHistory {
 
+    // UUID string
     @Id
     @Column(name = "ID", length = 36)
     public String id;
