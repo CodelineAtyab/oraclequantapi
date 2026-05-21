@@ -1,0 +1,29 @@
+v0.1.0
+
+Project creation/setup milestone.
+
+⸻
+
+v0.2.0
+
+Dependencies + architecture established.
+
+⸻
+
+v0.3.0
+
+Core decoding engine completed:
+
+* continuation mode
+* parser state movement
+* DecodedNumber
+
+⸻
+
+v0.4.0
+
+Package workflow foundation:
+
+* package count decoding
+* accumulation variables
+* nested parsing structure
