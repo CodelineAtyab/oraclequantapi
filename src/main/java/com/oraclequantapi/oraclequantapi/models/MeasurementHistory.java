@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "MEASUREMENT_TABLE")
-public class MeasurementsHistory {
+public class MeasurementHistory {
 
     // UUID string
     @Id

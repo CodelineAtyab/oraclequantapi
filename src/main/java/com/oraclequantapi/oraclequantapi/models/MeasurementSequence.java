@@ -3,11 +3,11 @@ package com.oraclequantapi.oraclequantapi.models;
 
 import java.util.Locale;
 
-public class MeasurementsSequence {
+public class MeasurementSequence {
     
     public String value;
     
-    public MeasurementsSequence(String value){
+    public MeasurementSequence(String value){
         setValue(value);
     }
 
@@ -20,6 +20,16 @@ public class MeasurementsSequence {
             this.value = normalize(value);
         }
     }
+
+    public String getValueAsString() {
+        return value;
+    }
+
+    // After normalization, the value is valid as long as it is not null.
+    public boolean isValid() {
+        return value != null;
+    }
+
 
     private String normalize (String value){
         String lowerValue = value.toLowerCase(Locale.ROOT);
