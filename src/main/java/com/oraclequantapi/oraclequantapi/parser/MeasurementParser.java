@@ -1,11 +1,24 @@
 package com.oraclequantapi.oraclequantapi.parser;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MeasurementParser {
 
     public List<Integer> parseMeasurements(String input) {
-        return null;
+        List<Integer> results = new ArrayList<>();
+
+        int currentIndex = 0;
+
+        while (currentIndex < input.length()) {
+            DecodedNumber packageCountResult =
+                    readEncodedNumber(input, currentIndex);
+
+            int packageCount = packageCountResult.getValue();
+
+            currentIndex = packageCountResult.getNextIndex();
+        }
+        return results;
     }
 
     private DecodedNumber readEncodedNumber(String input, int currentIndex) {
