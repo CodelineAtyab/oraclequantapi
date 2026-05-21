@@ -27,3 +27,7 @@ Package workflow foundation:
 * package count decoding
 * accumulation variables
 * nested parsing structure
+
+v0.5.0
+
+* Completed encoded measurement parser engine
