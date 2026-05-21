@@ -1,4 +1,4 @@
-package com.oraclequantapi.oraclequantapi;
+package com.example.pkc_api;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
