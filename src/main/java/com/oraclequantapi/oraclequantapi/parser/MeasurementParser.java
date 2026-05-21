@@ -20,6 +20,19 @@ public class MeasurementParser {
 
             int packageTotal = 0;
             int valuesRead = 0;
+
+            while (valuesRead < packageCount
+                    && currentIndex < input.length()) {
+
+                DecodedNumber valueResult =
+                        readEncodedNumber(input, currentIndex);
+
+                packageTotal += valueResult.getValue();
+
+                currentIndex = valueResult.getNextIndex();
+
+                valuesRead++;
+            }
         }
         return results;
     }
