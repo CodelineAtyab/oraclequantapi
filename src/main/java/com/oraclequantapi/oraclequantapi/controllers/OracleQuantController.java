@@ -9,12 +9,12 @@ import java.util.List;
 public class OracleQuantController {
 
     @GetMapping(path = "/Convert")
-    public List<String> Convert(@PathVariable String value) {
+    public List<String> Convert(@PathVariable String input) {
         return null;
     }
 
     @GetMapping(path = "/Fetch")
-    public List<String> fetch(@PathVariable String value) {
+    public List<String> fetch(@PathVariable String input) {
         return null;
     }
 
@@ -24,12 +24,12 @@ public class OracleQuantController {
     }
 
     @PutMapping(path = "/Update")
-    public List<String> Update(@PathVariable String value) {
+    public List<String> Update(@PathVariable String input) {
         return null;
     }
 
     @DeleteMapping(path = "/Delete")
-    public List<String> delete(@PathVariable String value) {
+    public List<String> delete(@PathVariable String input) {
         return null;
     }
 }
