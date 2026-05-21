@@ -33,6 +33,7 @@ public class MeasurementParser {
 
                 valuesRead++;
             }
+            results.add(packageCount);
         }
         return results;
     }
