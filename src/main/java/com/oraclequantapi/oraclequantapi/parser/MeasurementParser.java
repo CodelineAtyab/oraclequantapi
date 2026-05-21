@@ -38,6 +38,16 @@ public class MeasurementParser {
         return results;
     }
 
+    public static void main(String[] args) {
+
+        MeasurementParser parser = new MeasurementParser();
+
+        System.out.println(
+                parser.parseMeasurements("dz_a_aazzaaa")
+        );
+    }
+
+
     private DecodedNumber readEncodedNumber(String input, int currentIndex) {
         char currentCharacter = input.charAt(currentIndex);
         int value = 0;
