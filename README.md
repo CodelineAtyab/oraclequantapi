@@ -1,61 +1,232 @@
-﻿## Submission Instructions
+﻿# OracleQuant PKC API
 
-To submit your Oracle JAVA Spring Boot Maven project as a solution, please follow these steps:
+## Project Overview
 
-### Step 1: Install git on your PC
-- Install "git" as shown in this tutorial: [How to install git](https://youtu.be/iYkLrXobBbA?si=_l0haibv_X9NpIjJ)
-- Open command prompt and run
-  ```bash
-  git version
-  ```
-- If you see the version, then git is successfully installed.
+The OracleQuant PKC (Package Measurement Conversion) API converts encoded letter sequences into integer package measurements. Given a string of characters `a-z` and underscores, it parses packages using a count-value encoding scheme and returns an array of integers. The API also maintains a full history of conversion requests with CRUD endpoints for record management.
 
-### Step 2: Fork the Repository
-- Navigate to [this repository](https://github.com/CodelineAtyab/oraclequantapi) provided by Codeline.
-- Click on the "Fork" button at the top-right corner of the page to create a copy of the repository under your own GitHub account.
+Built with Java 17, Spring Boot 3.5, Oracle XE 21c, and Maven.
 
-### Step 3: Clone the Forked Repository
-- Open your terminal or command prompt.
-- Clone the forked repository to your local machine using the following command:
-  ```bash
-  git clone https://github.com/your-username/repo-name.git
-  ```
+## Prerequisites
 
-### Step 4: Create a new branch
-- Navigate to the cloned repository directory
-  ```bash
-  cd repo-name
-  ```
-- Create a new branch for your code submissions (Replace your-name with your name in your-name-submission-branch):
-  ```bash
-  git checkout -b your-name-submission-branch
-  ```
+- Oracle OpenJDK 17
+- Maven 3.8+
+- Oracle XE 21c
+- Oracle Linux (for deployment)
 
+## How to Build and Run Locally
 
-### Step 5: Add Your Code
-- Implement the API
+```bash
+# Clone the repository
+git clone <repo-url>
+cd oraclequantapi
 
-### Step 6: Commit your changes
-- Run the following commands in order to commit your changes:
-  ```bash
-  git add *
-  git commit -m "Meaningful commit message here"
-  ```
+# Build the JAR
+mvn clean package
 
-### Step 7: Push Your Branch to GitHub
-- Run the following commands to upload the changes to the forked github repository (Replace your-name with your name in your-name-submission-branch):
-  ```bash
-  git push origin your-name-submission-branch
-  ```
+# Run the application (requires Oracle XE running on localhost:1521)
+java -jar target/oraclequantapi-0.0.1-SNAPSHOT.jar
+```
 
-### Step 8: Create a Pull Request
-- Go to your forked repository on GitHub.
-- You should see a prompt to create a pull request. Click on "Compare & pull request".
-- Provide a title and description for your pull request, then click "Create pull request".
+The application starts on port `8080` by default.
 
-### Step 9: Notify Codeline
-- Notify on slack that you have created a PR for your solution.
+## Database Configuration
 
-## Note: If you face any issues in the process above, Please do the following:
-- Watch [this youtube tutorial](https://www.youtube.com/watch?v=a_FLqX3vGR4)
-- Contact Ikhlas or Atyab.
+### Install Oracle XE on Oracle Linux
+
+```bash
+# Download Oracle XE 21c RPM and install
+sudo dnf install -y oracle-database-xe-21c-1.0-1.ol8.x86_64.rpm
+
+# Configure the database
+sudo /etc/init.d/oracle-xe-21c configure
+
+# Set environment variables
+export ORACLE_SID=XE
+export ORAENV_ASK=NO
+source /usr/bin/oraenv
+```
+
+### Create Database User
+
+```sql
+-- Connect as SYSTEM
+sqlplus system@localhost:1521/XEPDB1
+
+-- Create application user
+CREATE USER pkc_user IDENTIFIED BY pkc_password;
+GRANT CONNECT, RESOURCE TO pkc_user;
+GRANT UNLIMITED TABLESPACE TO pkc_user;
+GRANT CREATE SEQUENCE TO pkc_user;
+GRANT CREATE TABLE TO pkc_user;
+```
+
+### Application Properties
+
+Configure `src/main/resources/application.properties`:
+
+```properties
+server.port=8080
+
+spring.datasource.url=jdbc:oracle:thin:@localhost:1521/XEPDB1
+spring.datasource.username=pkc_user
+spring.datasource.password=pkc_password
+spring.datasource.driver-class-name=oracle.jdbc.OracleDriver
+
+spring.jpa.hibernate.ddl-auto=update
+spring.jpa.show-sql=true
+spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.OracleDialect
+
+logging.level.com.oraclequantapi=DEBUG
+```
+
+## REST API Endpoints
+
+### Convert Measurements
+
+```
+GET /convert-measurements?input=abbcc
+```
+
+```bash
+curl "http://localhost:8080/convert-measurements?input=abbcc"
+```
+
+Response:
+```json
+[2, 6]
+```
+
+### Get All History Records
+
+```
+GET /history
+```
+
+```bash
+curl "http://localhost:8080/history"
+```
+
+Response:
+```json
+[
+  {
+    "id": 1,
+    "timestamp": "2026-05-21T09:30:00",
+    "sourceIpAddress": "127.0.0.1",
+    "input": "abbcc",
+    "output": "[2, 6]"
+  }
+]
+```
+
+### Get Single History Record
+
+```
+GET /history/{id}
+```
+
+```bash
+curl "http://localhost:8080/history/1"
+```
+
+Response:
+```json
+{
+  "id": 1,
+  "timestamp": "2026-05-21T09:30:00",
+  "sourceIpAddress": "127.0.0.1",
+  "input": "abbcc",
+  "output": "[2, 6]"
+}
+```
+
+### Update History Record
+
+```
+PUT /history/{id}
+```
+
+```bash
+curl -X PUT "http://localhost:8080/history/1" \
+  -H "Content-Type: application/json" \
+  -d '{"input":"aa","output":"[1]","sourceIpAddress":"10.0.0.1","timestamp":"2026-05-21T10:00:00"}'
+```
+
+Response: updated record.
+
+### Partial Update History Record
+
+```
+PATCH /history/{id}
+```
+
+```bash
+curl -X PATCH "http://localhost:8080/history/1" \
+  -H "Content-Type: application/json" \
+  -d '{"input":"aa"}'
+```
+
+Response: updated record with only the `input` field changed.
+
+### Delete All History Records
+
+```
+DELETE /history
+```
+
+```bash
+curl -X DELETE "http://localhost:8080/history"
+```
+
+Response: `204 No Content`.
+
+## Deploy to Oracle Linux via SSH
+
+### Step 1: Build the JAR on Windows
+
+```bash
+mvn clean package
+```
+
+### Step 2: Copy to VM using SCP
+
+```bash
+scp target/oraclequantapi-0.0.1-SNAPSHOT.jar oracle@<vm-ip>:/home/oracle/
+```
+
+### Step 3: SSH into VM and Run
+
+```bash
+ssh oracle@<vm-ip>
+cd /home/oracle
+java -jar oraclequantapi-0.0.1-SNAPSHOT.jar
+```
+
+For persistent execution:
+
+```bash
+nohup java -jar oraclequantapi-0.0.1-SNAPSHOT.jar > app.log 2>&1 &
+```
+
+### Step 4: Open Firewall Port
+
+```bash
+sudo firewall-cmd --add-port=8080/tcp --permanent
+sudo firewall-cmd --reload
+```
+
+### Step 5: Verify Remotely
+
+```bash
+curl "http://<vm-ip>:8080/convert-measurements?input=aa"
+```
+
+Expected: `[1]`
+
+## Logging
+
+Logs are written to `logs/pkc-api.log` using a rolling file appender with 7-day retention. The logging level for the `com.oraclequantapi` package is set to `DEBUG` in `application.properties`.
+
+## Changelog
+
+See [CHANGELOG.md](./CHANGELOG.md) for version history.
