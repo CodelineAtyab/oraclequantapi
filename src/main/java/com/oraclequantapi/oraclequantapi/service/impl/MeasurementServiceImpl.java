@@ -4,7 +4,9 @@ import com.oraclequantapi.oraclequantapi.parser.MeasurementParser;
 import com.oraclequantapi.oraclequantapi.service.MeasurementService;
 
 import java.util.List;
+import org.springframework.stereotype.Service;
 
+@Service
 public class MeasurementServiceImpl implements MeasurementService {
 
     private final MeasurementParser measurementParser =
