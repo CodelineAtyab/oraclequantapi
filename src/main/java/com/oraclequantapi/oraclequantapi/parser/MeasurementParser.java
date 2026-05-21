@@ -43,7 +43,7 @@ public class MeasurementParser {
         MeasurementParser parser = new MeasurementParser();
 
         System.out.println(
-                parser.parseMeasurements("chdkkuuw_a")
+                parser.parseMeasurements("za_a_a_a_a_a_a_a_a_a_a_a_a_azaaa")
         );
     }
 
