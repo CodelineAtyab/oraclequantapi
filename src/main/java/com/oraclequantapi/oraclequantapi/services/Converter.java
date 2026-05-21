@@ -9,22 +9,18 @@ import java.util.List;
 @Service
 public class Converter {
 
-    private List<Integer> list;
-    private String input;
-
     public Converter() {
     }
 
     public List<Integer> Convert(String input) {
-        this.input = input.trim().toLowerCase();
-        String[] inputArray = input.split("");
+        String input1 = input.trim().toLowerCase();
+        String[] inputArray = input1.split("");
         boolean checked = checkInput(inputArray);
         if (!checked) {
             return null;
         }
 
-        list = new ArrayList<>();
-        list = valueToInt(inputArray);
+        List<Integer> list = valueToInt(inputArray);
         list = backageSize(list);
         return list;
     }
@@ -66,15 +62,15 @@ public class Converter {
 
         String[] valid = "_abcdefghijklmnopqrstuvwxyz".split("");
 
-        for (int i = 0; i < inputs.length; i++) {
+        for (String input : inputs) {
             for (int j = 0; j < valid.length; j++) {
-                if (inputs[i].equals(valid[j])) {
+                if (input.equals(valid[j])) {
                     value += j;
                     break;
                 }
             }
 
-            if (!inputs[i].equals("z")) {
+            if (!input.equals("z")) {
                 valueList.add(value);
                 value = 0;
             }
