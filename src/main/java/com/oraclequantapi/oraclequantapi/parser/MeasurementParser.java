@@ -17,6 +17,9 @@ public class MeasurementParser {
             int packageCount = packageCountResult.getValue();
 
             currentIndex = packageCountResult.getNextIndex();
+
+            int packageTotal = 0;
+            int valuesRead = 0;
         }
         return results;
     }
