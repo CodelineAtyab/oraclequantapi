@@ -1,6 +1,6 @@
 package com.oraclequantapi.oraclequantapi.repositories;
 
-import om.oraclequant.pkc_api.models.MeasurementHistory;
+import com.oraclequantapi.oraclequantapi.models.MeasurementHistory;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
