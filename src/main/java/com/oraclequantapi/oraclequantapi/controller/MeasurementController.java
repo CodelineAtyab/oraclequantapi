@@ -4,6 +4,7 @@ import com.oraclequantapi.oraclequantapi.service.MeasurementService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import com.oraclequantapi.oraclequantapi.entity.MeasurementRecord;
 
 import java.util.List;
 
@@ -24,5 +25,11 @@ public class MeasurementController {
     ) {
 
         return measurementService.convertMeasurements(input);
+    }
+
+    @GetMapping("/measurement-history")
+    public List<MeasurementRecord> getMeasurementHistory() {
+
+        return measurementService.getMeasurementHistory();
     }
 }
