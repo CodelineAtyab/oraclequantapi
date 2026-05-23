@@ -20,7 +20,11 @@ public class MeasurementServiceImpl implements MeasurementService {
     @Override
     public List<Integer> convertMeasurements(String input) {
 
+        logger.info("Received measurement conversion request");
+
         if (input == null || input.isBlank()) {
+            logger.warn("Received invalid blank measurement input");
+
             throw new IllegalArgumentException(
                     "Input parameter is required"
             );
