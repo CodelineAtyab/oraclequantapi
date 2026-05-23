@@ -46,6 +46,6 @@ v1.0.0 - Implemented Oracle database persistence for measurement history
 
 -----------------------------------------------
 
-
+v1.1.0 - Added measurement history retrieval endpoint
 
 -----------------------------------------------
