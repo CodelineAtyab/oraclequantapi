@@ -1,6 +1,6 @@
 package com.oraclequantapi.oraclequantapi.controller;
 import jakarta.servlet.http.HttpServletRequest;
-import com.oraclequantapi.oraclequantapi.MeasurementRecord;
+import com.oraclequantapi.oraclequantapi.model.MeasurementRecord;
 import com.oraclequantapi.oraclequantapi.service.HistoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

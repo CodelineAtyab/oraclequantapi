@@ -1,6 +1,6 @@
 package com.oraclequantapi.oraclequantapi.service;
-import com.oraclequantapi.oraclequantapi.MeasurementRecord;
-import com.oraclequantapi.oraclequantapi.MeasurementRecordRepository;
+import com.oraclequantapi.oraclequantapi.model.MeasurementRecord;
+import com.oraclequantapi.oraclequantapi.repository.MeasurementRecordRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
