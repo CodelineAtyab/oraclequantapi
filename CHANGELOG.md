@@ -12,4 +12,7 @@
   - Count encoding via leading `z` (+26 each) + non-z terminator
   - Value reading with `_` as zero-value character
   - `z` value character contributing 27
-- 8 test cases for conversion algorithm (7/8 passing)
+- 8 test cases for conversion algorithm (all passing)
+- Input validation with `@NotBlank` and `@Pattern(regexp = "[a-z_]+")`
+- Global exception handler (`@RestControllerAdvice`) returning structured error JSON
+- `ConversionResponse` DTO wrapping response in `{"packages": [...]}` format

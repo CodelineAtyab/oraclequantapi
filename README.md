@@ -2,7 +2,7 @@
 
 ## Project Overview
 
-The OracleQuant PKC (Package Measurement Conversion) API converts encoded letter sequences into integer package measurements. Given a string of characters `a-z` and underscores, it parses packages using a count-value encoding scheme and returns an array of integers. The API also maintains a full history of conversion requests with CRUD endpoints for record management.
+The OracleQuant PKC (Package Measurement Conversion) API converts encoded letter sequences into integer package measurements. Given a string of characters `a-z` and underscores, it parses packages using a count-value encoding scheme and returns a JSON object containing an array of integers. The API also maintains a full history of conversion requests with CRUD endpoints for record management.
 
 Built with Java 17, Spring Boot 3.5, Oracle XE 21c, and Maven.
 
@@ -10,8 +10,40 @@ Built with Java 17, Spring Boot 3.5, Oracle XE 21c, and Maven.
 
 - Oracle OpenJDK 17
 - Maven 3.8+
-- Oracle XE 21c
+- Oracle XE 21c (with `pkc_user` created)
 - Oracle Linux (for deployment)
+
+---
+
+## Running Tests
+
+Run the unit tests (no database required):
+
+```bash
+# All tests
+mvn test
+
+# Single test class
+mvn test -Dtest=SequenceServiceTest
+
+# Single test method
+mvn test -Dtest=SequenceServiceTest#testAa
+```
+
+### Test Coverage
+
+| Test | Input | Expected |
+|------|-------|----------|
+| `testAa` | `aa` | `[1]` |
+| `testAbbcc` | `abbcc` | `[2, 6]` |
+| `testDz_a_aazzaaa` | `dz_a_aazzaaa` | `[28, 1]` |
+| `testA_` | `a_` | `[0]` |
+| `testAbcdabcdab` | `abcdabcdab` | `[2, 7, 7]` |
+| `testAbcdabcdab_` | `abcdabcdab_` | `[2, 7, 7, 0]` |
+| `testZdaaaaaaaabaaaaaaaabaaaaaaaabbaa` | `zdaaaaaaaabaaaaaaaabaaaaaaaabbaa` | `[34]` |
+| `testZa_a_a_a_a_a_a_a_a_a_a_a_a_azaaa` | `za_a_a_a_a_a_a_a_a_a_a_a_a_azaaa` | `[40, 1]` |
+
+---
 
 ## How to Build and Run Locally
 
@@ -20,39 +52,28 @@ Built with Java 17, Spring Boot 3.5, Oracle XE 21c, and Maven.
 git clone <repo-url>
 cd oraclequantapi
 
-# Build the JAR
+# Build the JAR (requires Oracle XE for full build)
 mvn clean package
 
-# Run the application (requires Oracle XE running on localhost:1521)
+# Build the JAR and skip tests (no database needed)
+mvn clean package -DskipTests
+
+# Run the application
 java -jar target/oraclequantapi-0.0.1-SNAPSHOT.jar
 ```
 
 The application starts on port `8080` by default.
 
+---
+
 ## Database Configuration
-
-### Install Oracle XE on Oracle Linux
-
-```bash
-# Download Oracle XE 21c RPM and install
-sudo dnf install -y oracle-database-xe-21c-1.0-1.ol8.x86_64.rpm
-
-# Configure the database
-sudo /etc/init.d/oracle-xe-21c configure
-
-# Set environment variables
-export ORACLE_SID=XE
-export ORAENV_ASK=NO
-source /usr/bin/oraenv
-```
 
 ### Create Database User
 
-```sql
--- Connect as SYSTEM
-sqlplus system@localhost:1521/XEPDB1
+Connect to your Oracle XE database and run:
 
--- Create application user
+```sql
+ALTER SESSION SET CONTAINER=XEPDB1;
 CREATE USER pkc_user IDENTIFIED BY pkc_password;
 GRANT CONNECT, RESOURCE TO pkc_user;
 GRANT UNLIMITED TABLESPACE TO pkc_user;
@@ -62,7 +83,7 @@ GRANT CREATE TABLE TO pkc_user;
 
 ### Application Properties
 
-Configure `src/main/resources/application.properties`:
+Configured in `src/main/resources/application.properties`:
 
 ```properties
 server.port=8080
@@ -79,6 +100,10 @@ spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.OracleDialect
 logging.level.com.oraclequantapi=DEBUG
 ```
 
+Hibernate `ddl-auto=update` creates the `conversion_history` table automatically on startup.
+
+---
+
 ## REST API Endpoints
 
 ### Convert Measurements
@@ -91,10 +116,32 @@ GET /convert-measurements?input=abbcc
 curl "http://localhost:8080/convert-measurements?input=abbcc"
 ```
 
-Response:
+Response (200 OK):
 ```json
-[2, 6]
+{"packages": [2, 6]}
 ```
+
+#### Input Validation
+
+- `input` parameter is required and cannot be blank.
+- Only lowercase letters (`a-z`) and underscores (`_`) are allowed.
+- Invalid input returns `400 Bad Request`:
+```json
+{"error": "Invalid input: ..."}
+```
+
+#### Auto-Evaluation Reference Table
+
+| Request (`?input=...`) | Response (`{"packages": [...]}`) |
+|------------------------|----------------------------------|
+| `aa` | `[1]` |
+| `abbcc` | `[2, 6]` |
+| `dz_a_aazzaaa` | `[28, 1]` |
+| `a_` | `[0]` |
+| `abcdabcdab` | `[2, 7, 7]` |
+| `abcdabcdab_` | `[2, 7, 7, 0]` |
+| `zdaaaaaaaabaaaaaaaabaaaaaaaabbaa` | `[34]` |
+| `za_a_a_a_a_a_a_a_a_a_a_a_a_azaaa` | `[40, 1]` |
 
 ### Get All History Records
 
@@ -106,7 +153,7 @@ GET /history
 curl "http://localhost:8080/history"
 ```
 
-Response:
+Response (200 OK):
 ```json
 [
   {
@@ -129,7 +176,7 @@ GET /history/{id}
 curl "http://localhost:8080/history/1"
 ```
 
-Response:
+Response (200 OK):
 ```json
 {
   "id": 1,
@@ -139,6 +186,8 @@ Response:
   "output": "[2, 6]"
 }
 ```
+
+Returns `404 Not Found` if the record does not exist.
 
 ### Update History Record
 
@@ -152,7 +201,7 @@ curl -X PUT "http://localhost:8080/history/1" \
   -d '{"input":"aa","output":"[1]","sourceIpAddress":"10.0.0.1","timestamp":"2026-05-21T10:00:00"}'
 ```
 
-Response: updated record.
+Response: the updated record (200 OK).
 
 ### Partial Update History Record
 
@@ -166,7 +215,7 @@ curl -X PATCH "http://localhost:8080/history/1" \
   -d '{"input":"aa"}'
 ```
 
-Response: updated record with only the `input` field changed.
+Response: the partially updated record (200 OK).
 
 ### Delete All History Records
 
@@ -180,12 +229,38 @@ curl -X DELETE "http://localhost:8080/history"
 
 Response: `204 No Content`.
 
+---
+
+## Postman Testing
+
+1. Create a new **GET** request to `http://localhost:8080/convert-measurements`
+2. Add a **Query Param**: `input` = `aa`
+3. Send → expect `{"packages": [1]}`
+4. All history endpoints are **GET/PUT/PATCH/DELETE** on `http://localhost:8080/history`
+
+### Collection of Test Requests
+
+| Method | URL | Notes |
+|--------|-----|-------|
+| `GET` | `/convert-measurements?input=aa` | Basic single package |
+| `GET` | `/convert-measurements?input=abbcc` | Multi-package |
+| `GET` | `/convert-measurements?input=dz_a_aazzaaa` | z in count + value |
+| `GET` | `/convert-measurements?input=a_` | Underscore = 0 |
+| `GET` | `/history` | Fetch all history |
+| `GET` | `/history/1` | Fetch by ID |
+| `PUT` | `/history/1` | Full update (JSON body) |
+| `PATCH` | `/history/1` | Partial update (JSON body) |
+| `DELETE` | `/history` | Clear all history |
+
+---
+
 ## Deploy to Oracle Linux via SSH
 
-### Step 1: Build the JAR on Windows
+### Step 1: Build the JAR
 
 ```bash
-mvn clean package
+# On your local machine
+mvn clean package -DskipTests
 ```
 
 ### Step 2: Copy to VM using SCP
@@ -198,35 +273,67 @@ scp target/oraclequantapi-0.0.1-SNAPSHOT.jar oracle@<vm-ip>:/home/oracle/
 
 ```bash
 ssh oracle@<vm-ip>
+
+# Verify Java 17
+java -version
+
+# Run the application
 cd /home/oracle
 java -jar oraclequantapi-0.0.1-SNAPSHOT.jar
 ```
 
-For persistent execution:
+### Step 4: Run as a Background Service
+
+For persistent execution after logout:
 
 ```bash
 nohup java -jar oraclequantapi-0.0.1-SNAPSHOT.jar > app.log 2>&1 &
+
+# Check startup logs
+tail -f app.log
+
+# Find process later
+ps aux | grep oraclequantapi
+
+# Stop it
+kill <pid>
 ```
 
-### Step 4: Open Firewall Port
+### Step 5: Configure Firewall
 
 ```bash
 sudo firewall-cmd --add-port=8080/tcp --permanent
 sudo firewall-cmd --reload
 ```
 
-### Step 5: Verify Remotely
+### Step 6: Verify Remotely
 
 ```bash
 curl "http://<vm-ip>:8080/convert-measurements?input=aa"
 ```
 
-Expected: `[1]`
+Expected:
+```json
+{"packages": [1]}
+```
+
+---
 
 ## Logging
 
-Logs are written to `logs/pkc-api.log` using a rolling file appender with 7-day retention. The logging level for the `com.oraclequantapi` package is set to `DEBUG` in `application.properties`.
+Logs are written to `logs/pkc-api.log` using a rolling file appender with 7-day retention. Archived logs are named `logs/pkc-api.YYYY-MM-DD.log`. The logging level for the `com.oraclequantapi` package is set to `DEBUG` in `application.properties`.
+
+Console and file output use the format:
+```
+yyyy-MM-dd HH:mm:ss [thread] LEVEL logger - message
+```
+
+---
 
 ## Changelog
 
 See [CHANGELOG.md](./CHANGELOG.md) for version history.
+
+## Version
+
+Current version: `0.0.1-SNAPSHOT` (see [version.txt](./version.txt)).
