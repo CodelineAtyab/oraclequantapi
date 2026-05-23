@@ -20,7 +20,6 @@ public class MeasurementServiceImpl implements MeasurementService {
                     "Input parameter is required"
             );
         }
-
         return measurementParser.parseMeasurements(input);
     }
 }

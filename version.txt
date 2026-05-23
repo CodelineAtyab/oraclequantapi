@@ -30,7 +30,7 @@ v0.6.0 - Implemented Spring Boot REST API integration
 
 -----------------------------------------------
 
-
+v0.7.0 - Added API validation and centralized exception handling
 
 -----------------------------------------------
 
