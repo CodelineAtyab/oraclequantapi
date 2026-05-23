@@ -15,6 +15,12 @@ public class MeasurementServiceImpl implements MeasurementService {
     @Override
     public List<Integer> convertMeasurements(String input) {
 
+        if (input == null || input.isBlank()) {
+            throw new IllegalArgumentException(
+                    "Input parameter is required"
+            );
+        }
+
         return measurementParser.parseMeasurements(input);
     }
 }
