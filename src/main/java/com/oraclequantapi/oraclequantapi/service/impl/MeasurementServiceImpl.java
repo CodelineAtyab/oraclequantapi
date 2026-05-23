@@ -25,6 +25,9 @@ public class MeasurementServiceImpl implements MeasurementService {
                     "Input parameter is required"
             );
         }
+
+        logger.info("Successfully converted measurement input");
+
         return measurementParser.parseMeasurements(input);
     }
 }
