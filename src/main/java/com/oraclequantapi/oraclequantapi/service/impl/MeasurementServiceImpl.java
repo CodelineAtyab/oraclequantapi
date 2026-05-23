@@ -42,8 +42,19 @@ public class MeasurementServiceImpl implements MeasurementService {
             );
         }
 
+        List<Integer> results =
+                measurementParser.parseMeasurements(input);
+
+        MeasurementRecord measurementRecord =
+                new MeasurementRecord(
+                        input,
+                        results.toString()
+                );
+
+        measurementRecordRepository.save(measurementRecord);
+
         logger.info("Successfully converted measurement input");
 
-        return measurementParser.parseMeasurements(input);
+        return results;
     }
 }

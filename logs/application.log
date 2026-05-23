@@ -1,16 +1,106 @@
-2026-05-23 22:13:35 [INFO] c.o.o.OraclequantapiApplication - Starting OraclequantapiApplication using Java 17.0.18 with PID 16876 (/Users/saif/Desktop/measurement-api/oraclequantapi/target/classes started by saif in /Users/saif/Desktop/measurement-api/oraclequantapi)
-2026-05-23 22:13:35 [INFO] c.o.o.OraclequantapiApplication - No active profile set, falling back to 1 default profile: "default"
-2026-05-23 22:13:41 [INFO] o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
-2026-05-23 22:13:41 [INFO] o.a.catalina.core.StandardService - Starting service [Tomcat]
-2026-05-23 22:13:41 [INFO] o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.54]
-2026-05-23 22:13:41 [INFO] o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
-2026-05-23 22:13:41 [INFO] o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 6107 ms
-2026-05-23 22:13:41 [INFO] o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/'
-2026-05-23 22:13:41 [INFO] c.o.o.OraclequantapiApplication - Started OraclequantapiApplication in 6.668 seconds (process running for 8.534)
-2026-05-23 22:15:00 [INFO] o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
-2026-05-23 22:15:00 [INFO] o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
-2026-05-23 22:15:00 [INFO] o.s.web.servlet.DispatcherServlet - Completed initialization in 9 ms
-2026-05-23 22:15:00 [INFO] c.o.o.s.impl.MeasurementServiceImpl - Received measurement conversion request
-2026-05-23 22:15:00 [INFO] c.o.o.s.impl.MeasurementServiceImpl - Successfully converted measurement input
-2026-05-23 22:15:14 [INFO] c.o.o.s.impl.MeasurementServiceImpl - Received measurement conversion request
-2026-05-23 22:15:14 [WARN] c.o.o.s.impl.MeasurementServiceImpl - Received invalid blank measurement input
+2026-05-24 00:37:55 [INFO] o.s.b.w.e.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2026-05-24 00:37:55 [INFO] o.s.b.w.e.tomcat.GracefulShutdown - Graceful shutdown complete
+2026-05-24 00:38:21 [INFO] c.o.o.OraclequantapiApplication - Starting OraclequantapiApplication using Java 17.0.18 with PID 19251 (/Users/saif/Desktop/measurement-api/oraclequantapi/target/classes started by saif in /Users/saif/Desktop/measurement-api/oraclequantapi)
+2026-05-24 00:38:21 [INFO] c.o.o.OraclequantapiApplication - No active profile set, falling back to 1 default profile: "default"
+2026-05-24 00:38:32 [INFO] o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-05-24 00:38:32 [INFO] o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 36 ms. Found 1 JPA repository interface.
+2026-05-24 00:38:32 [INFO] o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2026-05-24 00:38:32 [INFO] o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-05-24 00:38:32 [INFO] o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.54]
+2026-05-24 00:38:32 [INFO] o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2026-05-24 00:38:32 [INFO] o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 11500 ms
+2026-05-24 00:38:33 [INFO] o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-05-24 00:38:33 [INFO] org.hibernate.Version - HHH000412: Hibernate ORM core version 6.6.49.Final
+2026-05-24 00:38:33 [INFO] o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2026-05-24 00:38:33 [INFO] o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-05-24 00:38:33 [INFO] com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2026-05-24 00:38:35 [INFO] com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection oracle.jdbc.driver.T4CConnection@819fb19
+2026-05-24 00:38:35 [INFO] com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2026-05-24 00:38:35 [INFO] o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 21.3
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-05-24 00:38:36 [INFO] o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-05-24 00:38:39 [INFO] o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-05-24 00:38:39 [WARN] o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-05-24 00:38:39 [INFO] o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/'
+2026-05-24 00:38:39 [INFO] c.o.o.OraclequantapiApplication - Started OraclequantapiApplication in 19.034 seconds (process running for 19.607)
+2026-05-24 00:39:33 [INFO] o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-05-24 00:39:33 [INFO] o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2026-05-24 00:39:33 [INFO] o.s.web.servlet.DispatcherServlet - Completed initialization in 13 ms
+2026-05-24 00:39:33 [INFO] c.o.o.s.impl.MeasurementServiceImpl - Received measurement conversion request
+2026-05-24 00:39:33 [INFO] c.o.o.s.impl.MeasurementServiceImpl - Successfully converted measurement input
+2026-05-24 00:46:35 [INFO] o.s.b.w.e.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2026-05-24 00:46:35 [INFO] o.s.b.w.e.tomcat.GracefulShutdown - Graceful shutdown complete
+2026-05-24 00:46:35 [INFO] o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-05-24 00:46:35 [INFO] com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2026-05-24 00:46:37 [INFO] com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2026-05-24 00:46:59 [INFO] c.o.o.OraclequantapiApplication - Starting OraclequantapiApplication using Java 17.0.18 with PID 19529 (/Users/saif/Desktop/measurement-api/oraclequantapi/target/classes started by saif in /Users/saif/Desktop/measurement-api/oraclequantapi)
+2026-05-24 00:46:59 [INFO] c.o.o.OraclequantapiApplication - No active profile set, falling back to 1 default profile: "default"
+2026-05-24 00:47:09 [INFO] o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-05-24 00:47:09 [INFO] o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 31 ms. Found 1 JPA repository interface.
+2026-05-24 00:47:09 [INFO] o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2026-05-24 00:47:09 [INFO] o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 9960 ms
+2026-05-24 00:47:09 [INFO] o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-05-24 00:47:09 [INFO] org.hibernate.Version - HHH000412: Hibernate ORM core version 6.6.49.Final
+2026-05-24 00:47:09 [INFO] o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2026-05-24 00:47:10 [INFO] o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-05-24 00:47:10 [INFO] com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2026-05-24 00:47:11 [INFO] com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection oracle.jdbc.driver.T4CConnection@49cb5030
+2026-05-24 00:47:11 [INFO] com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2026-05-24 00:47:11 [INFO] o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 21.3
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-05-24 00:47:12 [INFO] o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-05-24 00:47:14 [INFO] o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-05-24 00:47:14 [WARN] o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-05-24 00:47:14 [INFO] o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/'
+2026-05-24 00:47:14 [INFO] c.o.o.OraclequantapiApplication - Started OraclequantapiApplication in 17.525 seconds (process running for 20.362)
+2026-05-24 00:47:14 [INFO] o.s.b.w.e.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2026-05-24 00:47:14 [INFO] o.s.b.w.e.tomcat.GracefulShutdown - Graceful shutdown complete
+2026-05-24 00:47:14 [INFO] o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-05-24 00:47:14 [INFO] com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2026-05-24 00:47:15 [INFO] com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2026-05-24 00:47:17 [INFO] c.o.o.OraclequantapiApplication - Starting OraclequantapiApplication using Java 17.0.18 with PID 19538 (/Users/saif/Desktop/measurement-api/oraclequantapi/target/classes started by saif in /Users/saif/Desktop/measurement-api/oraclequantapi)
+2026-05-24 00:47:17 [INFO] c.o.o.OraclequantapiApplication - No active profile set, falling back to 1 default profile: "default"
+2026-05-24 00:47:17 [INFO] o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-05-24 00:47:17 [INFO] o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 36 ms. Found 1 JPA repository interface.
+2026-05-24 00:47:17 [INFO] o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2026-05-24 00:47:17 [INFO] o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-05-24 00:47:17 [INFO] o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.54]
+2026-05-24 00:47:17 [INFO] o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2026-05-24 00:47:17 [INFO] o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 844 ms
+2026-05-24 00:47:18 [INFO] o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-05-24 00:47:18 [INFO] org.hibernate.Version - HHH000412: Hibernate ORM core version 6.6.49.Final
+2026-05-24 00:47:18 [INFO] o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2026-05-24 00:47:18 [INFO] o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-05-24 00:47:18 [INFO] com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2026-05-24 00:47:19 [INFO] com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection oracle.jdbc.driver.T4CConnection@54463380
+2026-05-24 00:47:19 [INFO] com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2026-05-24 00:47:19 [INFO] o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 21.3
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-05-24 00:47:20 [INFO] o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-05-24 00:47:21 [INFO] o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-05-24 00:47:21 [WARN] o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-05-24 00:47:21 [INFO] o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/'
+2026-05-24 00:47:21 [INFO] c.o.o.OraclequantapiApplication - Started OraclequantapiApplication in 5.353 seconds (process running for 5.61)
+2026-05-24 00:47:37 [INFO] o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-05-24 00:47:37 [INFO] o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2026-05-24 00:47:37 [INFO] o.s.web.servlet.DispatcherServlet - Completed initialization in 3 ms
+2026-05-24 00:47:37 [INFO] c.o.o.s.impl.MeasurementServiceImpl - Received measurement conversion request
+2026-05-24 00:47:37 [INFO] c.o.o.s.impl.MeasurementServiceImpl - Successfully converted measurement input
