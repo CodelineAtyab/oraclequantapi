@@ -57,4 +57,12 @@ public class MeasurementServiceImpl implements MeasurementService {
 
         return results;
     }
+
+    @Override
+    public List<MeasurementRecord> getMeasurementHistory() {
+
+        logger.info("Fetching measurement history");
+
+        return measurementRecordRepository.findAll();
+    }
 }
