@@ -21,16 +21,30 @@ import java.util.Map;
 @RequestMapping("/history")
 @RequiredArgsConstructor
 @Slf4j
+/**
+ * Web endpoints for viewing and editing saved conversion history.
+ *
+ * All URLs in this controller start with /history because of @RequestMapping.
+ */
 public class HistoryController {
 
+    // Service that contains the actual history logic and database calls.
     private final HistoryService historyService;
 
+    /**
+     * Handles: GET /history
+     * Returns every saved conversion history record.
+     */
     @GetMapping
     public ResponseEntity<List<HistoryRecord>> getAll() {
         log.info("GET /history called");
         return ResponseEntity.ok(historyService.getAll());
     }
 
+    /**
+     * Handles: GET /history/{id}
+     * Returns one history record by its database id, or 404 if it does not exist.
+     */
     @GetMapping("/{id}")
     public ResponseEntity<HistoryRecord> getById(@PathVariable Long id) {
         log.info("GET /history/{} called", id);
@@ -39,6 +53,10 @@ public class HistoryController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    /**
+     * Handles: PUT /history/{id}
+     * Replaces the editable values on an existing history record.
+     */
     @PutMapping("/{id}")
     public ResponseEntity<HistoryRecord> update(
             @PathVariable Long id,
@@ -47,6 +65,10 @@ public class HistoryController {
         return ResponseEntity.ok(historyService.update(id, record));
     }
 
+    /**
+     * Handles: PATCH /history/{id}
+     * Updates only the fields sent in the request body, such as input or output.
+     */
     @PatchMapping("/{id}")
     public ResponseEntity<HistoryRecord> partialUpdate(
             @PathVariable Long id,
@@ -55,6 +77,10 @@ public class HistoryController {
         return ResponseEntity.ok(historyService.partialUpdate(id, updates));
     }
 
+    /**
+     * Handles: DELETE /history
+     * Deletes all saved history rows.
+     */
     @DeleteMapping
     public ResponseEntity<Void> deleteAll() {
         log.info("DELETE /history called");
