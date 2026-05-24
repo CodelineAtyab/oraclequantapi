@@ -59,4 +59,8 @@ public class HistoryRecord {
         this.timestamp = timestamp;
     }
 
+    public String getSourceIpAddress() {
+        return sourceIpAddress;
+    }
+
 }
