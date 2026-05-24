@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.0.3 - Controller refactoring
+- Fixed `OracleQuantController`: corrected endpoints to match REST spec (`/convert-measurements`, `@RequestParam`)
+- Added service injection, source IP capture, and proper HTTP responses
+
 ## v0.0.2 - Converter fixes and service layer
 - Fixed conversion algorithm: corrected `checkInput` inversion, `backageCount` reset, and post-loop flush
 - Added `OracleQuantService` with history CRUD operations
