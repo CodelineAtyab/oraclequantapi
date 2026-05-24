@@ -12,6 +12,8 @@ import java.util.List;
 import java.util.Optional;
 import java.time.LocalDateTime;
 
+
+@Service
 public class SequenceService {
 
     private static final Logger log = LoggerFactory.getLogger(SequenceService.class);
