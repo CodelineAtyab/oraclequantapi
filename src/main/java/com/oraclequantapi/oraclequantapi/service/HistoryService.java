@@ -51,6 +51,10 @@ public class HistoryService {
             record.setTimestamp(timestamp);
         }
 
+        if (sourceIpAddress != null) {
+            record.setSourceIpAddress(sourceIpAddress);
+        }
+
         return repository.save(record);
     }
 
