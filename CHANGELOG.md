@@ -1,6 +1,7 @@
 # CHANGELOG
 
 ## version [1.0.0] - 2026-05-24
+
 ### Added
 - Integrated Oracle XE Pluggable Database (`XEPDB1`) via JDBC data source connections.
 - Added explicit mapping layer configurations for `SEQUENCE_HISTORY` transaction records.
