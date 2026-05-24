@@ -41,6 +41,15 @@ public class MeasurementService {
         if (first != 'z') {
             return new ParsedNumber(symbolValue(first), startIndex + 1);
         }
+
+        int index = startIndex;
+        int value = 0;
+
+        while (index < input.length() && input.charAt(index) == 'z') {
+            value += 26;
+            index++;
+        }
+
     }
 
 }
