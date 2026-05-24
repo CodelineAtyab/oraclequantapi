@@ -38,6 +38,8 @@ public class MeasurementController {
 
         List<Integer> output = measurementService.convert(safeInput);
 
+        log.info("Conversion result: {}", output);
+
         return List.of();
     }
 
