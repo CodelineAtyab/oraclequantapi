@@ -2,3 +2,8 @@
 - Initialized Spring Boot REST API project
 - Added in-memory sequence storage endpoint
 - Implemented clean controller-service architecture
+
+[0.2] 24/05/26
+- Added underscore-prefix input rejection rule
+- Implemented length-encoded sequence parser algorithm
+- Output array now exposed on POST and GET responses
