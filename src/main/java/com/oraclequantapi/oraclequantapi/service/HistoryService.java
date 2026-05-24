@@ -1,5 +1,6 @@
 package com.oraclequantapi.oraclequantapi.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.oraclequantapi.oraclequantapi.model.HistoryRecord;
 import com.oraclequantapi.oraclequantapi.repository.HistoryRepository;
@@ -21,8 +22,13 @@ public class HistoryService {
     @Transactional
     public HistoryRecord record(String input, List<Integer> output, String sourceIpAddress) {
 
-        String outputJson = objectMapper.writeValueAsString(output);
-        return repository.save(new HistoryRecord(sourceIpAddress, input, outputJson));
+        try {
+            String outputJson = objectMapper.writeValueAsString(output);
+            return repository.save(new HistoryRecord(sourceIpAddress, input, outputJson));
+        }
+        catch (JsonProcessingException exception) {
+            throw new IllegalStateException("Unable to serialize conversion output", exception);
+        }
     }
 
 }
