@@ -56,6 +56,9 @@ public class MeasurementService {
             index++;
         }
         return new ParsedNumber(value, index);
+    }
+
+    private int symbolValue(char symbol) {
 
     }
 
