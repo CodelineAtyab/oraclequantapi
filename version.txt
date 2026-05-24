@@ -21,3 +21,8 @@
 [0.5] 24/05/26
 - Wired Sequence_DATABASE into Service — all CRUD operations now persist to Oracle
 - Recompute @Transient output field on retrieval from DB
+
+[0.6] 24/05/26
+- Extracted JPA entity to DATABASE.java in repository package (SRP)
+- Stripped all framework annotations from Sequence.java — pure domain POJO
+- Updated Controller, Service, Sequence_DATABASE, Repository to use DATABASE throughout
