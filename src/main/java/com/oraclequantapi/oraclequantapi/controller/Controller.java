@@ -27,6 +27,16 @@ public class Controller {
         return ResponseEntity.status(HttpStatus.CREATED).body(stored);
     }
 
+    // Updates an existing enquiry by id; re-runs decoder on new input
+    @PutMapping
+    public ResponseEntity<?> updateSequence(@RequestBody Sequence sequence) {
+        Sequence updated = service.updateSequence(sequence);
+        if (updated == null) {
+            return ResponseEntity.badRequest().body("Enquiry not found or input invalid");
+        }
+        return ResponseEntity.status(HttpStatus.CREATED).body(updated);
+    }
+
     // Returns all previously submitted sequence enquiries
     @GetMapping
     public ResponseEntity<List<Sequence>> getAllSequences() {
