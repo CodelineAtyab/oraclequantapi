@@ -22,7 +22,7 @@ public class HistoryService {
     public HistoryRecord record(String input, List<Integer> output, String sourceIpAddress) {
 
         String outputJson = objectMapper.writeValueAsString(output);
-
+        return repository.save(new HistoryRecord(sourceIpAddress, input, outputJson));
     }
 
 }
