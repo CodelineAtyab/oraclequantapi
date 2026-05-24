@@ -51,4 +51,12 @@ public class HistoryController {
         return ResponseEntity.noContent().build();
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteById(@PathVariable Long id) {
+        log.warn("Deleting history record with id {}", id);
+        historyService.deleteById(id);
+        log.info("History record {} deleted successfully", id);
+        return ResponseEntity.noContent().build();
+    }
+
 }
