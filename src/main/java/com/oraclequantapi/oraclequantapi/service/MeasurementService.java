@@ -15,5 +15,9 @@ public class MeasurementService {
 
         List<Integer> totals = new ArrayList<>();
         int index = 0;
+
+        while (index < input.length()) {
+
+        }
     }
 }
