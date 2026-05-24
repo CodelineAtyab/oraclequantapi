@@ -4,7 +4,8 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.UUID;
 
-// Model representing a single sequence enquiry stored in memory
+// Model representing a single sequence enquiry stored in memory.
+// Input field accepts only lowercase a-z and underscore characters.
 public class Sequence {
 
     private String id;

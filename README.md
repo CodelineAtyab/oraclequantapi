@@ -128,7 +128,7 @@ com.oraclequantapi.oraclequantapi
 
 ### POST `/sequenceDecoder`
 
-Submit a new sequence enquiry. The server auto-generates `id` (UUID) and `currentTime`.
+Submit a new sequence enquiry. The `input` field must contain **only lowercase letters a–z and underscores** — any other character returns 400. The server auto-generates `id` (UUID) and `currentTime`.
 
 **Request:**
 ```http
@@ -136,7 +136,7 @@ POST http://localhost:8080/sequenceDecoder
 Content-Type: application/json
 
 {
-  "sequence": "1, 1, 2, 3, 5, 8, 13"
+  "input": "aabbbbbbbabdchdb"
 }
 ```
 
@@ -144,9 +144,22 @@ Content-Type: application/json
 ```json
 {
   "id": "a3f9c1d2-84ab-4e11-b3c7-2f4400000001",
-  "sequence": "1, 1, 2, 3, 5, 8, 13",
+  "input": "aabbbbbbbabdchdb",
   "currentTime": "2026-05-24 14:30:00"
 }
+```
+
+**Another valid example:**
+```json
+{ "input": "aa_" }
+```
+
+**Invalid input — Response 400 Bad Request:**
+```json
+{ "input": "Hello123!" }
+```
+```
+Input must only contain lowercase letters a-z and underscore
 ```
 
 ---
@@ -165,12 +178,12 @@ GET http://localhost:8080/sequenceDecoder
 [
   {
     "id": "a3f9c1d2-84ab-4e11-b3c7-2f4400000001",
-    "sequence": "1, 1, 2, 3, 5, 8, 13",
+    "input": "aabbbbbbbabdchdb",
     "currentTime": "2026-05-24 14:30:00"
   },
   {
     "id": "b7e2d3a1-91cd-4f22-c4d8-3g5500000002",
-    "sequence": "2, 4, 8, 16, 32",
+    "input": "aa_",
     "currentTime": "2026-05-24 14:31:05"
   }
 ]

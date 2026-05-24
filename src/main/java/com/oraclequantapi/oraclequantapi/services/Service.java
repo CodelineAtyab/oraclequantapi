@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+// Encapsulates all business logic for sequence enquiries; validates and stores inputs in RAM.
 @org.springframework.stereotype.Service
 public class Service {
 

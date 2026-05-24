@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+// REST entry point for /sequenceDecoder; delegates all logic to Service, contains no business rules.
 @RestController
 @RequestMapping("/sequenceDecoder")
 public class Controller {
