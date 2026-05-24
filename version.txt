@@ -12,3 +12,8 @@
 - Moved Sequence model to dedicated Module package
 - Added PUT endpoint for updating stored enquiries
 - Added DELETE endpoint for removing stored enquiries
+
+[0.4] 24/05/26
+- Added Oracle JPA dependency and datasource scaffold
+- Created Repository interface for Spring Data JPA operations
+- Implemented Sequence_DATABASE with full exception handling
