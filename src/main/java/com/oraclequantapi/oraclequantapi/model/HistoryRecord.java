@@ -47,4 +47,8 @@ public class HistoryRecord {
         }
     }
 
+    public Long getId() {
+        return id;
+    }
+
 }
