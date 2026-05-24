@@ -11,4 +11,9 @@ import org.springframework.web.bind.annotation.RestController;
 public class HistoryController {
     private static final Logger log = LoggerFactory.getLogger(HistoryController.class);
     private final HistoryService historyService;
+
+    public HistoryController(HistoryService historyService) {
+        this.historyService = historyService;
+    }
+
 }
