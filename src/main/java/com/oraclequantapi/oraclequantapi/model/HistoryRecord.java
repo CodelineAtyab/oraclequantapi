@@ -31,4 +31,13 @@ public class HistoryRecord {
     @Column(name = "OUTPUT", nullable = false)
     private String output;
 
+    protected HistoryRecord() {
+    }
+
+    public HistoryRecord(String sourceIpAddress, String input, String output) {
+        this.sourceIpAddress = sourceIpAddress;
+        this.input = input;
+        this.output = output;
+    }
+
 }
