@@ -50,6 +50,12 @@ public class MeasurementService {
             index++;
         }
 
+        if (index < input.length()) {
+            char terminator = input.charAt(index);
+            value += symbolValue(terminator);
+            index++;
+        }
+
     }
 
 }
