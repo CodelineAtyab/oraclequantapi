@@ -114,12 +114,14 @@ com.oraclequantapi.oraclequantapi
 +-- controller/
 |   +-- Controller.java              (REST layer - @RestController)
 +-- services/
-    +-- Service.java                 (business logic - @Service)
+|   +-- Service.java                 (business logic - @Service)
++-- module/
     +-- Sequence.java                (model POJO)
 ```
 
 - The Controller delegates all logic to the Service via `@Autowired` injection.
-- The Service validates input, runs the length-encoded parser, and stores the decoded integer output array in memory (data resets on restart).
+- The Service validates input, runs the length-encoded parser, and manages the in-memory ArrayList (data resets on restart).
+- `Sequence.java` lives in the `module` package — separated from business logic (SRP).
 - `id` and `currentTime` are always server-generated — never client-supplied.
 - `input` is write-only — accepted in the request body but never returned in any response.
 
@@ -190,6 +192,64 @@ Content-Type: application/json
 ```
 ```
 Input must only contain a-z and underscore, and must not start with underscore
+```
+
+---
+
+### PUT `/sequenceDecoder`
+
+Update an existing enquiry by `id`. Applies the same input validation rules as POST. Re-runs the decoder on the new input and refreshes `currentTime`.
+
+**Request:**
+```http
+PUT http://localhost:8080/sequenceDecoder
+Content-Type: application/json
+
+{
+  "id": "a3f9c1d2-84ab-4e11-b3c7-2f4400000001",
+  "input": "cdaaabaa"
+}
+```
+
+**Response — 201:**
+```json
+{
+  "id": "a3f9c1d2-84ab-4e11-b3c7-2f4400000001",
+  "currentTime": "2026-05-24 15:00:00",
+  "output": [6, 2, 1]
+}
+```
+
+**Failure — 400 Bad Request:**
+- `id` not found, or `input` fails validation:
+```
+Enquiry not found or input invalid
+```
+
+---
+
+### DELETE `/sequenceDecoder`
+
+Remove an existing enquiry by `id`.
+
+**Request:**
+```http
+DELETE http://localhost:8080/sequenceDecoder
+Content-Type: application/json
+
+{
+  "id": "a3f9c1d2-84ab-4e11-b3c7-2f4400000001"
+}
+```
+
+**Response — 201:**
+```
+Enquiry deleted successfully
+```
+
+**Failure — 400 Bad Request:**
+```
+Enquiry not found
 ```
 
 ---
