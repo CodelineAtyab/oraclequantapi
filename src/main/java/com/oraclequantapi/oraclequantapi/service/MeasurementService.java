@@ -34,4 +34,9 @@ public class MeasurementService {
         }
         return totals;
     }
+
+    private ParsedNumber readNumber(String input, int startIndex) {
+
+    }
+
 }
