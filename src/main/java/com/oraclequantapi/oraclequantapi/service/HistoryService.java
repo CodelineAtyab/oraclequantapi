@@ -8,6 +8,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Instant;
 import java.util.List;
 
 @Service
@@ -40,6 +41,12 @@ public class HistoryService {
     @Transactional(readOnly = true)
     public HistoryRecord findById(Long id) {
         return repository.findById(id).orElseThrow(() -> new HistoryRecordNotFoundException(id));
+    }
+
+    @Transactional
+    public HistoryRecord update(Long id, Instant timestamp, String sourceIpAddress, String input, String output) {
+        HistoryRecord record = findById(id);
+        return repository.save(record);
     }
 
 }
