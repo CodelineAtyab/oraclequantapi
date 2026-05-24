@@ -21,6 +21,8 @@ public class HistoryService {
     @Transactional
     public HistoryRecord record(String input, List<Integer> output, String sourceIpAddress) {
 
+        String outputJson = objectMapper.writeValueAsString(output);
+
     }
 
 }
