@@ -1,4 +1,11 @@
 # Change Log
+
+## Version[0.0.4] - 22-05-2026
+### Fixed
+- Added `SequenceRepo` interface for DB connection.
+- Established a connection with the DB and tested with multiple requests.
+- PUT request now works with raw JSON format to update input value.
+
 ## Version[0.0.3] - 21-05-2026
 ### Fixed
 - Added PUT request to edit using input with endpoint `/convert-measurements/{id}`
