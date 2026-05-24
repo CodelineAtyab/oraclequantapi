@@ -67,4 +67,8 @@ public class HistoryRecord {
         this.sourceIpAddress = sourceIpAddress;
     }
 
+    public String getInput() {
+        return input;
+    }
+
 }
