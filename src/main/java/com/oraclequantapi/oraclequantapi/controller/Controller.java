@@ -37,6 +37,16 @@ public class Controller {
         return ResponseEntity.status(HttpStatus.CREATED).body(updated);
     }
 
+    // Removes an existing enquiry by id from memory
+    @DeleteMapping
+    public ResponseEntity<?> deleteSequence(@RequestBody Sequence sequence) {
+        boolean deleted = service.deleteSequence(sequence.getId());
+        if (!deleted) {
+            return ResponseEntity.badRequest().body("Enquiry not found");
+        }
+        return ResponseEntity.status(HttpStatus.CREATED).body("Enquiry deleted successfully");
+    }
+
     // Returns all previously submitted sequence enquiries
     @GetMapping
     public ResponseEntity<List<Sequence>> getAllSequences() {
