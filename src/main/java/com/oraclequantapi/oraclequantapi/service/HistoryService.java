@@ -37,4 +37,9 @@ public class HistoryService {
         return repository.findAll(Sort.by(Sort.Direction.ASC, "id"));
     }
 
+    @Transactional(readOnly = true)
+    public HistoryRecord findById(Long id) {
+        return repository.findById(id).orElseThrow(() -> new HistoryRecordNotFoundException(id));
+    }
+
 }
