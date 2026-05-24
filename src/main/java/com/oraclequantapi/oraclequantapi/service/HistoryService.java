@@ -59,6 +59,10 @@ public class HistoryService {
             record.setInput(input);
         }
 
+        if (output != null) {
+            record.setOutput(output);
+        }
+
         return repository.save(record);
     }
 
