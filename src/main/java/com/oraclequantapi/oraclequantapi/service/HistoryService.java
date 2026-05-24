@@ -66,4 +66,9 @@ public class HistoryService {
         return repository.save(record);
     }
 
+    @Transactional
+    public void deleteAll() {
+        repository.deleteAllInBatch();
+    }
+
 }
