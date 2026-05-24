@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.0.5 - Null safety and tests
+- Fixed controller: invalid input now returns 400 Bad Request instead of 200 with null body
+- Added `ConverterTest` with all 8 spec examples and invalid input tests
+
 ## v0.0.4 - Logging implementation
 - Added `logback-spring.xml` with console and rolling file appender (7-day retention)
 - Added SLF4J log statements to Controller, Service, and Converter

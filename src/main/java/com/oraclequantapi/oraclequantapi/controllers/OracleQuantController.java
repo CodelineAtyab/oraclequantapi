@@ -28,6 +28,10 @@ public class OracleQuantController {
         String sourceIp = request.getRemoteAddr();
         log.info("Conversion request - input: \"{}\", source IP: {}", input, sourceIp);
         List<Integer> result = service.convertMeasurements(input, sourceIp);
+        if (result == null) {
+            log.warn("Invalid input, returning 400 - input: \"{}\"", input);
+            return ResponseEntity.badRequest().build();
+        }
         log.info("Conversion result - input: \"{}\", output: {}", input, result);
         return ResponseEntity.ok(result);
     }
