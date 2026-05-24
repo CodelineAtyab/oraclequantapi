@@ -1,0 +1,24 @@
+spring:
+  datasource:
+    # TODO: Replace with your Oracle DB connection URL
+    # Example: jdbc:oracle:thin:@//prod-db.company.com:1521/ORCLPDB1
+    url: jdbc:oracle:thin:@//localhost:1521/ORCL
+    # TODO: Replace with your Oracle DB username
+    # Example: QUANT_USER
+    username: DB_USER_TODO
+    # TODO: Replace with your Oracle DB password
+    # Example: Str0ngP@ssw0rd!
+    password: DB_PASS_TODO
+    driver-class-name: oracle.jdbc.OracleDriver
+  jpa:
+    database-platform: org.hibernate.dialect.OracleDialect
+    hibernate:
+      # TODO: Change to 'validate' or 'update' once DB is live; never use 'create-drop' in production
+      ddl-auto: none
+    show-sql: false
+    open-in-view: false
+  autoconfigure:
+    exclude:
+      - org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
+      - org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration
+      - org.springframework.boot.autoconfigure.data.jpa.JpaRepositoriesAutoConfiguration
