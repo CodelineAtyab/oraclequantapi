@@ -23,4 +23,10 @@ public class Controller {
         return ResponseEntity.status(HttpStatus.CREATED).body(stored);
     }
 
+    // Returns all previously submitted sequence enquiries
+    @GetMapping
+    public ResponseEntity<List<Sequence>> getAllSequences() {
+        return ResponseEntity.ok(service.getAllSequences());
+    }
+
 }
