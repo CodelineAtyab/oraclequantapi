@@ -1,0 +1,4 @@
+[0.1] 24/05/26
+- Initialized Spring Boot REST API project
+- Added in-memory sequence storage endpoint
+- Implemented clean controller-service architecture
