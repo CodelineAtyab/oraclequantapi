@@ -1,7 +1,10 @@
 package com.oraclequantapi.oraclequantapi.services;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.UUID;
 
 // Model representing a single sequence enquiry stored in memory.
@@ -9,8 +12,13 @@ import java.util.UUID;
 public class Sequence {
 
     private String id;
+
+    // Accepted from request body but excluded from all responses
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String input;
+
     private String currentTime;
+    private List<Integer> output;
 
     public Sequence() {
         this.id = UUID.randomUUID().toString();
@@ -36,6 +44,10 @@ public class Sequence {
         return currentTime;
     }
 
+    public List<Integer> getOutput() {
+        return output;
+    }
+
     public void setId(String id) {
         this.id = id;
     }
@@ -46,5 +58,9 @@ public class Sequence {
 
     public void setCurrentTime(String currentTime) {
         this.currentTime = currentTime;
+    }
+
+    public void setOutput(List<Integer> output) {
+        this.output = output;
     }
 }
