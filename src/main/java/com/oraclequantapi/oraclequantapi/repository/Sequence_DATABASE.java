@@ -86,4 +86,22 @@ public class Sequence_DATABASE {
         }
     }
 
+    //------[DB] Removes a Sequence by UUID — checks existsById first, then issues repository.deleteById()
+    public boolean remove(String id) {
+        try {
+            checkAvailable();
+            if (!repository.existsById(id)) {
+                return false;
+            }
+            repository.deleteById(id);
+            return true;
+        } catch (IllegalStateException e) {
+            throw e;
+        } catch (DataAccessException e) {
+            throw new RuntimeException("DB error while deleting sequence: " + e.getMostSpecificCause().getMessage(), e);
+        } catch (Exception e) {
+            throw new RuntimeException("Unexpected error during deletion: " + e.getMessage(), e);
+        }
+    }
+
 }
