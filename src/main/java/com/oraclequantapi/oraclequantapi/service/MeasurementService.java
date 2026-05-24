@@ -65,6 +65,7 @@ public class MeasurementService {
         if (symbol < 'a' || symbol > 'z') {
             return 0;
         }
+        return symbol - 'a' + 1;
     }
 
 }
