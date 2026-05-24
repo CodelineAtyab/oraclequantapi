@@ -27,7 +27,7 @@ public class Converter {
 
     public boolean checkInput(String[] input) {
         for (String s : input) {
-            if (s.isEmpty() || s.matches("^[a-z_]*$")) {
+            if (s.isEmpty() || !s.matches("^[a-z_]*$")) {
                 return false;
             }
         }
@@ -43,15 +43,19 @@ public class Converter {
         for (Integer integer : valuesList) {
             if (backageCount == 0) {
                 backageCount = integer;
-            } else if (count < backageCount) {
+            } else {
                 size += integer;
                 count++;
-            } else {
-                backageSizeList.add(size);
-                count = 0;
-                size = 0;
-                backageCount = 0;
             }
+            if (backageCount == count) {
+            backageSizeList.add(size);
+            count = 0;
+            size = 0;
+            backageCount = 0;
+            }
+        }
+        if (count > 0) {
+            backageSizeList.add(size);
         }
         return backageSizeList;
     }
@@ -62,15 +66,15 @@ public class Converter {
 
         String[] valid = "_abcdefghijklmnopqrstuvwxyz".split("");
 
-        for (String input : inputs) {
+        for (int i =0; i < inputs.length; i++) {
             for (int j = 0; j < valid.length; j++) {
-                if (input.equals(valid[j])) {
+                if (inputs[i].equals(valid[j])) {
                     value += j;
                     break;
                 }
             }
 
-            if (!input.equals("z")) {
+            if (!inputs[i].equals("z") || i == inputs.length -1) {
                 valueList.add(value);
                 value = 0;
             }
