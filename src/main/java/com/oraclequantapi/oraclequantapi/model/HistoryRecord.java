@@ -75,4 +75,8 @@ public class HistoryRecord {
         this.input = input;
     }
 
+    public String getOutput() {
+        return output;
+    }
+
 }
