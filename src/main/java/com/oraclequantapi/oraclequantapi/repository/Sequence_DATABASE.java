@@ -55,4 +55,18 @@ public class Sequence_DATABASE {
         }
     }
 
+    //------[DB] Looks up a single Sequence by UUID primary key via repository.findById()
+    public Optional<Sequence> retrieveById(String id) {
+        try {
+            checkAvailable();
+            return repository.findById(id);
+        } catch (IllegalStateException e) {
+            throw e;
+        } catch (DataAccessException e) {
+            throw new RuntimeException("DB error while finding sequence by id: " + e.getMostSpecificCause().getMessage(), e);
+        } catch (Exception e) {
+            throw new RuntimeException("Unexpected error during retrieval by id: " + e.getMessage(), e);
+        }
+    }
+
 }
