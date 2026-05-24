@@ -1,4 +1,4 @@
-package com.oraclequantapi.oraclequantapi.services;
+package com.oraclequantapi.oraclequantapi.module;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

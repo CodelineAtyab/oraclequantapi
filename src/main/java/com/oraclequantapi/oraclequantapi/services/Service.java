@@ -1,5 +1,7 @@
 package com.oraclequantapi.oraclequantapi.services;
 
+import com.oraclequantapi.oraclequantapi.module.Sequence;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;

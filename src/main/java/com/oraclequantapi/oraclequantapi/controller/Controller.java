@@ -1,6 +1,6 @@
 package com.oraclequantapi.oraclequantapi.controller;
 
-import com.oraclequantapi.oraclequantapi.services.Sequence;
+import com.oraclequantapi.oraclequantapi.module.Sequence;
 import com.oraclequantapi.oraclequantapi.services.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
