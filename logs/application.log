@@ -182,3 +182,9 @@
 2026-05-24 11:06:43 [WARN] o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
 2026-05-24 11:06:44 [INFO] o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/'
 2026-05-24 11:06:44 [INFO] c.o.o.OraclequantapiApplication - Started OraclequantapiApplication in 20.266 seconds (process running for 20.826)
+2026-05-24 11:12:12 [INFO] o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-05-24 11:12:12 [INFO] o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2026-05-24 11:12:12 [INFO] o.s.web.servlet.DispatcherServlet - Completed initialization in 67 ms
+2026-05-24 11:12:12 [INFO] c.o.o.s.impl.MeasurementServiceImpl - Received measurement conversion request
+2026-05-24 11:12:14 [INFO] c.o.o.s.impl.MeasurementServiceImpl - Successfully converted measurement input
+2026-05-24 11:15:32 [INFO] c.o.o.s.impl.MeasurementServiceImpl - Fetching measurement history
