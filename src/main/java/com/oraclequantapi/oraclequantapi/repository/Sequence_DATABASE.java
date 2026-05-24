@@ -27,4 +27,32 @@ public class Sequence_DATABASE {
         }
     }
 
+    //------[DB] Persists a new Sequence entity to Oracle via repository.save()
+    public Sequence persist(Sequence sequence) {
+        try {
+            checkAvailable();
+            return repository.save(sequence);
+        } catch (IllegalStateException e) {
+            throw e;
+        } catch (DataAccessException e) {
+            throw new RuntimeException("DB error while saving sequence: " + e.getMostSpecificCause().getMessage(), e);
+        } catch (Exception e) {
+            throw new RuntimeException("Unexpected error during persist: " + e.getMessage(), e);
+        }
+    }
+
+    //------[DB] Retrieves all Sequence records from Oracle via repository.findAll()
+    public List<Sequence> retrieveAll() {
+        try {
+            checkAvailable();
+            return repository.findAll();
+        } catch (IllegalStateException e) {
+            throw e;
+        } catch (DataAccessException e) {
+            throw new RuntimeException("DB error while retrieving all sequences: " + e.getMostSpecificCause().getMessage(), e);
+        } catch (Exception e) {
+            throw new RuntimeException("Unexpected error during retrieval: " + e.getMessage(), e);
+        }
+    }
+
 }
