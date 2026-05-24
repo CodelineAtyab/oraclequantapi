@@ -64,7 +64,7 @@ To submit your Oracle JAVA Spring Boot Maven project as a solution, please follo
 
 ## Project Overview
 
-Oracle Quant API is a Spring Boot 3.5.14 / Java 17 REST API that accepts and stores sequence enquiries in memory.
+Oracle Quant API is a Spring Boot 3.5.14 / Java 17 REST API that decodes submitted sequence strings using a length-encoded parser and stores the results in memory.
 
 **Tech Stack**
 - Java 17
@@ -101,26 +101,46 @@ HTTP Request
 [ Controller ]   -- HTTP mappings only, zero business logic
      |
      v
-[   Service  ]   -- All business logic, in-memory ArrayList storage
+[   Service  ]   -- Validation, decoder algorithm, in-memory ArrayList storage
      |
      v
-[  Sequence  ]   -- POJO model (id, sequence, currentTime)
+[  Sequence  ]   -- POJO model (id, currentTime, output)
 ```
 
 **Package structure:**
 ```
 com.oraclequantapi.oraclequantapi
-├── OraclequantapiApplication.java   (entry point)
-├── controller/
-│   └── Controller.java              (REST layer - @RestController)
-└── service/
-    ├── Service.java                 (business logic - @Service)
-    └── Sequence.java                (model POJO)
++-- OraclequantapiApplication.java   (entry point)
++-- controller/
+|   +-- Controller.java              (REST layer - @RestController)
++-- services/
+    +-- Service.java                 (business logic - @Service)
+    +-- Sequence.java                (model POJO)
 ```
 
 - The Controller delegates all logic to the Service via `@Autowired` injection.
-- The Service stores all incoming sequences in an in-memory `ArrayList` (data resets on restart).
+- The Service validates input, runs the length-encoded parser, and stores the decoded integer output array in memory (data resets on restart).
 - `id` and `currentTime` are always server-generated — never client-supplied.
+- `input` is write-only — accepted in the request body but never returned in any response.
+
+---
+
+## Decoder Algorithm
+
+The `sequenceLogicAlgorithm` method processes the input string using a self-delimiting length-encoded parser:
+
+- Character values: `a=1, b=2, ... z=26, _=0`
+- **Header phase:** consecutive `z` characters each add 26 to the block length; the first non-`z` character adds its own value. This determines how many characters to consume next.
+- **Data phase:** consume exactly that many characters and sum their values; the sum is appended to the output array.
+- Parsing repeats left-to-right until the full string is consumed.
+
+**Examples:**
+
+| Input | Decode steps | Output |
+|---|---|---|
+| `abbcc` | `a`=len 1 → `b`=2; `b`=len 2 → `c`+`c`=6 | `[2, 6]` |
+| `cdaaabaa` | `c`=len 3 → `d`+`a`+`a`=6; `a`=len 1 → `b`=2; `a`=len 1 → `a`=1 | `[6, 2, 1]` |
+| `zabc...` | `z`+`a`=len 27 → consume 27 chars | `[sum]` |
 
 ---
 
@@ -128,7 +148,7 @@ com.oraclequantapi.oraclequantapi
 
 ### POST `/sequenceDecoder`
 
-Submit a new sequence enquiry. The `input` field must contain **only lowercase letters a–z and underscores** — any other character returns 400. The server auto-generates `id` (UUID) and `currentTime`.
+Submit a sequence string for decoding. The `input` field must contain **only lowercase letters a-z and underscores** and **must not start with `_`** — any violation returns 400. The server decodes the input, auto-generates `id` and `currentTime`, and returns the result.
 
 **Request:**
 ```http
@@ -136,7 +156,7 @@ POST http://localhost:8080/sequenceDecoder
 Content-Type: application/json
 
 {
-  "input": "aabbbbbbbabdchdb"
+  "input": "abbcc"
 }
 ```
 
@@ -144,29 +164,39 @@ Content-Type: application/json
 ```json
 {
   "id": "a3f9c1d2-84ab-4e11-b3c7-2f4400000001",
-  "input": "aabbbbbbbabdchdb",
-  "currentTime": "2026-05-24 14:30:00"
+  "currentTime": "2026-05-24 14:30:00",
+  "output": [2, 6]
 }
 ```
 
 **Another valid example:**
+```http
+{ "input": "cdaaabaa" }
+```
 ```json
-{ "input": "aa_" }
+{
+  "id": "b7e2d3a1-91cd-4f22-c4d8-3g5500000002",
+  "currentTime": "2026-05-24 14:31:05",
+  "output": [6, 2, 1]
+}
 ```
 
 **Invalid input — Response 400 Bad Request:**
 ```json
 { "input": "Hello123!" }
 ```
+```json
+{ "input": "_abc" }
 ```
-Input must only contain lowercase letters a-z and underscore
+```
+Input must only contain a-z and underscore, and must not start with underscore
 ```
 
 ---
 
 ### GET `/sequenceDecoder`
 
-Retrieve all stored sequence enquiries.
+Retrieve all stored sequence enquiries with their decoded outputs.
 
 **Request:**
 ```http
@@ -178,13 +208,13 @@ GET http://localhost:8080/sequenceDecoder
 [
   {
     "id": "a3f9c1d2-84ab-4e11-b3c7-2f4400000001",
-    "input": "aabbbbbbbabdchdb",
-    "currentTime": "2026-05-24 14:30:00"
+    "currentTime": "2026-05-24 14:30:00",
+    "output": [2, 6]
   },
   {
     "id": "b7e2d3a1-91cd-4f22-c4d8-3g5500000002",
-    "input": "aa_",
-    "currentTime": "2026-05-24 14:31:05"
+    "currentTime": "2026-05-24 14:31:05",
+    "output": [6, 2, 1]
   }
 ]
 ```
@@ -197,14 +227,14 @@ This project uses feature branches for isolated development:
 
 ```bash
 # Create a feature branch
-git checkout -b feature/--86exp5ubg---initializing-rest-Api
+git checkout -b feature/--86exp5ubg--creating-solverLogics
 
-# Stage specific files and commit with concise messages (1-5 words)
-git add src/main/java/com/oraclequantapi/oraclequantapi/controller/Controller.java
-git commit -m "Add Controller scaffold"
+# Stage specific files and commit with concise messages
+git add src/main/java/com/oraclequantapi/oraclequantapi/services/Service.java
+git commit -m "Implement length-encoded parser logic"
 
 # Push to remote and open a Pull Request
-git push origin feature/--86exp5ubg---initializing-rest-Api
+git push origin feature/--86exp5ubg--creating-solverLogics
 ```
 
 All changes are committed in small, atomic commits and merged into `main` via Pull Request on GitHub.
