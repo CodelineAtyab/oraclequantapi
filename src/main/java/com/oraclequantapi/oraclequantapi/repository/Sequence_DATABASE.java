@@ -69,4 +69,21 @@ public class Sequence_DATABASE {
         }
     }
 
+    //------[DB] Updates an existing Sequence — checks existsById first, then overwrites via repository.save()
+    public Sequence update(Sequence sequence) {
+        try {
+            checkAvailable();
+            if (!repository.existsById(sequence.getId())) {
+                return null;
+            }
+            return repository.save(sequence);
+        } catch (IllegalStateException e) {
+            throw e;
+        } catch (DataAccessException e) {
+            throw new RuntimeException("DB error while updating sequence: " + e.getMostSpecificCause().getMessage(), e);
+        } catch (Exception e) {
+            throw new RuntimeException("Unexpected error during update: " + e.getMessage(), e);
+        }
+    }
+
 }
