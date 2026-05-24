@@ -71,4 +71,8 @@ public class HistoryRecord {
         return input;
     }
 
+    public void setInput(String input) {
+        this.input = input;
+    }
+
 }
