@@ -44,7 +44,7 @@ public class MeasurementController {
 
         log.info("Request saved from IP: {}", clientIp(request));
 
-        return List.of();
+        return output;
     }
 
 }
