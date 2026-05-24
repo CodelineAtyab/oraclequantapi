@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.oraclequantapi.oraclequantapi.model.HistoryRecord;
 import com.oraclequantapi.oraclequantapi.repository.HistoryRepository;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,6 +30,11 @@ public class HistoryService {
         catch (JsonProcessingException exception) {
             throw new IllegalStateException("Unable to serialize conversion output", exception);
         }
+    }
+
+    @Transactional(readOnly = true)
+    public List<HistoryRecord> findAll() {
+        return repository.findAll(Sort.by(Sort.Direction.ASC, "id"));
     }
 
 }
