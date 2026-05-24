@@ -3,6 +3,7 @@ package com.oraclequantapi.oraclequantapi.service;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -14,6 +15,11 @@ public class Service {
     public Sequence addSequence(Sequence sequence) {
         sequenceList.add(sequence);
         return sequence;
+    }
+
+    // Returns all stored enquiries as a read-only view
+    public List<Sequence> getAllSequences() {
+        return Collections.unmodifiableList(sequenceList);
     }
 
 }
