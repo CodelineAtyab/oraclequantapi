@@ -14,6 +14,7 @@ public class Service {
 
     private final List<Sequence> sequenceList = new ArrayList<>();
 
+    //------[DB] Currently stores in RAM — delegate to Sequence_DATABASE.persist() to switch to Oracle
     // Stores enquiry after validating input contains only a-z and underscore, and does not start with _
     public Sequence addSequence(Sequence sequence) {
         String input = sequence.getInput();
@@ -28,6 +29,7 @@ public class Service {
         return sequence;
     }
 
+    //------[DB] Currently updates in RAM — delegate to Sequence_DATABASE.update() for Oracle persistence
     // Finds enquiry by id, validates new input, re-runs decoder, and updates the stored entry
     public Sequence updateSequence(Sequence request) {
         String newInput = request.getInput();
@@ -45,11 +47,13 @@ public class Service {
         return null;
     }
 
+    //------[DB] Currently deletes from RAM — delegate to Sequence_DATABASE.remove() for Oracle persistence
     // Removes the enquiry matching the given id; returns true if found and deleted
     public boolean deleteSequence(String id) {
         return sequenceList.removeIf(s -> s.getId().equals(id));
     }
 
+    //------[DB] Currently reads from RAM — delegate to Sequence_DATABASE.retrieveAll() for Oracle persistence
     // Returns all stored enquiries as a read-only view
     public List<Sequence> getAllSequences() {
         return Collections.unmodifiableList(sequenceList);
