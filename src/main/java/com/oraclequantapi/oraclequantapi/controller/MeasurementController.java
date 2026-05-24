@@ -47,4 +47,8 @@ public class MeasurementController {
         return output;
     }
 
+    private String clientIp(HttpServletRequest request) {
+
+    }
+
 }
