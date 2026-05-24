@@ -114,16 +114,91 @@ com.oraclequantapi.oraclequantapi
 +-- controller/
 |   +-- Controller.java              (REST layer - @RestController)
 +-- services/
-|   +-- Service.java                 (business logic - @Service)
+|   +-- Service.java                 (business logic - @Service, currently RAM-based)
 +-- module/
-    +-- Sequence.java                (model POJO)
+|   +-- Sequence.java                (JPA entity / model POJO)
++-- repository/
+    +-- Repository.java              (Spring Data JPA interface)
+    +-- Sequence_DATABASE.java       (exception-safe DB persistence layer)
 ```
 
 - The Controller delegates all logic to the Service via `@Autowired` injection.
-- The Service validates input, runs the length-encoded parser, and manages the in-memory ArrayList (data resets on restart).
-- `Sequence.java` lives in the `module` package — separated from business logic (SRP).
+- The Service validates input, runs the length-encoded parser, and currently manages an in-memory ArrayList (data resets on restart).
+- `Sequence.java` lives in the `module` package — separated from business logic (SRP). It is a full JPA `@Entity` mapped to the `SEQUENCE_ENQUIRIES` Oracle table.
+- The `repository` package is the prepared Oracle persistence layer — activate by configuring `application.yaml` and removing the autoconfigure exclusions.
 - `id` and `currentTime` are always server-generated — never client-supplied.
 - `input` is write-only — accepted in the request body but never returned in any response.
+
+---
+
+## Database Diagram
+
+```
++-----------------------------+
+|   SEQUENCE_ENQUIRIES        |  Oracle Table
++-----------------------------+
+| PK  ID           VARCHAR2   |  UUID, server-generated
+|     INPUT        VARCHAR2   |  Raw input (write-only in API)
+|     CURRENT_TIME VARCHAR2   |  Timestamp of save or last update
++-----------------------------+
+           |
+           | managed by
+           v
++-----------------------------+
+|   Repository.java           |  Spring Data JPA interface
+|   JpaRepository<            |  Auto-provides: save, findAll,
+|     Sequence, String>       |  findById, existsById, deleteById
++-----------------------------+
+           |
+           | wrapped by
+           v
++-----------------------------+
+|   Sequence_DATABASE.java    |  Exception-safe persistence layer
+|   persist()                 |  -> repository.save()
+|   retrieveAll()             |  -> repository.findAll()
+|   retrieveById()            |  -> repository.findById()
+|   update()                  |  -> existsById() + save()
+|   remove()                  |  -> existsById() + deleteById()
++-----------------------------+
+           |
+           | ready to replace
+           v
++-----------------------------+
+|   Service.java              |  Currently RAM ArrayList
+|   addSequence()             |  -> replace with persist()
+|   getAllSequences()         |  -> replace with retrieveAll()
+|   updateSequence()          |  -> replace with update()
+|   deleteSequence()          |  -> replace with remove()
++-----------------------------+
+```
+
+---
+
+## Database Setup
+
+The Oracle persistence layer is scaffolded and ready. To activate it:
+
+1. **Configure credentials** in `src/main/resources/application.yaml`:
+   ```yaml
+   spring:
+     datasource:
+       url: jdbc:oracle:thin:@//your-host:1521/your-service
+       username: YOUR_USERNAME
+       password: YOUR_PASSWORD
+   ```
+
+2. **Remove the autoconfigure exclusions** from `application.yaml` (the three lines under `spring.autoconfigure.exclude`).
+
+3. **Create the Oracle table** before starting the app (`ddl-auto: none` — schema is not auto-created):
+   ```sql
+   CREATE TABLE SEQUENCE_ENQUIRIES (
+       ID           VARCHAR2(36)  PRIMARY KEY,
+       INPUT        VARCHAR2(500),
+       CURRENT_TIME VARCHAR2(30)
+   );
+   ```
+
+4. **Wire `Sequence_DATABASE` into `Service.java`** — replace the ArrayList calls with the corresponding `Sequence_DATABASE` method calls as indicated by the `//------[DB]` comments.
 
 ---
 
