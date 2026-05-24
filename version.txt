@@ -7,3 +7,8 @@
 - Added underscore-prefix input rejection rule
 - Implemented length-encoded sequence parser algorithm
 - Output array now exposed on POST and GET responses
+
+[0.3] 24/05/26
+- Moved Sequence model to dedicated Module package
+- Added PUT endpoint for updating stored enquiries
+- Added DELETE endpoint for removing stored enquiries
