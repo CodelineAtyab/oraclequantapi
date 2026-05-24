@@ -67,5 +67,11 @@ public class HistoryController {
         return error(HttpStatus.NOT_FOUND, exception.getMessage());
     }
 
+    private HistoryRecord update(Long id, HistoryUpdateRequest request) {
+        HistoryRecord record = historyService.update(id, request.timestamp(), request.sourceIpAddress(), request.input(), request.output());
+        log.info("History record {} updated successfully", id);
+        return record;
+    }
+
 
 }
