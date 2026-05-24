@@ -54,3 +54,79 @@ repository/
 entity/
 parser/
 exception/
+
+## Oracle Linux Deployment
+
+This project was packaged into a deployable Spring Boot JAR file and tested successfully outside IntelliJ.
+
+### Build the Application
+
+Run the following command inside the project directory:
+
+```bash
+mvn clean package -DskipTests
+```
+
+After a successful build, the JAR file will be generated inside:
+
+```text
+target/oraclequantapi-0.0.1-SNAPSHOT.jar
+```
+
+### Run the Application
+
+Start the Spring Boot application using:
+
+```bash
+java -jar target/oraclequantapi-0.0.1-SNAPSHOT.jar
+```
+
+### Oracle Database Setup
+
+Oracle Database was configured using Docker.
+
+Start the Oracle XE container:
+
+```bash
+docker run -d \
+--name oracle-db \
+-p 1521:1521 \
+-e ORACLE_PASSWORD=oracle \
+gvenzl/oracle-xe:21-slim
+```
+
+### Verify Database Connection
+
+Access the Oracle container:
+
+```bash
+docker exec -it oracle-db bash
+```
+
+Connect to SQL Plus:
+
+```bash
+sqlplus system/oracle@localhost:1521/XE
+```
+
+Verify stored records:
+
+```sql
+SELECT * FROM measurement_record;
+```
+
+### API Testing
+
+The API was tested using Postman.
+
+Example request:
+
+```http
+GET http://localhost:8080/convert-measurements?input=dz_a_aazzaaa
+```
+
+Example response:
+
+```json
+[28,53,1]
+```
