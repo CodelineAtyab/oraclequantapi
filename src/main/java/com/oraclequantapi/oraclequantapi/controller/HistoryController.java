@@ -1,5 +1,7 @@
 package com.oraclequantapi.oraclequantapi.controller;
 
+import com.fasterxml.jackson.annotation.JsonAlias;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.oraclequantapi.oraclequantapi.model.HistoryRecord;
 import com.oraclequantapi.oraclequantapi.service.HistoryService;
 import org.slf4j.Logger;
@@ -76,6 +78,9 @@ public class HistoryController {
 
     private ResponseEntity<Map<String, Object>> error(HttpStatus status, String message) {
         return ResponseEntity.status(status).body(Map.of("timestamp", Instant.now().toString(), "status", status.value(), "error", status.getReasonPhrase(), "message", message));
+    }
+
+    public record HistoryUpdateRequest (Instant timestamp, @JsonProperty("source_ip_address") @JsonAlias("sourceIpAddress") String sourceIpAddress, String input, String output) {
     }
 
 
