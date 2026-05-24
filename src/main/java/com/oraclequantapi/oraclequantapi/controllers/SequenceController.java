@@ -2,6 +2,7 @@ package com.oraclequantapi.oraclequantapi.controllers;
 
 
 import com.oraclequantapi.oraclequantapi.models.Sequence;
+import com.oraclequantapi.oraclequantapi.models.SequenceHistory;
 import com.oraclequantapi.oraclequantapi.services.SequenceService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.ResponseEntity;
