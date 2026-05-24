@@ -63,4 +63,8 @@ public class HistoryRecord {
         return sourceIpAddress;
     }
 
+    public void setSourceIpAddress(String sourceIpAddress) {
+        this.sourceIpAddress = sourceIpAddress;
+    }
+
 }
