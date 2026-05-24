@@ -26,6 +26,15 @@ public class MeasurementController {
     @GetMapping("/convert-measurements")
     public List<Integer> convert(@RequestParam(required = false) String input, HttpServletRequest request) {
 
+        String safeInput;
+        if (input == null) {
+            safeInput = "";
+        }
+        else {
+            safeInput = input;
+        }
+
+
         return List.of();
     }
 
