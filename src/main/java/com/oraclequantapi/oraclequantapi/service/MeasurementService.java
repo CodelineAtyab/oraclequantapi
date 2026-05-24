@@ -17,6 +17,8 @@ public class MeasurementService {
         int index = 0;
 
         while (index < input.length()) {
+            ParsedNumber count = readNumber(input, index);
+            index = count.nextIndex();
 
         }
     }
