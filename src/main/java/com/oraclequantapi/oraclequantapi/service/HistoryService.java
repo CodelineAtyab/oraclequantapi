@@ -80,4 +80,8 @@ public class HistoryService {
 
     }
 
+    public static class HistoryRecordNotFoundException extends RuntimeException {
+
+    }
+
 }
