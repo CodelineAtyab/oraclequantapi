@@ -40,6 +40,8 @@ public class MeasurementController {
 
         log.info("Conversion result: {}", output);
 
+        historyService.record(safeInput, output, clientIp(request));
+
         return List.of();
     }
 
