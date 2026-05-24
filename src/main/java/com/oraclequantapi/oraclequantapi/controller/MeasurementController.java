@@ -48,7 +48,7 @@ public class MeasurementController {
     }
 
     private String clientIp(HttpServletRequest request) {
-
+        String forwardedFor = request.getHeader("X-Forwarded-For");
     }
 
 }
