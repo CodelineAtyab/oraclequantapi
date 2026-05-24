@@ -1,20 +1,22 @@
 package com.oraclequantapi.oraclequantapi.services;
 
 import com.oraclequantapi.oraclequantapi.module.Sequence;
+import com.oraclequantapi.oraclequantapi.repository.Sequence_DATABASE;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
-// Encapsulates all business logic for sequence enquiries; validates and stores inputs in RAM.
+// Encapsulates all business logic for sequence enquiries; validates inputs and delegates persistence to Oracle.
 @org.springframework.stereotype.Service
 public class Service {
 
-    private final List<Sequence> sequenceList = new ArrayList<>();
+    @Autowired
+    private Sequence_DATABASE sequenceDb;
 
-    //------[DB] Currently stores in RAM — delegate to Sequence_DATABASE.persist() to switch to Oracle
+    //------[DB] Delegates to Sequence_DATABASE.persist() — stores validated enquiry in Oracle
     // Stores enquiry after validating input contains only a-z and underscore, and does not start with _
     public Sequence addSequence(Sequence sequence) {
         String input = sequence.getInput();
@@ -25,38 +27,33 @@ public class Service {
             return null;
         }
         sequence.setOutput(sequenceLogicAlgorithm(input));
-        sequenceList.add(sequence);
-        return sequence;
+        return sequenceDb.persist(sequence);
     }
 
-    //------[DB] Currently updates in RAM — delegate to Sequence_DATABASE.update() for Oracle persistence
+    //------[DB] Delegates to Sequence_DATABASE.update() — validates, refreshes time/output, persists to Oracle
     // Finds enquiry by id, validates new input, re-runs decoder, and updates the stored entry
     public Sequence updateSequence(Sequence request) {
         String newInput = request.getInput();
         if (newInput == null || !newInput.matches("^[a-z_]+$") || newInput.charAt(0) == '_') {
             return null;
         }
-        for (Sequence s : sequenceList) {
-            if (s.getId().equals(request.getId())) {
-                s.setInput(newInput);
-                s.setCurrentTime(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
-                s.setOutput(sequenceLogicAlgorithm(newInput));
-                return s;
-            }
-        }
-        return null;
+        request.setCurrentTime(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+        request.setOutput(sequenceLogicAlgorithm(newInput));
+        return sequenceDb.update(request);
     }
 
-    //------[DB] Currently deletes from RAM — delegate to Sequence_DATABASE.remove() for Oracle persistence
+    //------[DB] Delegates to Sequence_DATABASE.remove() — removes enquiry by id from Oracle
     // Removes the enquiry matching the given id; returns true if found and deleted
     public boolean deleteSequence(String id) {
-        return sequenceList.removeIf(s -> s.getId().equals(id));
+        return sequenceDb.remove(id);
     }
 
-    //------[DB] Currently reads from RAM — delegate to Sequence_DATABASE.retrieveAll() for Oracle persistence
-    // Returns all stored enquiries as a read-only view
+    //------[DB] Delegates to Sequence_DATABASE.retrieveAll() — loads all rows from Oracle, recomputes @Transient output
+    // Returns all stored enquiries; output is recomputed from input since it is not persisted in Oracle
     public List<Sequence> getAllSequences() {
-        return Collections.unmodifiableList(sequenceList);
+        List<Sequence> list = sequenceDb.retrieveAll();
+        list.forEach(s -> s.setOutput(sequenceLogicAlgorithm(s.getInput())));
+        return list;
     }
 
     // Decodes an input string using a self-delimiting length-encoded parser:
