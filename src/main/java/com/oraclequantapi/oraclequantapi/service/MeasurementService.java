@@ -2,6 +2,7 @@ package com.oraclequantapi.oraclequantapi.service;
 
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -11,5 +12,8 @@ public class MeasurementService {
         if (input == null) {
             return List.of();
         }
+
+        List<Integer> totals = new ArrayList<>();
+        int index = 0;
     }
 }
