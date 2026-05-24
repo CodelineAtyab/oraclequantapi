@@ -4,10 +4,12 @@ import com.oraclequantapi.oraclequantapi.model.HistoryRecord;
 import com.oraclequantapi.oraclequantapi.service.HistoryService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/history")
@@ -58,5 +60,12 @@ public class HistoryController {
         log.info("History record {} deleted successfully", id);
         return ResponseEntity.noContent().build();
     }
+
+    @ExceptionHandler(HistoryService.HistoryRecordNotFoundException.class)
+    public ResponseEntity<Map<String, Object>> historyNotFound(HistoryService.HistoryRecordNotFoundException exception) {
+        log.warn("History record not found: {}", exception.getMessage());
+        return error(HttpStatus.NOT_FOUND, exception.getMessage());
+    }
+
 
 }
