@@ -40,4 +40,11 @@ public class HistoryRecord {
         this.output = output;
     }
 
+    @PrePersist
+    void onCreate() {
+        if (timestamp == null) {
+            timestamp = Instant.now();
+        }
+    }
+
 }
