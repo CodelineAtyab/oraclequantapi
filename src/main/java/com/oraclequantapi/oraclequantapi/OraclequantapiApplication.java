@@ -7,7 +7,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class OraclequantapiApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(OraclequantapiApplication.class, args);
+		SpringApplication.run
+				(OraclequantapiApplication.class, args);
 	}
 
 }
