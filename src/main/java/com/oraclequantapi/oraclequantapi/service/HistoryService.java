@@ -73,6 +73,9 @@ public class HistoryService {
 
     @Transactional
     public void deleteById(Long id) {
+        if (!repository.existsById(id)) {
+            throw new HistoryRecordNotFoundException(id);
+        }
 
     }
 
