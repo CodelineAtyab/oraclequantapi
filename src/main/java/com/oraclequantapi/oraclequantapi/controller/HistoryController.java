@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.Map;
 
@@ -71,6 +72,10 @@ public class HistoryController {
         HistoryRecord record = historyService.update(id, request.timestamp(), request.sourceIpAddress(), request.input(), request.output());
         log.info("History record {} updated successfully", id);
         return record;
+    }
+
+    private ResponseEntity<Map<String, Object>> error(HttpStatus status, String message) {
+        return ResponseEntity.status(status).body(Map.of("timestamp", Instant.now().toString(), "status", status.value(), "error", status.getReasonPhrase(), "message", message));
     }
 
 
