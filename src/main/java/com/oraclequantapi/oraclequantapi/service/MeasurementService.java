@@ -59,6 +59,9 @@ public class MeasurementService {
     }
 
     private int symbolValue(char symbol) {
+        if (symbol == '_') {
+            return 0;
+        }
 
     }
 
