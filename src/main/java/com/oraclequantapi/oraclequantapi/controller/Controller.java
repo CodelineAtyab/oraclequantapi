@@ -16,4 +16,11 @@ public class Controller {
     @Autowired
     private Service service;
 
+    // Accepts a sequence enquiry and stores it in memory
+    @PostMapping
+    public ResponseEntity<Sequence> postSequence(@RequestBody Sequence sequence) {
+        Sequence stored = service.addSequence(sequence);
+        return ResponseEntity.status(HttpStatus.CREATED).body(stored);
+    }
+
 }
