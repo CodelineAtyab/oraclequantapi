@@ -34,6 +34,7 @@ public class MeasurementController {
             safeInput = input;
         }
 
+        log.info("Received input: {}", safeInput);
 
         return List.of();
     }
