@@ -1,12 +1,10 @@
-package com.oraclequantapi.oraclequantapi.service;
-
-import org.springframework.stereotype.Service;
+package com.oraclequantapi.oraclequantapi.services;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-@Service
+@org.springframework.stereotype.Service
 public class Service {
 
     private final List<Sequence> sequenceList = new ArrayList<>();
