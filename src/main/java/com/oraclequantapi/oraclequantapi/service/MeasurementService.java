@@ -31,5 +31,6 @@ public class MeasurementService {
             total += measurement.value();
             index = measurement.nextIndex();
         }
+        totals.add(total);
     }
 }
