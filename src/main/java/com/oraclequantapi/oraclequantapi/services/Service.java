@@ -1,6 +1,6 @@
 package com.oraclequantapi.oraclequantapi.services;
 
-import com.oraclequantapi.oraclequantapi.module.Sequence;
+import com.oraclequantapi.oraclequantapi.repository.DATABASE;
 import com.oraclequantapi.oraclequantapi.repository.Sequence_DATABASE;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -18,21 +18,21 @@ public class Service {
 
     //------[DB] Delegates to Sequence_DATABASE.persist() — stores validated enquiry in Oracle
     // Stores enquiry after validating input contains only a-z and underscore, and does not start with _
-    public Sequence addSequence(Sequence sequence) {
-        String input = sequence.getInput();
+    public DATABASE addSequence(DATABASE db) {
+        String input = db.getInput();
         if (input == null || !input.matches("^[a-z_]+$")) {
             return null;
         }
         if (input.charAt(0) == '_') {
             return null;
         }
-        sequence.setOutput(sequenceLogicAlgorithm(input));
-        return sequenceDb.persist(sequence);
+        db.setOutput(sequenceLogicAlgorithm(input));
+        return sequenceDb.persist(db);
     }
 
     //------[DB] Delegates to Sequence_DATABASE.update() — validates, refreshes time/output, persists to Oracle
     // Finds enquiry by id, validates new input, re-runs decoder, and updates the stored entry
-    public Sequence updateSequence(Sequence request) {
+    public DATABASE updateSequence(DATABASE request) {
         String newInput = request.getInput();
         if (newInput == null || !newInput.matches("^[a-z_]+$") || newInput.charAt(0) == '_') {
             return null;
@@ -50,9 +50,9 @@ public class Service {
 
     //------[DB] Delegates to Sequence_DATABASE.retrieveAll() — loads all rows from Oracle, recomputes @Transient output
     // Returns all stored enquiries; output is recomputed from input since it is not persisted in Oracle
-    public List<Sequence> getAllSequences() {
-        List<Sequence> list = sequenceDb.retrieveAll();
-        list.forEach(s -> s.setOutput(sequenceLogicAlgorithm(s.getInput())));
+    public List<DATABASE> getAllSequences() {
+        List<DATABASE> list = sequenceDb.retrieveAll();
+        list.forEach(db -> db.setOutput(sequenceLogicAlgorithm(db.getInput())));
         return list;
     }
 

@@ -1,6 +1,5 @@
 package com.oraclequantapi.oraclequantapi.repository;
 
-import com.oraclequantapi.oraclequantapi.module.Sequence;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -25,18 +24,18 @@ public class Sequence_DATABASE {
         }
     }
 
-    //------[DB] Persists a new Sequence entity to Oracle via repository.save()
-    public Sequence persist(Sequence sequence) {
+    //------[DB] Persists a new DATABASE entity to Oracle via repository.save()
+    public DATABASE persist(DATABASE db) {
         checkAvailable();
         try {
-            return repository.save(sequence);
+            return repository.save(db);
         } catch (Exception e) {
             throw new RuntimeException("Unable to save your request — a database error occurred.", e);
         }
     }
 
-    //------[DB] Retrieves all Sequence records from Oracle via repository.findAll()
-    public List<Sequence> retrieveAll() {
+    //------[DB] Retrieves all DATABASE records from Oracle via repository.findAll()
+    public List<DATABASE> retrieveAll() {
         checkAvailable();
         try {
             return repository.findAll();
@@ -45,8 +44,8 @@ public class Sequence_DATABASE {
         }
     }
 
-    //------[DB] Looks up a single Sequence by UUID primary key via repository.findById()
-    public Optional<Sequence> retrieveById(String id) {
+    //------[DB] Looks up a single DATABASE record by UUID primary key via repository.findById()
+    public Optional<DATABASE> retrieveById(String id) {
         checkAvailable();
         try {
             return repository.findById(id);
@@ -55,20 +54,20 @@ public class Sequence_DATABASE {
         }
     }
 
-    //------[DB] Updates an existing Sequence — checks existsById first, then overwrites via repository.save()
-    public Sequence update(Sequence sequence) {
+    //------[DB] Updates an existing DATABASE record — checks existsById first, then overwrites via repository.save()
+    public DATABASE update(DATABASE db) {
         checkAvailable();
-        if (!repository.existsById(sequence.getId())) {
+        if (!repository.existsById(db.getId())) {
             return null;
         }
         try {
-            return repository.save(sequence);
+            return repository.save(db);
         } catch (Exception e) {
             throw new RuntimeException("Unable to update your request — a database error occurred.", e);
         }
     }
 
-    //------[DB] Removes a Sequence by UUID — checks existsById first, then issues repository.deleteById()
+    //------[DB] Removes a DATABASE record by UUID — checks existsById first, then issues repository.deleteById()
     public boolean remove(String id) {
         checkAvailable();
         if (!repository.existsById(id)) {

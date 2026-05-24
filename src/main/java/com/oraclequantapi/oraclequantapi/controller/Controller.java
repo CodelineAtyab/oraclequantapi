@@ -1,6 +1,6 @@
 package com.oraclequantapi.oraclequantapi.controller;
 
-import com.oraclequantapi.oraclequantapi.module.Sequence;
+import com.oraclequantapi.oraclequantapi.repository.DATABASE;
 import com.oraclequantapi.oraclequantapi.services.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,8 +19,8 @@ public class Controller {
 
     // Accepts a sequence enquiry; rejects with 400 if input contains non a-z or non-underscore characters
     @PostMapping
-    public ResponseEntity<?> postSequence(@RequestBody Sequence sequence) {
-        Sequence stored = service.addSequence(sequence);
+    public ResponseEntity<?> postSequence(@RequestBody DATABASE db) {
+        DATABASE stored = service.addSequence(db);
         if (stored == null) {
             return ResponseEntity.badRequest().body("Input must only contain a-z and underscore, and must not start with underscore");
         }
@@ -29,18 +29,18 @@ public class Controller {
 
     // Updates an existing enquiry by id; re-runs decoder on new input
     @PutMapping
-    public ResponseEntity<?> updateSequence(@RequestBody Sequence sequence) {
-        Sequence updated = service.updateSequence(sequence);
+    public ResponseEntity<?> updateSequence(@RequestBody DATABASE db) {
+        DATABASE updated = service.updateSequence(db);
         if (updated == null) {
             return ResponseEntity.badRequest().body("Enquiry not found or input invalid");
         }
         return ResponseEntity.status(HttpStatus.CREATED).body(updated);
     }
 
-    // Removes an existing enquiry by id from memory
+    // Removes an existing enquiry by id from Oracle
     @DeleteMapping
-    public ResponseEntity<?> deleteSequence(@RequestBody Sequence sequence) {
-        boolean deleted = service.deleteSequence(sequence.getId());
+    public ResponseEntity<?> deleteSequence(@RequestBody DATABASE db) {
+        boolean deleted = service.deleteSequence(db.getId());
         if (!deleted) {
             return ResponseEntity.badRequest().body("Enquiry not found or already deleted");
         }
@@ -49,7 +49,7 @@ public class Controller {
 
     // Returns all previously submitted sequence enquiries
     @GetMapping
-    public ResponseEntity<List<Sequence>> getAllSequences() {
+    public ResponseEntity<List<DATABASE>> getAllSequences() {
         return ResponseEntity.ok(service.getAllSequences());
     }
 
