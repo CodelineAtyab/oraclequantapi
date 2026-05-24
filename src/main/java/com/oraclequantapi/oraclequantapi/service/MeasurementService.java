@@ -68,4 +68,6 @@ public class MeasurementService {
         return symbol - 'a' + 1;
     }
 
+    private record ParsedNumber(int value, int nextIndex) {
+    }
 }
