@@ -59,3 +59,198 @@ To submit your Oracle JAVA Spring Boot Maven project as a solution, please follo
 ## Note: If you face any issues in the process above, Please do the following:
 - Watch [this youtube tutorial](https://www.youtube.com/watch?v=a_FLqX3vGR4)
 - Contact Ikhlas or Atyab.
+----------------# OracleQuant API - Package Measurement Conversion
+
+## How to Build
+```bash
+cd oraclequantapi
+mvn clean package -DskipTests
+```
+
+## How to Run
+```bash
+java -jar target/oraclequantapi-0.0.1-SNAPSHOT.jar
+```
+
+## Database Configuration
+Make sure Oracle XE is running via Docker:
+```bash
+docker run -d --name oracle-xe -p 1521:1521 -e ORACLE_PASSWORD=29999login gvenzl/oracle-xe:21-slim
+```
+
+Update `application.properties`:
+
+# OracleQuant ERP - Package Measurement Conversion API
+
+## Overview
+A REST API for converting package measurement input strings into a list of total values per package. Built with Java 17, Spring Boot, and Oracle XE Database.
+
+---
+
+## Prerequisites
+- Oracle OpenJDK 17
+- Oracle XE Database
+- Maven 3.x
+
+---
+
+## Building the Application
+
+```bash
+./mvnw clean package
+```
+
+The JAR file will be generated at:
+```
+target/oraclequantapi-0.0.1-SNAPSHOT.jar
+```
+
+---
+
+## Configuring the Database
+
+Edit `src/main/resources/application.properties`:
+
+```properties
+spring.datasource.url=jdbc:oracle:thin:@localhost:1521:XE
+spring.datasource.username=system
+spring.datasource.password=YOUR_PASSWORD
+spring.datasource.driver-class-name=oracle.jdbc.OracleDriver
+spring.jpa.hibernate.ddl-auto=update
+```
+
+---
+
+## Running the Application
+
+### On Windows:
+```bash
+./mvnw spring-boot:run
+```
+
+### On Oracle Linux:
+```bash
+java -jar oraclequantapi-0.0.1-SNAPSHOT.jar
+```
+
+The application runs on port **8080** by default.
+
+---
+
+## Deploying on Oracle Linux via SSH
+
+### Step 1 — Copy JAR to Oracle Linux server:
+```bash
+scp -P 22 target/oraclequantapi-0.0.1-SNAPSHOT.jar user@SERVER_IP:/home/user/
+```
+
+### Step 2 — SSH into the server:
+```bash
+ssh user@SERVER_IP
+```
+
+### Step 3 — Run the application:
+```bash
+java -jar /home/user/oraclequantapi-0.0.1-SNAPSHOT.jar
+```
+
+### Step 4 — Run in background (keep running after logout):
+```bash
+nohup java -jar /home/user/oraclequantapi-0.0.1-SNAPSHOT.jar > /dev/null 2>&1 &
+```
+
+---
+
+## REST API Endpoints
+
+### Conversion Endpoint
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/convert-measurements?input={string}` | Convert measurement input string |
+
+**Example:**
+```
+GET http://localhost:8080/convert-measurements?input=abbcc
+Response: [2, 6]
+```
+
+---
+
+### History Endpoints
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/history` | Get all history records |
+| GET | `/history/{id}` | Get record by ID |
+| PUT | `/history/{id}` | Update record by ID |
+| PATCH | `/history/{id}` | Partially update record by ID |
+| DELETE | `/history` | Delete all history records |
+
+**Example:**
+```
+GET http://localhost:8080/history
+Response:
+[
+  {
+    "id": 1,
+    "timestamp": "2026-05-24T00:48:17",
+    "sourceIpAddress": "0:0:0:0:0:0:0:1",
+    "input": "abbcc",
+    "output": "[2, 6]"
+  }
+]
+```
+
+---
+
+## Input Encoding Format
+
+- Letters `a–y` map to values `1–25`
+- Letter `z` means continue reading (add next character too)
+- `_` means `0`
+- First character = count of values in the package
+- Remaining characters = the values
+
+**Examples:**
+
+| Input | Output |
+|-------|--------|
+| `aa` | `[1]` |
+| `abbcc` | `[2, 6]` |
+| `dz_a_aazzaaa` | `[28, 53, 1]` |
+| `a_` | `[0]` |
+
+---
+
+## Logging
+
+Logs are written to:
+```
+logs/pkc-api.log
+```
+- Rolling logs: 7 days history
+- Log level: INFO
+
+---
+
+## Project Structure
+
+```
+src/
+├── main/
+│   ├── java/com/oraclequantapi/oraclequantapi/
+│   │   ├── controller/
+│   │   │   ├── ConversionController.java
+│   │   │   └── HistoryController.java
+│   │   ├── model/
+│   │   │   └── ConversionHistory.java
+│   │   ├── repository/
+│   │   │   └── HistoryRepository.java
+│   │   ├── service/
+│   │   │   ├── ConversionService.java
+│   │   │   └── HistoryService.java
+│   │   └── OraclequantapiApplication.java
+│   └── resources/
+│       └── application.properties
+```

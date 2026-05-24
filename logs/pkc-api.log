@@ -1,0 +1,108 @@
+2026-05-24T00:06:11.650+04:00  INFO 25884 --- [oraclequantapi] [main] c.o.o.OraclequantapiApplicationTests     : Starting OraclequantapiApplicationTests using Java 17.0.19 with PID 25884 (started by PC in C:\Users\PC\Desktop\kawther3lii-evaluation4\oraclequantapi)
+2026-05-24T00:06:11.658+04:00  INFO 25884 --- [oraclequantapi] [main] c.o.o.OraclequantapiApplicationTests     : No active profile set, falling back to 1 default profile: "default"
+2026-05-24T00:06:12.317+04:00  INFO 25884 --- [oraclequantapi] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-05-24T00:06:12.379+04:00  INFO 25884 --- [oraclequantapi] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 52 ms. Found 1 JPA repository interface.
+2026-05-24T00:06:12.875+04:00  INFO 25884 --- [oraclequantapi] [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-05-24T00:06:12.955+04:00  INFO 25884 --- [oraclequantapi] [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.6.15.Final
+2026-05-24T00:06:12.996+04:00  INFO 25884 --- [oraclequantapi] [main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2026-05-24T00:06:13.350+04:00  INFO 25884 --- [oraclequantapi] [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-05-24T00:06:13.385+04:00  INFO 25884 --- [oraclequantapi] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-05-24T00:06:13.750+04:00  INFO 25884 --- [oraclequantapi] [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection oracle.jdbc.driver.T4CConnection@e07b4db
+2026-05-24T00:06:13.751+04:00  INFO 25884 --- [oraclequantapi] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2026-05-24T00:06:13.889+04:00  WARN 25884 --- [oraclequantapi] [main] org.hibernate.orm.deprecation            : HHH90000025: OracleDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-05-24T00:06:14.009+04:00  INFO 25884 --- [oraclequantapi] [main] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 21.3
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-05-24T00:06:14.746+04:00  INFO 25884 --- [oraclequantapi] [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-05-24T00:06:16.306+04:00  INFO 25884 --- [oraclequantapi] [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-05-24T00:06:16.637+04:00  WARN 25884 --- [oraclequantapi] [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-05-24T00:06:17.015+04:00  INFO 25884 --- [oraclequantapi] [main] c.o.o.OraclequantapiApplicationTests     : Started OraclequantapiApplicationTests in 5.705 seconds (process running for 6.596)
+2026-05-24T00:06:17.415+04:00  INFO 25884 --- [oraclequantapi] [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-05-24T00:06:17.417+04:00  INFO 25884 --- [oraclequantapi] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2026-05-24T00:06:17.439+04:00  INFO 25884 --- [oraclequantapi] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2026-05-24T00:19:25.165+04:00  INFO 27364 --- [oraclequantapi] [main] c.o.o.OraclequantapiApplicationTests     : Starting OraclequantapiApplicationTests using Java 17.0.19 with PID 27364 (started by PC in C:\Users\PC\Desktop\kawther3lii-evaluation4\oraclequantapi)
+2026-05-24T00:19:25.168+04:00  INFO 27364 --- [oraclequantapi] [main] c.o.o.OraclequantapiApplicationTests     : No active profile set, falling back to 1 default profile: "default"
+2026-05-24T00:19:25.822+04:00  INFO 27364 --- [oraclequantapi] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-05-24T00:19:25.889+04:00  INFO 27364 --- [oraclequantapi] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 57 ms. Found 1 JPA repository interface.
+2026-05-24T00:19:26.382+04:00  INFO 27364 --- [oraclequantapi] [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-05-24T00:19:26.446+04:00  INFO 27364 --- [oraclequantapi] [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.6.15.Final
+2026-05-24T00:19:26.483+04:00  INFO 27364 --- [oraclequantapi] [main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2026-05-24T00:19:26.811+04:00  INFO 27364 --- [oraclequantapi] [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-05-24T00:19:26.846+04:00  INFO 27364 --- [oraclequantapi] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-05-24T00:19:27.175+04:00  INFO 27364 --- [oraclequantapi] [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection oracle.jdbc.driver.T4CConnection@3193e21d
+2026-05-24T00:19:27.177+04:00  INFO 27364 --- [oraclequantapi] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2026-05-24T00:19:27.312+04:00  WARN 27364 --- [oraclequantapi] [main] org.hibernate.orm.deprecation            : HHH90000025: OracleDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-05-24T00:19:27.406+04:00  INFO 27364 --- [oraclequantapi] [main] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 21.3
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-05-24T00:19:28.075+04:00  INFO 27364 --- [oraclequantapi] [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-05-24T00:19:29.291+04:00  INFO 27364 --- [oraclequantapi] [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-05-24T00:19:29.652+04:00  WARN 27364 --- [oraclequantapi] [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-05-24T00:19:30.065+04:00  INFO 27364 --- [oraclequantapi] [main] c.o.o.OraclequantapiApplicationTests     : Started OraclequantapiApplicationTests in 5.22 seconds (process running for 6.064)
+2026-05-24T00:19:30.465+04:00  INFO 27364 --- [oraclequantapi] [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-05-24T00:19:30.468+04:00  INFO 27364 --- [oraclequantapi] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2026-05-24T00:19:30.491+04:00  INFO 27364 --- [oraclequantapi] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2026-05-24T00:34:04.204+04:00  INFO 3460 --- [oraclequantapi] [main] c.o.o.OraclequantapiApplicationTests     : Starting OraclequantapiApplicationTests using Java 17.0.19 with PID 3460 (started by PC in C:\Users\PC\Desktop\kawther3lii-evaluation4\oraclequantapi)
+2026-05-24T00:34:04.207+04:00  INFO 3460 --- [oraclequantapi] [main] c.o.o.OraclequantapiApplicationTests     : No active profile set, falling back to 1 default profile: "default"
+2026-05-24T00:34:04.851+04:00  INFO 3460 --- [oraclequantapi] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-05-24T00:34:04.917+04:00  INFO 3460 --- [oraclequantapi] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 55 ms. Found 1 JPA repository interface.
+2026-05-24T00:34:05.350+04:00  INFO 3460 --- [oraclequantapi] [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-05-24T00:34:05.403+04:00  INFO 3460 --- [oraclequantapi] [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.6.15.Final
+2026-05-24T00:34:05.434+04:00  INFO 3460 --- [oraclequantapi] [main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2026-05-24T00:34:05.744+04:00  INFO 3460 --- [oraclequantapi] [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-05-24T00:34:05.772+04:00  INFO 3460 --- [oraclequantapi] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-05-24T00:34:06.094+04:00  INFO 3460 --- [oraclequantapi] [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection oracle.jdbc.driver.T4CConnection@63553e9f
+2026-05-24T00:34:06.096+04:00  INFO 3460 --- [oraclequantapi] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2026-05-24T00:34:06.197+04:00  WARN 3460 --- [oraclequantapi] [main] org.hibernate.orm.deprecation            : HHH90000025: OracleDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-05-24T00:34:06.285+04:00  INFO 3460 --- [oraclequantapi] [main] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 21.3
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-05-24T00:34:06.940+04:00  INFO 3460 --- [oraclequantapi] [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-05-24T00:34:07.979+04:00  INFO 3460 --- [oraclequantapi] [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-05-24T00:34:08.313+04:00  WARN 3460 --- [oraclequantapi] [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-05-24T00:34:08.691+04:00  INFO 3460 --- [oraclequantapi] [main] c.o.o.OraclequantapiApplicationTests     : Started OraclequantapiApplicationTests in 4.831 seconds (process running for 5.667)
+2026-05-24T00:34:09.076+04:00  INFO 3460 --- [oraclequantapi] [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-05-24T00:34:09.081+04:00  INFO 3460 --- [oraclequantapi] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2026-05-24T00:34:09.104+04:00  INFO 3460 --- [oraclequantapi] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2026-05-24T00:47:41.990+04:00  INFO 17060 --- [oraclequantapi] [main] c.o.o.OraclequantapiApplicationTests     : Starting OraclequantapiApplicationTests using Java 17.0.19 with PID 17060 (started by PC in C:\Users\PC\Desktop\kawther3lii-evaluation4\oraclequantapi)
+2026-05-24T00:47:41.993+04:00  INFO 17060 --- [oraclequantapi] [main] c.o.o.OraclequantapiApplicationTests     : No active profile set, falling back to 1 default profile: "default"
+2026-05-24T00:47:42.647+04:00  INFO 17060 --- [oraclequantapi] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-05-24T00:47:42.703+04:00  INFO 17060 --- [oraclequantapi] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 45 ms. Found 1 JPA repository interface.
+2026-05-24T00:47:43.160+04:00  INFO 17060 --- [oraclequantapi] [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-05-24T00:47:43.218+04:00  INFO 17060 --- [oraclequantapi] [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.6.15.Final
+2026-05-24T00:47:43.252+04:00  INFO 17060 --- [oraclequantapi] [main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2026-05-24T00:47:43.538+04:00  INFO 17060 --- [oraclequantapi] [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-05-24T00:47:43.567+04:00  INFO 17060 --- [oraclequantapi] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-05-24T00:47:43.892+04:00  INFO 17060 --- [oraclequantapi] [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection oracle.jdbc.driver.T4CConnection@243c4346
+2026-05-24T00:47:43.893+04:00  INFO 17060 --- [oraclequantapi] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2026-05-24T00:47:44.013+04:00  WARN 17060 --- [oraclequantapi] [main] org.hibernate.orm.deprecation            : HHH90000025: OracleDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-05-24T00:47:44.097+04:00  INFO 17060 --- [oraclequantapi] [main] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 21.3
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-05-24T00:47:44.736+04:00  INFO 17060 --- [oraclequantapi] [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-05-24T00:47:45.814+04:00  INFO 17060 --- [oraclequantapi] [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-05-24T00:47:46.137+04:00  WARN 17060 --- [oraclequantapi] [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-05-24T00:47:46.507+04:00  INFO 17060 --- [oraclequantapi] [main] c.o.o.OraclequantapiApplicationTests     : Started OraclequantapiApplicationTests in 4.877 seconds (process running for 5.744)
+2026-05-24T00:47:46.870+04:00  INFO 17060 --- [oraclequantapi] [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-05-24T00:47:46.873+04:00  INFO 17060 --- [oraclequantapi] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2026-05-24T00:47:46.893+04:00  INFO 17060 --- [oraclequantapi] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
