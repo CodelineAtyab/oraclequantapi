@@ -76,6 +76,7 @@ public class HistoryService {
         if (!repository.existsById(id)) {
             throw new HistoryRecordNotFoundException(id);
         }
+        repository.deleteById(id);
 
     }
 
