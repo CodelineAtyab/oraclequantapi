@@ -77,11 +77,12 @@ public class HistoryService {
             throw new HistoryRecordNotFoundException(id);
         }
         repository.deleteById(id);
-
     }
 
     public static class HistoryRecordNotFoundException extends RuntimeException {
-
+        public HistoryRecordNotFoundException(Long id) {
+            super("History record not found: " + id);
+        }
     }
 
 }
