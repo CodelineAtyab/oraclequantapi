@@ -62,7 +62,9 @@ public class MeasurementService {
         if (symbol == '_') {
             return 0;
         }
-
+        if (symbol < 'a' || symbol > 'z') {
+            return 0;
+        }
     }
 
 }
