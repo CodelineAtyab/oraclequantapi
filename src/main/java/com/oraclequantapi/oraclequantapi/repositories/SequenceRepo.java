@@ -1,10 +1,10 @@
 package com.oraclequantapi.oraclequantapi.repositories;
 
 
-import com.oraclequantapi.oraclequantapi.models.Sequence;
+import com.oraclequantapi.oraclequantapi.models.SequenceHistory;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface SequenceRepo extends JpaRepository<Sequence, Long> {
+public interface SequenceRepo extends JpaRepository<SequenceHistory, Long> {
 }
