@@ -1,4 +1,4 @@
-package com.oraclequantapi.oraclequantapi.service;
+package com.oraclequantapi.oraclequantapi.services;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -8,7 +8,7 @@ import java.util.UUID;
 public class Sequence {
 
     private String id;
-    private String sequence;
+    private String input;
     private String currentTime;
 
     public Sequence() {
@@ -17,9 +17,9 @@ public class Sequence {
                 .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
     }
 
-    public Sequence(String id, String sequence, String currentTime) {
+    public Sequence(String id, String input, String currentTime) {
         this.id = id;
-        this.sequence = sequence;
+        this.input = input;
         this.currentTime = currentTime;
     }
 
@@ -27,8 +27,8 @@ public class Sequence {
         return id;
     }
 
-    public String getSequence() {
-        return sequence;
+    public String getInput() {
+        return input;
     }
 
     public String getCurrentTime() {
@@ -39,8 +39,8 @@ public class Sequence {
         this.id = id;
     }
 
-    public void setSequence(String sequence) {
-        this.sequence = sequence;
+    public void setInput(String input) {
+        this.input = input;
     }
 
     public void setCurrentTime(String currentTime) {

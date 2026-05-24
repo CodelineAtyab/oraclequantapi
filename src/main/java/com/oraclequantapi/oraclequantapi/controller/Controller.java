@@ -1,7 +1,7 @@
 package com.oraclequantapi.oraclequantapi.controller;
 
-import com.oraclequantapi.oraclequantapi.service.Sequence;
-import com.oraclequantapi.oraclequantapi.service.Service;
+import com.oraclequantapi.oraclequantapi.services.Sequence;
+import com.oraclequantapi.oraclequantapi.services.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,10 +16,13 @@ public class Controller {
     @Autowired
     private Service service;
 
-    // Accepts a sequence enquiry and stores it in memory
+    // Accepts a sequence enquiry; rejects with 400 if input contains non a-z or non-underscore characters
     @PostMapping
-    public ResponseEntity<Sequence> postSequence(@RequestBody Sequence sequence) {
+    public ResponseEntity<?> postSequence(@RequestBody Sequence sequence) {
         Sequence stored = service.addSequence(sequence);
+        if (stored == null) {
+            return ResponseEntity.badRequest().body("Input must only contain lowercase letters a-z and underscore");
+        }
         return ResponseEntity.status(HttpStatus.CREATED).body(stored);
     }
 

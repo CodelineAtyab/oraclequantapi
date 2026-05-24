@@ -9,8 +9,11 @@ public class Service {
 
     private final List<Sequence> sequenceList = new ArrayList<>();
 
-    // Stores enquiry and returns it with server-generated id and timestamp
+    // Stores enquiry after validating input contains only a-z and underscore
     public Sequence addSequence(Sequence sequence) {
+        if (sequence.getInput() == null || !sequence.getInput().matches("^[a-z_]+$")) {
+            return null;
+        }
         sequenceList.add(sequence);
         return sequence;
     }
