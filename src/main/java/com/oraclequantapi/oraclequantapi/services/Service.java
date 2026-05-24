@@ -2,6 +2,8 @@ package com.oraclequantapi.oraclequantapi.services;
 
 import com.oraclequantapi.oraclequantapi.module.Sequence;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -24,6 +26,23 @@ public class Service {
         sequence.setOutput(sequenceLogicAlgorithm(input));
         sequenceList.add(sequence);
         return sequence;
+    }
+
+    // Finds enquiry by id, validates new input, re-runs decoder, and updates the stored entry
+    public Sequence updateSequence(Sequence request) {
+        String newInput = request.getInput();
+        if (newInput == null || !newInput.matches("^[a-z_]+$") || newInput.charAt(0) == '_') {
+            return null;
+        }
+        for (Sequence s : sequenceList) {
+            if (s.getId().equals(request.getId())) {
+                s.setInput(newInput);
+                s.setCurrentTime(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+                s.setOutput(sequenceLogicAlgorithm(newInput));
+                return s;
+            }
+        }
+        return null;
     }
 
     // Returns all stored enquiries as a read-only view
