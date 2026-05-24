@@ -1,61 +1,146 @@
-﻿## Submission Instructions
+# OracleQuant ERP - Package Measurement Conversion API
 
-To submit your Oracle JAVA Spring Boot Maven project as a solution, please follow these steps:
+A REST API for converting measurement input strings into package totals, built with **Java 17**, **Spring Boot**, **JPA**, and **Oracle XE**.
 
-### Step 1: Install git on your PC
-- Install "git" as shown in this tutorial: [How to install git](https://youtu.be/iYkLrXobBbA?si=_l0haibv_X9NpIjJ)
-- Open command prompt and run
-  ```bash
-  git version
-  ```
-- If you see the version, then git is successfully installed.
+---
 
-### Step 2: Fork the Repository
-- Navigate to [this repository](https://github.com/CodelineAtyab/oraclequantapi) provided by Codeline.
-- Click on the "Fork" button at the top-right corner of the page to create a copy of the repository under your own GitHub account.
+## Prerequisites
 
-### Step 3: Clone the Forked Repository
-- Open your terminal or command prompt.
-- Clone the forked repository to your local machine using the following command:
-  ```bash
-  git clone https://github.com/your-username/repo-name.git
-  ```
+- Oracle OpenJDK 17
+- Maven (or use the included `mvnw` wrapper)
+- Oracle XE database (21c+)
 
-### Step 4: Create a new branch
-- Navigate to the cloned repository directory
-  ```bash
-  cd repo-name
-  ```
-- Create a new branch for your code submissions (Replace your-name with your name in your-name-submission-branch):
-  ```bash
-  git checkout -b your-name-submission-branch
-  ```
+---
 
+## Build
 
-### Step 5: Add Your Code
-- Implement the API
+```bash
+./mvnw clean package
+```
 
-### Step 6: Commit your changes
-- Run the following commands in order to commit your changes:
-  ```bash
-  git add *
-  git commit -m "Meaningful commit message here"
-  ```
+Produces `target/oraclequantapi-0.0.1-SNAPSHOT.jar`.
 
-### Step 7: Push Your Branch to GitHub
-- Run the following commands to upload the changes to the forked github repository (Replace your-name with your name in your-name-submission-branch):
-  ```bash
-  git push origin your-name-submission-branch
-  ```
+---
 
-### Step 8: Create a Pull Request
-- Go to your forked repository on GitHub.
-- You should see a prompt to create a pull request. Click on "Compare & pull request".
-- Provide a title and description for your pull request, then click "Create pull request".
+## Database Configuration
 
-### Step 9: Notify Codeline
-- Notify on slack that you have created a PR for your solution.
+Edit `src/main/resources/application.properties`:
 
-## Note: If you face any issues in the process above, Please do the following:
-- Watch [this youtube tutorial](https://www.youtube.com/watch?v=a_FLqX3vGR4)
-- Contact Ikhlas or Atyab.
+```properties
+spring.datasource.url=jdbc:oracle:thin:@localhost:1521/XEPDB1
+spring.datasource.username=your_user
+spring.datasource.password=your_password
+spring.datasource.driver-class-name=oracle.jdbc.OracleDriver
+
+spring.jpa.hibernate.ddl-auto=update
+spring.jpa.database-platform=org.hibernate.dialect.OracleDialect
+```
+
+Tables are created automatically via `ddl-auto=update`.
+
+---
+
+## Run
+
+```bash
+java -jar target/oraclequantapi-0.0.1-SNAPSHOT.jar
+```
+
+The API starts at `http://localhost:8080`.
+
+---
+
+## API Endpoints
+
+### Convert measurements
+
+```
+GET /convert-measurements?input={string}
+```
+
+**Response**: `200 OK` with JSON array of package totals.
+
+| Request | Response |
+|---|---|
+| `?input=aa` | `[1]` |
+| `?input=abbcc` | `[2, 6]` |
+| `?input=dz_a_aazzaaa` | `[28, 53, 1]` |
+| `?input=a_` | `[0]` |
+| `?input=abcdabcdab` | `[2, 7, 7]` |
+| `?input=abcdabcdab_` | `[2, 7, 7, 0]` |
+
+### History
+
+| Method | Endpoint | Description |
+|---|---|---|
+| GET | `/convert-measurements/history` | List all records |
+| GET | `/convert-measurements/history/{id}` | Get record by ID |
+| PUT | `/convert-measurements/history/{id}` | Update record |
+| DELETE | `/convert-measurements/history` | Clear all history |
+| DELETE | `/convert-measurements/history/{id}` | Delete record by ID |
+
+Each history record contains: `id`, `timestamp`, `source_ip_address`, `input`, `output`.
+
+---
+
+## Deploy on Oracle Linux
+
+### 1. Transfer the JAR
+
+```bash
+scp target/oraclequantapi-0.0.1-SNAPSHOT.jar oracle@your-vm-ip:/home/oracle/
+```
+
+### 2. SSH into the VM
+
+```bash
+ssh oracle@your-vm-ip
+```
+
+### 3. Install Java (if not present)
+
+```bash
+sudo dnf install java-17-openjdk-devel
+```
+
+### 4. Run as a service (optional)
+
+```bash
+sudo tee /etc/systemd/system/oraclequantapi.service <<EOF
+[Unit]
+Description=OracleQuant Measurement Conversion API
+After=network.target
+
+[Service]
+ExecStart=/usr/bin/java -jar /home/oracle/oraclequantapi-0.0.1-SNAPSHOT.jar
+User=oracle
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+sudo systemctl daemon-reload
+sudo systemctl enable --now oraclequantapi
+```
+
+### 5. Verify
+
+```bash
+curl http://localhost:8080/convert-measurements?input=aa
+```
+
+---
+
+## Encoding Rules
+
+- `a` = 1, `b` = 2, ..., `z` = 26
+- `_` = 0
+- Numbers > 26: chain `z` characters (each adds 26), terminated by a non-`z` letter
+- Each package: first number = count of values, then sum of that many values
+
+---
+
+## Logging
+
+Logs are written to `logs/oraclequantapi.YYYY-MM-DD.log` and rotated daily, retained for 7 days.
