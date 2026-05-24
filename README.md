@@ -1,4 +1,4 @@
-﻿## Submission Instructions
+## Submission Instructions
 
 To submit your Oracle JAVA Spring Boot Maven project as a solution, please follow these steps:
 
@@ -59,3 +59,139 @@ To submit your Oracle JAVA Spring Boot Maven project as a solution, please follo
 ## Note: If you face any issues in the process above, Please do the following:
 - Watch [this youtube tutorial](https://www.youtube.com/watch?v=a_FLqX3vGR4)
 - Contact Ikhlas or Atyab.
+
+---
+
+## Project Overview
+
+Oracle Quant API is a Spring Boot 3.5.14 / Java 17 REST API that accepts and stores sequence enquiries in memory.
+
+**Tech Stack**
+- Java 17
+- Spring Boot 3.5.14
+- Spring Web (embedded Tomcat)
+- Maven
+
+---
+
+## How to Run
+
+**Prerequisites:** Java 17 JDK installed.
+
+```bash
+# Windows
+mvnw.cmd spring-boot:run
+
+# macOS / Linux
+./mvnw spring-boot:run
+```
+
+The server starts on `http://localhost:8080`. No database or external setup required.
+
+---
+
+## Architecture
+
+Clean 3-layer architecture with strict Single Responsibility Principle (SRP):
+
+```
+HTTP Request
+     |
+     v
+[ Controller ]   -- HTTP mappings only, zero business logic
+     |
+     v
+[   Service  ]   -- All business logic, in-memory ArrayList storage
+     |
+     v
+[  Sequence  ]   -- POJO model (id, sequence, currentTime)
+```
+
+**Package structure:**
+```
+com.oraclequantapi.oraclequantapi
+├── OraclequantapiApplication.java   (entry point)
+├── controller/
+│   └── Controller.java              (REST layer - @RestController)
+└── service/
+    ├── Service.java                 (business logic - @Service)
+    └── Sequence.java                (model POJO)
+```
+
+- The Controller delegates all logic to the Service via `@Autowired` injection.
+- The Service stores all incoming sequences in an in-memory `ArrayList` (data resets on restart).
+- `id` and `currentTime` are always server-generated — never client-supplied.
+
+---
+
+## API Reference
+
+### POST `/sequenceDecoder`
+
+Submit a new sequence enquiry. The server auto-generates `id` (UUID) and `currentTime`.
+
+**Request:**
+```http
+POST http://localhost:8080/sequenceDecoder
+Content-Type: application/json
+
+{
+  "sequence": "1, 1, 2, 3, 5, 8, 13"
+}
+```
+
+**Response — 201 Created:**
+```json
+{
+  "id": "a3f9c1d2-84ab-4e11-b3c7-2f4400000001",
+  "sequence": "1, 1, 2, 3, 5, 8, 13",
+  "currentTime": "2026-05-24 14:30:00"
+}
+```
+
+---
+
+### GET `/sequenceDecoder`
+
+Retrieve all stored sequence enquiries.
+
+**Request:**
+```http
+GET http://localhost:8080/sequenceDecoder
+```
+
+**Response — 200 OK:**
+```json
+[
+  {
+    "id": "a3f9c1d2-84ab-4e11-b3c7-2f4400000001",
+    "sequence": "1, 1, 2, 3, 5, 8, 13",
+    "currentTime": "2026-05-24 14:30:00"
+  },
+  {
+    "id": "b7e2d3a1-91cd-4f22-c4d8-3g5500000002",
+    "sequence": "2, 4, 8, 16, 32",
+    "currentTime": "2026-05-24 14:31:05"
+  }
+]
+```
+
+---
+
+## Branch Workflow
+
+This project uses feature branches for isolated development:
+
+```bash
+# Create a feature branch
+git checkout -b feature/--86exp5ubg---initializing-rest-Api
+
+# Stage specific files and commit with concise messages (1-5 words)
+git add src/main/java/com/oraclequantapi/oraclequantapi/controller/Controller.java
+git commit -m "Add Controller scaffold"
+
+# Push to remote and open a Pull Request
+git push origin feature/--86exp5ubg---initializing-rest-Api
+```
+
+All changes are committed in small, atomic commits and merged into `main` via Pull Request on GitHub.
