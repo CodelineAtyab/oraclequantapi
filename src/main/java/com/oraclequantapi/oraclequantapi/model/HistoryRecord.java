@@ -23,4 +23,12 @@ public class HistoryRecord {
     @JsonAlias("sourceIpAddress")
     private String sourceIpAddress;
 
+    @Lob
+    @Column(name = "INPUT")
+    private String input;
+
+    @Lob
+    @Column(name = "OUTPUT", nullable = false)
+    private String output;
+
 }
