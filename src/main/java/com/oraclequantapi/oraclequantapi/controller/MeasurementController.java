@@ -42,6 +42,8 @@ public class MeasurementController {
 
         historyService.record(safeInput, output, clientIp(request));
 
+        log.info("Request saved from IP: {}", clientIp(request));
+
         return List.of();
     }
 
