@@ -17,10 +17,10 @@ public class MeasurementController {
     public MeasurementService measurementService;
 
     // /convert-measurements?input=aa
-    @GetMapping(path = "/convert-measurements")
+    @GetMapping(path = "/convert")
     public ResponseEntity<List<Long>> convertMeasurements(
             @RequestParam(name = "input", required = false) String input,
-            @RequestParam(name = "convert-measurements", required = false) String legacyInput,
+            @RequestParam(name = "convert", required = false) String legacyInput,
             HttpServletRequest request
     ) {
 

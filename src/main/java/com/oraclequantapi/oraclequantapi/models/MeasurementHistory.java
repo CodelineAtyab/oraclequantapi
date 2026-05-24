@@ -25,6 +25,7 @@ public class MeasurementHistory {
 
 
     // Normalized input string after converting capital letters to lowercase.
+    //  Lob: Large Object & No size limit
     @Lob
     @Column(name = "MEASUREMENT_INPUT")
     public String input;
