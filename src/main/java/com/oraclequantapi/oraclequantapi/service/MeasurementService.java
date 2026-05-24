@@ -21,5 +21,15 @@ public class MeasurementService {
             index = count.nextIndex();
 
         }
+
+        int total = 0;
+        for (int valueIndex = 0; valueIndex < count.value(); valueIndex++) {
+            if (index >= input.length()) {
+                continue;
+            }
+            ParsedNumber measurement = readNumber(input, index);
+            total += measurement.value();
+            index = measurement.nextIndex();
+        }
     }
 }
