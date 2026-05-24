@@ -36,6 +36,8 @@ public class MeasurementController {
 
         log.info("Received input: {}", safeInput);
 
+        List<Integer> output = measurementService.convert(safeInput);
+
         return List.of();
     }
 
