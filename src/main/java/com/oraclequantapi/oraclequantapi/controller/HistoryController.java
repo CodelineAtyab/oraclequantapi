@@ -4,10 +4,7 @@ import com.oraclequantapi.oraclequantapi.model.HistoryRecord;
 import com.oraclequantapi.oraclequantapi.service.HistoryService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -31,6 +28,12 @@ public class HistoryController {
     public HistoryRecord findById(@PathVariable Long id) {
         log.info("Fetching history record with id {}", id);
         return historyService.findById(id);
+    }
+
+    @PutMapping("/{id}")
+    public HistoryRecord put(@PathVariable Long id, @RequestBody HistoryUpdateRequest request) {
+        log.info("PUT update request received for history record {}", id);
+        return update(id, request);
     }
 
 }
