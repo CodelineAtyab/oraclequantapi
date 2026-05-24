@@ -71,4 +71,9 @@ public class HistoryService {
         repository.deleteAllInBatch();
     }
 
+    @Transactional
+    public void deleteById(Long id) {
+
+    }
+
 }
