@@ -46,6 +46,11 @@ public class HistoryService {
     @Transactional
     public HistoryRecord update(Long id, Instant timestamp, String sourceIpAddress, String input, String output) {
         HistoryRecord record = findById(id);
+
+        if (timestamp != null) {
+            record.setTimestamp(timestamp);
+        }
+
         return repository.save(record);
     }
 
