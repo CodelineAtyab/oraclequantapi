@@ -45,6 +45,11 @@ public class Service {
         return null;
     }
 
+    // Removes the enquiry matching the given id; returns true if found and deleted
+    public boolean deleteSequence(String id) {
+        return sequenceList.removeIf(s -> s.getId().equals(id));
+    }
+
     // Returns all stored enquiries as a read-only view
     public List<Sequence> getAllSequences() {
         return Collections.unmodifiableList(sequenceList);
