@@ -36,7 +36,11 @@ public class MeasurementService {
     }
 
     private ParsedNumber readNumber(String input, int startIndex) {
+        char first = input.charAt(startIndex);
 
+        if (first != 'z') {
+            return new ParsedNumber(symbolValue(first), startIndex + 1);
+        }
     }
 
 }
