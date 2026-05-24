@@ -42,7 +42,7 @@ public class Controller {
     public ResponseEntity<?> deleteSequence(@RequestBody Sequence sequence) {
         boolean deleted = service.deleteSequence(sequence.getId());
         if (!deleted) {
-            return ResponseEntity.badRequest().body("Enquiry not found");
+            return ResponseEntity.badRequest().body("Enquiry not found or already deleted");
         }
         return ResponseEntity.status(HttpStatus.CREATED).body("Enquiry deleted successfully");
     }
