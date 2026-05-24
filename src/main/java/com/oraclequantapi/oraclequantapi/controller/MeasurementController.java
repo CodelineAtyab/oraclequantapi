@@ -52,6 +52,7 @@ public class MeasurementController {
         if (forwardedFor != null && !forwardedFor.isBlank()) {
             return forwardedFor.split(",")[0].trim();
         }
+        return request.getRemoteAddr();
     }
 
 }
