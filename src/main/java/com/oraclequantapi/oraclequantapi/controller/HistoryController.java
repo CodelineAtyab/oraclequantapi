@@ -36,4 +36,10 @@ public class HistoryController {
         return update(id, request);
     }
 
+    @PatchMapping("/{id}")
+    public HistoryRecord patch(@PathVariable Long id, @RequestBody HistoryUpdateRequest request) {
+        log.info("PATCH update request received for history record {}", id);
+        return update(id, request);
+    }
+
 }
