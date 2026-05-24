@@ -1,61 +1,160 @@
-﻿## Submission Instructions
+﻿# Package Measurement Conversion API
 
-To submit your Oracle JAVA Spring Boot Maven project as a solution, please follow these steps:
+## Features
+- Convert measurement strings to numeric package totals.
+- Persist conversion history in Oracle XE Database.
+- Built with Spring Boot and Oracle OpenJDK 17.
+- Logging to `logs/` directory.
 
-### Step 1: Install git on your PC
-- Install "git" as shown in this tutorial: [How to install git](https://youtu.be/iYkLrXobBbA?si=_l0haibv_X9NpIjJ)
-- Open command prompt and run
-  ```bash
-  git version
-  ```
-- If you see the version, then git is successfully installed.
+## Prerequisites
+- Oracle OpenJDK 17 installed.
+- Oracle XE 21c Database running.
+- Apache Maven 3.8+ installed.
 
-### Step 2: Fork the Repository
-- Navigate to [this repository](https://github.com/CodelineAtyab/oraclequantapi) provided by Codeline.
-- Click on the "Fork" button at the top-right corner of the page to create a copy of the repository under your own GitHub account.
+---
 
-### Step 3: Clone the Forked Repository
-- Open your terminal or command prompt.
-- Clone the forked repository to your local machine using the following command:
-  ```bash
-  git clone https://github.com/your-username/repo-name.git
-  ```
+## Running the Application
 
-### Step 4: Create a new branch
-- Navigate to the cloned repository directory
-  ```bash
-  cd repo-name
-  ```
-- Create a new branch for your code submissions (Replace your-name with your name in your-name-submission-branch):
-  ```bash
-  git checkout -b your-name-submission-branch
-  ```
+### Build the JAR
+```bash
+.\mvnw clean package -DskipTests
+```
 
+### Run the JAR
+```bash
+java -jar target/pkc-api.jar
+```
 
-### Step 5: Add Your Code
-- Implement the API
+### API available at
 
-### Step 6: Commit your changes
-- Run the following commands in order to commit your changes:
-  ```bash
-  git add *
-  git commit -m "Meaningful commit message here"
-  ```
+http://localhost:8080/
+---
 
-### Step 7: Push Your Branch to GitHub
-- Run the following commands to upload the changes to the forked github repository (Replace your-name with your name in your-name-submission-branch):
-  ```bash
-  git push origin your-name-submission-branch
-  ```
+## Configuring the Database
 
-### Step 8: Create a Pull Request
-- Go to your forked repository on GitHub.
-- You should see a prompt to create a pull request. Click on "Compare & pull request".
-- Provide a title and description for your pull request, then click "Create pull request".
+Edit `src/main/resources/application.properties`:
 
-### Step 9: Notify Codeline
-- Notify on slack that you have created a PR for your solution.
+```properties
+spring.datasource.url=jdbc:oracle:thin:@//localhost:1521/XEPDB1
+spring.datasource.username=system
+spring.datasource.password=yourpassword
+spring.datasource.driver-class-name=oracle.jdbc.OracleDriver
+spring.jpa.hibernate.ddl-auto=update
+server.port=8080
+```
 
-## Note: If you face any issues in the process above, Please do the following:
-- Watch [this youtube tutorial](https://www.youtube.com/watch?v=a_FLqX3vGR4)
-- Contact Ikhlas or Atyab.
+---
+
+## API Endpoints
+
+### Convert Measurements
+
+GET/http://192.168.100.7:8080/history/2
+
+{
+    "id": 2,
+    "timestamp": "2026-05-24T08:59:18.375786",
+    "sourceIpAddress": "0:0:0:0:0:0:0:1",
+    "input": "aa",
+    "output": "[1]"
+}
+
+POST/http://192.168.100.7:8080/history/2
+
+"timestamp": "2026-05-24T12:18:33.642+00:00",
+"status": 405,
+"error": "Method Not Allowed",
+"path": "/history/2"
+}
+
+PATCH/http://192.168.100.7:8080/history/
+
+{
+"timestamp": "2026-05-24T12:19:48.149+00:00",
+"status": 404,
+"error": "Not Found",
+"path": "/history/"
+}
+
+PUT/http://localhost:8080/history/1
+{
+"id": 1,
+"timestamp": "2026-05-24T08:58:56.620227",
+"sourceIpAddress": "0:0:0:0:0:0:0:1",
+"input": "abbcc",
+"output": "[2, 6]"
+}
+
+http://192.168.100.7:8080/api/convert-measurements?input=abbcc
+[2,6]
+
+DELETE/history
+
+--- Example Response:
+```json
+[
+  {
+    "id": 1,
+    "timestamp": "2024-05-24T10:30:00",
+    "sourceIpAddress": "127.0.0.1",
+    "input": "abbcc",
+    "output": "[2, 6]"
+  }
+]
+```
+
+---
+
+## Deploy on Oracle Linux via SSH
+
+### 1. Copy JAR to Oracle Linux
+```bash
+scp target/pkc-api.jar razan@192.168.100.7:/home/razan/
+```
+
+### 2. SSH into server
+```bash
+ssh razan@192.168.100.7
+```
+
+### 3. Install Java 17
+```bash
+sudo dnf install -y java-17-openjdk-headless
+```
+
+### 4. Create app folder and move JAR
+```bash
+sudo mkdir -p /opt/pkc-api
+sudo cp /home/razan/pkc-api.jar /opt/pkc-api/
+```
+
+### 5. Create configuration file
+```bash
+sudo tee /opt/pkc-api/application.properties << 'EOF'
+spring.datasource.url=jdbc:oracle:thin:@//192.168.100.11:1521/XEPDB1
+spring.datasource.username=system
+spring.datasource.password=yourpassword
+spring.datasource.driver-class-name=oracle.jdbc.OracleDriver
+spring.jpa.hibernate.ddl-auto=update
+server.port=8080
+EOF
+```
+
+### 6. Open firewall port
+```bash
+sudo firewall-cmd --permanent --add-port=8080/tcp
+sudo firewall-cmd --reload
+```
+
+### 7. Run the application
+```bash
+java -jar /opt/pkc-api/pkc-api.jar \
+  --spring.config.location=file:/opt/pkc-api/application.properties
+```
+
+### 8. Test the deployment
+```bash
+curl "http://http://192.168.100.7:8080/api/convert-measurements?input=abcdabcdab"
+```
+
+--- Response:[2,7,7]
