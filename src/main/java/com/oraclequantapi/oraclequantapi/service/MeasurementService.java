@@ -8,6 +8,8 @@ import java.util.List;
 public class MeasurementService {
 
     public List<Integer> convert(String input) {
-        return List.of();
+        if (input == null) {
+            return List.of();
+        }
     }
 }
