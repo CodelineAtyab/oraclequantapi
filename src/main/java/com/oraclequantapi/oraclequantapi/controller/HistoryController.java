@@ -4,6 +4,7 @@ import com.oraclequantapi.oraclequantapi.model.HistoryRecord;
 import com.oraclequantapi.oraclequantapi.service.HistoryService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -40,6 +41,14 @@ public class HistoryController {
     public HistoryRecord patch(@PathVariable Long id, @RequestBody HistoryUpdateRequest request) {
         log.info("PATCH update request received for history record {}", id);
         return update(id, request);
+    }
+
+    @DeleteMapping
+    public ResponseEntity<Void> deleteAll() {
+        log.warn("Deleting all history records");
+        historyService.deleteAll();
+        log.info("All history records deleted successfully");
+        return ResponseEntity.noContent().build();
     }
 
 }
