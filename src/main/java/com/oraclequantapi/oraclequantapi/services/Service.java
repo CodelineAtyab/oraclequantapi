@@ -19,6 +19,7 @@ public class Service {
         if (input.charAt(0) == '_') {
             return null;
         }
+        sequence.setOutput(sequenceLogicAlgorithm(input));
         sequenceList.add(sequence);
         return sequence;
     }

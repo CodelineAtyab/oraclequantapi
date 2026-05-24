@@ -22,7 +22,7 @@ public class Controller {
     public ResponseEntity<?> postSequence(@RequestBody Sequence sequence) {
         Sequence stored = service.addSequence(sequence);
         if (stored == null) {
-            return ResponseEntity.badRequest().body("Input must only contain lowercase letters a-z and underscore");
+            return ResponseEntity.badRequest().body("Input must only contain a-z and underscore, and must not start with underscore");
         }
         return ResponseEntity.status(HttpStatus.CREATED).body(stored);
     }
