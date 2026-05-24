@@ -51,4 +51,8 @@ public class HistoryRecord {
         return id;
     }
 
+    public Instant getTimestamp() {
+        return timestamp;
+    }
+
 }
