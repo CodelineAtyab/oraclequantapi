@@ -20,17 +20,18 @@ public class MeasurementService {
             ParsedNumber count = readNumber(input, index);
             index = count.nextIndex();
 
-        }
 
-        int total = 0;
-        for (int valueIndex = 0; valueIndex < count.value(); valueIndex++) {
-            if (index >= input.length()) {
-                continue;
+            int total = 0;
+            for (int valueIndex = 0; valueIndex < count.value(); valueIndex++) {
+                if (index >= input.length()) {
+                    continue;
+                }
+                ParsedNumber measurement = readNumber(input, index);
+                total += measurement.value();
+                index = measurement.nextIndex();
             }
-            ParsedNumber measurement = readNumber(input, index);
-            total += measurement.value();
-            index = measurement.nextIndex();
+            totals.add(total);
         }
-        totals.add(total);
+        return totals;
     }
 }
