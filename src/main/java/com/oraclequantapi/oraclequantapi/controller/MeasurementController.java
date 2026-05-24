@@ -13,4 +13,9 @@ public class MeasurementController {
     private final MeasurementService measurementService;
     private final HistoryService historyService;
 
+    public MeasurementController(MeasurementService measurementService, HistoryService historyService) {
+        this.measurementService = measurementService;
+        this.historyService = historyService;
+    }
+
 }
