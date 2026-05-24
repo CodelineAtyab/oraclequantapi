@@ -142,3 +142,14 @@
 2026-05-24 01:09:11 [INFO] o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
 2026-05-24 01:09:11 [INFO] o.s.web.servlet.DispatcherServlet - Completed initialization in 4 ms
 2026-05-24 01:09:11 [INFO] c.o.o.s.impl.MeasurementServiceImpl - Fetching measurement history
+2026-05-24 02:31:58 [WARN] com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=46m44s102ms).
+2026-05-24 03:15:17 [WARN] com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=43m18s679ms).
+2026-05-24 03:46:34 [WARN] com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=31m17s96ms).
+2026-05-24 03:59:28 [WARN] com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=12m54s588ms).
+2026-05-24 07:28:08 [WARN] com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=3h28m39s638ms).
+2026-05-24 09:53:26 [WARN] com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=2h24m47s572ms).
+2026-05-24 10:00:01 [WARN] com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=6m35s208ms).
+2026-05-24 10:09:35 [INFO] o.s.b.w.e.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2026-05-24 10:09:35 [INFO] o.s.b.w.e.tomcat.GracefulShutdown - Graceful shutdown complete
+2026-05-24 10:09:35 [INFO] o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-05-24 10:09:35 [INFO] com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
