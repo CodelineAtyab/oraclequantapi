@@ -1,82 +1,20 @@
-## Submission Instructions
-
-To submit your Oracle JAVA Spring Boot Maven project as a solution, please follow these steps:
-
-### Step 1: Install git on your PC
-- Install "git" as shown in this tutorial: [How to install git](https://youtu.be/iYkLrXobBbA?si=_l0haibv_X9NpIjJ)
-- Open command prompt and run
-  ```bash
-  git version
-  ```
-- If you see the version, then git is successfully installed.
-
-### Step 2: Fork the Repository
-- Navigate to [this repository](https://github.com/CodelineAtyab/oraclequantapi) provided by Codeline.
-- Click on the "Fork" button at the top-right corner of the page to create a copy of the repository under your own GitHub account.
-
-### Step 3: Clone the Forked Repository
-- Open your terminal or command prompt.
-- Clone the forked repository to your local machine using the following command:
-  ```bash
-  git clone https://github.com/your-username/repo-name.git
-  ```
-
-### Step 4: Create a new branch
-- Navigate to the cloned repository directory
-  ```bash
-  cd repo-name
-  ```
-- Create a new branch for your code submissions (Replace your-name with your name in your-name-submission-branch):
-  ```bash
-  git checkout -b your-name-submission-branch
-  ```
-
-
-### Step 5: Add Your Code
-- Implement the API
-
-### Step 6: Commit your changes
-- Run the following commands in order to commit your changes:
-  ```bash
-  git add *
-  git commit -m "Meaningful commit message here"
-  ```
-
-### Step 7: Push Your Branch to GitHub
-- Run the following commands to upload the changes to the forked github repository (Replace your-name with your name in your-name-submission-branch):
-  ```bash
-  git push origin your-name-submission-branch
-  ```
-
-### Step 8: Create a Pull Request
-- Go to your forked repository on GitHub.
-- You should see a prompt to create a pull request. Click on "Compare & pull request".
-- Provide a title and description for your pull request, then click "Create pull request".
-
-### Step 9: Notify Codeline
-- Notify on slack that you have created a PR for your solution.
-
-## Note: If you face any issues in the process above, Please do the following:
-- Watch [this youtube tutorial](https://www.youtube.com/watch?v=a_FLqX3vGR4)
-- Contact Ikhlas or Atyab.
-
----
-
 ## Project Overview
 
-Oracle Quant API is a Spring Boot 3.5.14 / Java 17 REST API that decodes submitted sequence strings using a length-encoded parser and stores the results in memory.
+Oracle Quant API is a Spring Boot 3.5.14 / Java 17 REST API that decodes submitted sequence strings using a self-delimiting length-encoded parser and persists the results in an Oracle database.
 
 **Tech Stack**
 - Java 17
 - Spring Boot 3.5.14
 - Spring Web (embedded Tomcat)
+- Spring Data JPA / Hibernate ORM (OracleDialect)
+- Oracle JDBC (ojdbc11)
 - Maven
 
 ---
 
 ## How to Run
 
-**Prerequisites:** Java 17 JDK installed.
+**Prerequisites:** Java 17 JDK and an Oracle database configured in `application.yaml` (see Database Setup below).
 
 ```bash
 # Windows
@@ -86,7 +24,7 @@ mvnw.cmd spring-boot:run
 ./mvnw spring-boot:run
 ```
 
-The server starts on `http://localhost:8080`. No database or external setup required.
+The server starts on `http://localhost:8080`.
 
 ---
 
@@ -98,13 +36,19 @@ Clean 3-layer architecture with strict Single Responsibility Principle (SRP):
 HTTP Request
      |
      v
-[ Controller ]   -- HTTP mappings only, zero business logic
+[ Controller ]        -- HTTP mappings only, zero business logic
      |
      v
-[   Service  ]   -- Validation, decoder algorithm, in-memory ArrayList storage
+[   Service  ]        -- Input validation and decoder algorithm
      |
      v
-[  Sequence  ]   -- POJO model (id, currentTime, output)
+[Sequence_DATABASE]   -- Exception-safe Oracle persistence wrapper
+     |
+     v
+[  Repository  ]      -- Spring Data JPA interface
+     |
+     v
+[  Oracle DB  ]       -- SEQUENCE_ENQUIRIES table
 ```
 
 **Package structure:**
@@ -114,20 +58,20 @@ com.oraclequantapi.oraclequantapi
 +-- controller/
 |   +-- Controller.java              (REST layer - @RestController)
 +-- services/
-|   +-- Service.java                 (business logic - @Service, currently RAM-based)
+|   +-- Service.java                 (business logic - @Service)
 +-- module/
-|   +-- Sequence.java                (JPA entity / model POJO)
+|   +-- Sequence.java                (JPA entity mapped to SEQUENCE_ENQUIRIES)
 +-- repository/
     +-- Repository.java              (Spring Data JPA interface)
-    +-- Sequence_DATABASE.java       (exception-safe DB persistence layer)
+    +-- Sequence_DATABASE.java       (exception-safe Oracle persistence wrapper)
 ```
 
 - The Controller delegates all logic to the Service via `@Autowired` injection.
-- The Service validates input, runs the length-encoded parser, and currently manages an in-memory ArrayList (data resets on restart).
-- `Sequence.java` lives in the `module` package — separated from business logic (SRP). It is a full JPA `@Entity` mapped to the `SEQUENCE_ENQUIRIES` Oracle table.
-- The `repository` package is the prepared Oracle persistence layer — activate by configuring `application.yaml` and removing the autoconfigure exclusions.
+- The Service validates input, runs the length-encoded parser, and delegates all persistence to `Sequence_DATABASE`.
+- `Sequence.java` is the JPA `@Entity` mapped to the `SEQUENCE_ENQUIRIES` Oracle table. It owns all column mappings and JSON serialization rules.
 - `id` and `currentTime` are always server-generated — never client-supplied.
 - `input` is write-only — accepted in the request body but never returned in any response.
+- Data persists across restarts via Oracle; the table is auto-created on first startup (`ddl-auto: update`).
 
 ---
 
@@ -147,7 +91,7 @@ com.oraclequantapi.oraclequantapi
 +-----------------------------+
 |   Repository.java           |  Spring Data JPA interface
 |   JpaRepository<            |  Auto-provides: save, findAll,
-|     Sequence, String>       |  findById, existsById, deleteById
+|     Sequence, String>       |  existsById, deleteById
 +-----------------------------+
            |
            | wrapped by
@@ -156,27 +100,24 @@ com.oraclequantapi.oraclequantapi
 |   Sequence_DATABASE.java    |  Exception-safe persistence layer
 |   persist()                 |  -> repository.save()
 |   retrieveAll()             |  -> repository.findAll()
-|   retrieveById()            |  -> repository.findById()
 |   update()                  |  -> existsById() + save()
 |   remove()                  |  -> existsById() + deleteById()
 +-----------------------------+
            |
-           | ready to replace
+           | called by
            v
 +-----------------------------+
-|   Service.java              |  Currently RAM ArrayList
-|   addSequence()             |  -> replace with persist()
-|   getAllSequences()         |  -> replace with retrieveAll()
-|   updateSequence()          |  -> replace with update()
-|   deleteSequence()          |  -> replace with remove()
+|   Service.java              |  Business logic layer
+|   addSequence()             |  -> persist()
+|   getAllSequences()         |  -> retrieveAll()
+|   updateSequence()          |  -> update()
+|   deleteSequence()          |  -> remove()
 +-----------------------------+
 ```
 
 ---
 
 ## Database Setup
-
-The Oracle persistence layer is scaffolded and ready. To activate it:
 
 1. **Configure credentials** in `src/main/resources/application.yaml`:
    ```yaml
@@ -187,18 +128,7 @@ The Oracle persistence layer is scaffolded and ready. To activate it:
        password: YOUR_PASSWORD
    ```
 
-2. **Remove the autoconfigure exclusions** from `application.yaml` (the three lines under `spring.autoconfigure.exclude`).
-
-3. **Create the Oracle table** before starting the app (`ddl-auto: none` — schema is not auto-created):
-   ```sql
-   CREATE TABLE SEQUENCE_ENQUIRIES (
-       ID           VARCHAR2(36)  PRIMARY KEY,
-       INPUT        VARCHAR2(500),
-       CURRENT_TIME VARCHAR2(30)
-   );
-   ```
-
-4. **Wire `Sequence_DATABASE` into `Service.java`** — replace the ArrayList calls with the corresponding `Sequence_DATABASE` method calls as indicated by the `//------[DB]` comments.
+2. **Start the application** — `ddl-auto: update` will auto-create the `SEQUENCE_ENQUIRIES` table on first startup. No manual SQL required.
 
 ---
 
@@ -324,7 +254,7 @@ Enquiry deleted successfully
 
 **Failure — 400 Bad Request:**
 ```
-Enquiry not found
+Enquiry not found or already deleted
 ```
 
 ---
@@ -353,23 +283,3 @@ GET http://localhost:8080/sequenceDecoder
   }
 ]
 ```
-
----
-
-## Branch Workflow
-
-This project uses feature branches for isolated development:
-
-```bash
-# Create a feature branch
-git checkout -b feature/--86exp5ubg--creating-solverLogics
-
-# Stage specific files and commit with concise messages
-git add src/main/java/com/oraclequantapi/oraclequantapi/services/Service.java
-git commit -m "Implement length-encoded parser logic"
-
-# Push to remote and open a Pull Request
-git push origin feature/--86exp5ubg--creating-solverLogics
-```
-
-All changes are committed in small, atomic commits and merged into `main` via Pull Request on GitHub.
