@@ -27,3 +27,11 @@ All notable project changes are documented in this file.
 - Renamed the main application class to `OracleQuantApiApplication`.
 - Renamed service and repository classes to match the requested project structure.
 - Updated unit and integration tests to match the new package structure.
+
+## 0.0.4-SNAPSHOT - 2026-05-22
+
+- Updated conversion behavior so invalid characters are treated as `0` instead of returning errors.
+- Updated conversion behavior so missing measured values are treated as `0`.
+- Added support for empty or missing `input` values, returning an empty list.
+- Updated history persistence to support empty request input values.
+- Updated tests for tolerant conversion behavior.
