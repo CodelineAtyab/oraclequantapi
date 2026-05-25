@@ -1,0 +1,26 @@
+2026-05-25 11:14:12 [INFO] c.o.o.OraclequantapiApplicationTests - Starting OraclequantapiApplicationTests using Java 25.0.2 with PID 49186 (started by saif in /Users/saif/Desktop/measurement-api/oraclequantapi)
+2026-05-25 11:14:12 [INFO] c.o.o.OraclequantapiApplicationTests - No active profile set, falling back to 1 default profile: "default"
+2026-05-25 11:14:12 [INFO] o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-05-25 11:14:13 [INFO] o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 44 ms. Found 1 JPA repository interface.
+2026-05-25 11:14:13 [INFO] o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-05-25 11:14:13 [INFO] org.hibernate.Version - HHH000412: Hibernate ORM core version 6.6.49.Final
+2026-05-25 11:14:13 [INFO] o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2026-05-25 11:14:13 [INFO] o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-05-25 11:14:13 [INFO] com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2026-05-25 11:14:14 [INFO] com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection oracle.jdbc.driver.T4CConnection@45796b2a
+2026-05-25 11:14:14 [INFO] com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2026-05-25 11:14:15 [INFO] o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 21.3
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-05-25 11:14:15 [INFO] o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-05-25 11:14:20 [INFO] o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-05-25 11:14:21 [WARN] o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-05-25 11:14:21 [INFO] c.o.o.OraclequantapiApplicationTests - Started OraclequantapiApplicationTests in 9.811 seconds (process running for 10.569)
+2026-05-25 11:14:22 [INFO] o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-05-25 11:14:22 [INFO] com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2026-05-25 11:14:23 [INFO] com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.

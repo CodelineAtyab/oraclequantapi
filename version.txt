@@ -1,0 +1,94 @@
+v0.1.0 - Project creation/setup milestone.
+
+-----------------------------------------------
+
+v0.2.0 - Dependencies + architecture established.
+
+-----------------------------------------------
+
+v0.3.0 - Core decoding engine completed:
+
+* continuation mode
+* parser state movement
+* DecodedNumber
+
+-----------------------------------------------
+
+v0.4.0 - Package workflow foundation:
+
+* package count decoding
+* accumulation variables
+* nested parsing structure
+
+-----------------------------------------------
+
+v0.5.0 - Completed encoded measurement parser engine
+
+-----------------------------------------------
+
+v0.6.0 - Implemented Spring Boot REST API integration
+
+-----------------------------------------------
+
+v0.7.0 - Added API validation and centralized exception handling
+
+-----------------------------------------------
+
+v0.8.0 - Added rolling application logging infrastructure
+
+-----------------------------------------------
+
+v0.9.0 - Added Oracle database and JPA datasource configuration
+
+-----------------------------------------------
+
+v1.0.0 - Implemented Oracle database persistence for measurement history
+
+-----------------------------------------------
+
+v1.1.0 - Added measurement history retrieval endpoint
+
+-----------------------------------------------
+
+v1.2.0 - Added measurement history CRUD operations:
+
+* GET measurement history by id
+* UPDATE measurement history via PUT
+* DELETE measurement history records
+
+-----------------------------------------------
+
+v1.3.0 - Added request metadata persistence:
+
+* timestamp tracking
+* source IP address tracking
+* Oracle XE history persistence improvements
+
+-----------------------------------------------
+
+v1.4.0 - Improved parser validation and exception handling:
+
+* custom InvalidMeasurementInputException
+* invalid character validation
+* centralized error responses
+
+-----------------------------------------------
+
+v1.5.0 - Production deployment completed:
+
+* Maven runnable fat JAR packaging
+* Oracle Linux deployment
+* SSH/SCP deployment workflow
+* REST API validation via curl
+
+-----------------------------------------------
+
+v2.0.0 - Final production-ready evaluation release
+
+* Full Oracle XE persistence support
+* Complete measurement history CRUD functionality
+* Oracle Linux deployment verified
+* Logging and rolling file retention enabled
+* README and deployment documentation finalized
+
+-----------------------------------------------
