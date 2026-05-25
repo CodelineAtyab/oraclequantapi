@@ -27,14 +27,12 @@ public class HistoryRecord {
     @JsonAlias("sourceIpAddress") // Accept alternative JSON field name
     private String sourceIpAddress;
 
-    // Stores request input as large text
-    @Lob
-    @Column(name = "INPUT")
+    // Stores request input text. Empty Oracle strings are treated as null by the database.
+    @Column(name = "INPUT", length = 4000)
     private String input;
 
-    // Stores generated output as large text
-    @Lob
-    @Column(name = "OUTPUT", nullable = false)
+    // Stores generated output JSON.
+    @Column(name = "OUTPUT", nullable = false, length = 4000)
     private String output;
 
     // Default constructor required by JPA
