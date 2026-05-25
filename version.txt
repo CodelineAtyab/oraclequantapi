@@ -82,3 +82,13 @@ v1.5.0 - Production deployment completed:
 * REST API validation via curl
 
 -----------------------------------------------
+
+v2.0.0 - Final production-ready evaluation release
+
+* Full Oracle XE persistence support
+* Complete measurement history CRUD functionality
+* Oracle Linux deployment verified
+* Logging and rolling file retention enabled
+* README and deployment documentation finalized
+
+-----------------------------------------------
