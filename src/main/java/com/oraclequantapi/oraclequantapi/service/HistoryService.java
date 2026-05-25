@@ -8,11 +8,12 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service // Marks this class as a Spring service
 public class HistoryService {
+
     private final HistoryRepository repository; // Repository used for database operations
     private final ObjectMapper objectMapper; // ObjectMapper used to convert Java objects into JSON
 
@@ -25,12 +26,10 @@ public class HistoryService {
     // Saves conversion history into the database
     @Transactional
     public HistoryRecord record(String input, List<Integer> output, String sourceIpAddress) {
-
         try {
             String outputJson = objectMapper.writeValueAsString(output);
             return repository.save(new HistoryRecord(sourceIpAddress, input, outputJson));
-        }
-        catch (JsonProcessingException exception) {
+        } catch (JsonProcessingException exception) {
             throw new IllegalStateException("Unable to serialize conversion output", exception);
         }
     }
@@ -44,25 +43,37 @@ public class HistoryService {
     // Finds history record using ID
     @Transactional(readOnly = true)
     public HistoryRecord findById(Long id) {
-        return repository.findById(id).orElseThrow(() -> new HistoryRecordNotFoundException(id));
+        return repository.findById(id)
+                .orElseThrow(() -> new HistoryRecordNotFoundException(id));
     }
 
     // Updates existing history record
     @Transactional
-    public HistoryRecord update(Long id, Instant timestamp, String sourceIpAddress, String input, String output) {
+    public HistoryRecord update(
+            Long id,
+            LocalDateTime timestamp,
+            String sourceIpAddress,
+            String input,
+            String output
+    ) {
         HistoryRecord record = findById(id);
+
         if (timestamp != null) {
             record.setTimestamp(timestamp);
         }
+
         if (sourceIpAddress != null) {
             record.setSourceIpAddress(sourceIpAddress);
         }
+
         if (input != null) {
             record.setInput(input);
         }
+
         if (output != null) {
             record.setOutput(output);
         }
+
         return repository.save(record);
     }
 
@@ -78,6 +89,7 @@ public class HistoryService {
         if (!repository.existsById(id)) {
             throw new HistoryRecordNotFoundException(id);
         }
+
         repository.deleteById(id);
     }
 
