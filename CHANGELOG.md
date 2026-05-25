@@ -50,3 +50,11 @@ All notable project changes are documented in this file.
 - Documented that the application uses Logback for console and file logging.
 - Documented that logs are written to `logs/oraclequantapi.log` by default.
 - Documented that rolling log files are retained for seven days.
+
+## 0.0.7-SNAPSHOT - 2026-05-25
+
+- Updated documentation for `application-oracle.properties` and `logback-spring.xml`.
+- Documented that `application-oracle.properties` stores Oracle XE profile database settings separately from local H2 settings.
+- Documented that the Oracle profile can be activated with `SPRING_PROFILES_ACTIVE=oracle`.
+- Documented that `logback-spring.xml` controls console logging, file logging, daily log rotation, and seven-day log retention.
+- Clarified that logs are written to `logs/oraclequantapi.log` by default.
