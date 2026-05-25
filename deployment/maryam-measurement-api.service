@@ -1,0 +1,24 @@
+[Unit]
+Description=MARYAM Measurement Conversion API
+After=network.target oracle-xe.service
+Requires=network.target
+
+[Service]
+Type=simple
+User=maryam
+Group=maryam
+WorkingDirectory=/opt/maryam-measurement-api
+Environment="JAVA_HOME=/usr/lib/jvm/jdk-17"
+Environment="LOG_DIR=/var/log/maryam-measurement-api"
+Environment="SPRING_PROFILES_ACTIVE=prod"
+ExecStart=/usr/lib/jvm/jdk-17/bin/java \
+    -Xms256m -Xmx768m \
+    -Dfile.encoding=UTF-8 \
+    -jar /opt/maryam-measurement-api/maryam-measurement-api.jar
+SuccessExitStatus=143
+Restart=on-failure
+RestartSec=10
+LimitNOFILE=65536
+
+[Install]
+WantedBy=multi-user.target

@@ -1,61 +1,153 @@
-﻿## Submission Instructions
+# MARYAM Measurement Conversion API
 
-To submit your Oracle JAVA Spring Boot Maven project as a solution, please follow these steps:
+A Spring Boot REST service that decodes encoded measurement strings into
+numeric package totals and persists every request in Oracle XE.
 
-### Step 1: Install git on your PC
-- Install "git" as shown in this tutorial: [How to install git](https://youtu.be/iYkLrXobBbA?si=_l0haibv_X9NpIjJ)
-- Open command prompt and run
-  ```bash
-  git version
-  ```
-- If you see the version, then git is successfully installed.
+---
 
-### Step 2: Fork the Repository
-- Navigate to [this repository](https://github.com/CodelineAtyab/oraclequantapi) provided by Codeline.
-- Click on the "Fork" button at the top-right corner of the page to create a copy of the repository under your own GitHub account.
+## What it does
 
-### Step 3: Clone the Forked Repository
-- Open your terminal or command prompt.
-- Clone the forked repository to your local machine using the following command:
-  ```bash
-  git clone https://github.com/your-username/repo-name.git
-  ```
+Send an encoded string to `/convert-measurements`.  The API decodes it into
+a list of package totals and returns them as JSON.  Every request is also
+written to an audit table in Oracle XE.
 
-### Step 4: Create a new branch
-- Navigate to the cloned repository directory
-  ```bash
-  cd repo-name
-  ```
-- Create a new branch for your code submissions (Replace your-name with your name in your-name-submission-branch):
-  ```bash
-  git checkout -b your-name-submission-branch
-  ```
+Example:
 
+```
+GET /convert-measurements?input=abcdabcdab    ->   [2, 7, 7]
+GET /convert-measurements?input=dz_a_aazzaaa  ->   [28, 53, 1]
+```
 
-### Step 5: Add Your Code
-- Implement the API
+### Endpoints
 
-### Step 6: Commit your changes
-- Run the following commands in order to commit your changes:
-  ```bash
-  git add *
-  git commit -m "Meaningful commit message here"
-  ```
+| Method   | Path                                  | Purpose                                |
+|----------|---------------------------------------|----------------------------------------|
+| GET      | `/convert-measurements?input=...`     | Decode + persist                       |
+| GET      | `/history`                            | List all history records               |
+| GET      | `/history/{id}`                       | One history record                     |
+| PUT      | `/history/{id}`                       | Replace a history record               |
+| PATCH    | `/history/{id}`                       | Partial update                         |
+| DELETE   | `/history/{id}`                       | Delete one history record              |
+| DELETE   | `/history`                            | Clear the entire history table         |
+| GET      | `/swagger-ui/index.html`              | Interactive API docs                   |
+| GET      | `/actuator/health`                    | Liveness probe                         |
 
-### Step 7: Push Your Branch to GitHub
-- Run the following commands to upload the changes to the forked github repository (Replace your-name with your name in your-name-submission-branch):
-  ```bash
-  git push origin your-name-submission-branch
-  ```
+Base URL when running locally:  `http://localhost:8080/maryam`
 
-### Step 8: Create a Pull Request
-- Go to your forked repository on GitHub.
-- You should see a prompt to create a pull request. Click on "Compare & pull request".
-- Provide a title and description for your pull request, then click "Create pull request".
+---
 
-### Step 9: Notify Codeline
-- Notify on slack that you have created a PR for your solution.
+## Tech stack
 
-## Note: If you face any issues in the process above, Please do the following:
-- Watch [this youtube tutorial](https://www.youtube.com/watch?v=a_FLqX3vGR4)
-- Contact Ikhlas or Atyab.
+Java 17  ·  Spring Boot 3.2  ·  Spring Data JPA  ·  Oracle XE 21c  ·
+SpringDoc OpenAPI  ·  Logback  ·  Maven.
+
+---
+
+## How to set it up
+
+### 1. Prerequisites
+
+- Oracle OpenJDK 17
+- Maven 3.9+
+- Oracle XE 21c reachable at `localhost:1521/XEPDB1`
+- SYS/SYSTEM password set to `1234`  (matches `application.properties`)
+
+### 2. Build
+
+```bash
+mvn clean package
+```
+
+Produces `target/maryam-measurement-api.jar`.
+
+### 3. Run
+
+```bash
+java -jar target/maryam-measurement-api.jar
+```
+
+Service starts on `http://localhost:8080/maryam`.
+
+### 4. Try it
+
+```bash
+curl "http://localhost:8080/maryam/convert-measurements?input=aa"        # [1]
+curl  http://localhost:8080/maryam/history
+```
+
+Open Swagger:  `http://localhost:8080/maryam/swagger-ui/index.html`
+
+---
+
+## Deploying on Oracle Linux
+
+See `LINUX_DEPLOY.md` for the full step-by-step.  Short version:
+
+```bash
+# on the Oracle Linux box
+sudo dnf install -y java-17-openjdk maven
+unzip maryam-measurement-api.zip && cd maryam-measurement-api
+mvn clean package -DskipTests
+sudo cp target/maryam-measurement-api.jar           /opt/maryam-measurement-api/
+sudo cp src/main/resources/application.properties /opt/maryam-measurement-api/
+sudo cp deployment/maryam-measurement-api.service   /etc/systemd/system/
+sudo systemctl daemon-reload
+sudo systemctl enable --now maryam-measurement-api
+```
+
+The PDF requires the jar to be running as a managed service on Oracle Linux
+reachable over SSH - the unit file above does exactly that.
+
+---
+
+## Configuration
+
+`src/main/resources/application.properties`:
+
+| Property                          | Default                                              |
+|-----------------------------------|------------------------------------------------------|
+| `server.port`                     | 8080                                                 |
+| `server.servlet.context-path`     | `/maryam`                                              |
+| `spring.datasource.url`           | `jdbc:oracle:thin:@//localhost:1521/XEPDB1`          |
+| `spring.datasource.username`      | `SYSTEM`                                             |
+| `spring.datasource.password`      | `1234`                                               |
+| `spring.jpa.hibernate.ddl-auto`   | `update` (auto-creates the history table)            |
+| Log file                          | `logs/maryam-measurement-api.log` (rolling, 30 days)   |
+
+For a quick demo without Oracle, run with the H2 profile:
+
+```bash
+java -jar target/maryam-measurement-api.jar --spring.profiles.active=dev
+```
+
+---
+
+## Project layout
+
+```
+src/main/java/om/maryam/measurement/
+├── MaryamMeasurementApplication.java
+├── algorithm/      decoder (pure, unit-tested)
+├── controller/     REST endpoints
+├── service/        business contracts + impl
+├── repository/     Spring Data JPA
+├── entity/         JPA entity
+├── dto/            request/response DTOs
+├── exception/      domain exceptions + global handler
+├── config/         OpenAPI metadata
+└── util/           client-IP resolver
+```
+
+Architecture is layered (controller -> service -> repository -> Oracle),
+each layer depends only on the one beneath it through interfaces.
+
+---
+
+## Running tests
+
+```bash
+mvn test
+```
+
+`MeasurementDecoderTest` runs all eight examples from the evaluation document
+and blocks the build if any of them regress.

@@ -1,0 +1,5 @@
+MARYAM Measurement Conversion API
+Version : 1.0.0
+Build   : 2026-05-21
+Java    : OpenJDK 17
+Stack   : Spring Boot 3.2.5, Hibernate, Oracle XE, SpringDoc OpenAPI
