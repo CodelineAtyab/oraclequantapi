@@ -1,61 +1,124 @@
-﻿## Submission Instructions
+﻿# History Conversion API
 
-To submit your Oracle JAVA Spring Boot Maven project as a solution, please follow these steps:
+A Spring Boot REST API that converts input strings into numeric values and stores the conversion history in an Oracle XE database.
 
-### Step 1: Install git on your PC
-- Install "git" as shown in this tutorial: [How to install git](https://youtu.be/iYkLrXobBbA?si=_l0haibv_X9NpIjJ)
-- Open command prompt and run
-  ```bash
-  git version
-  ```
-- If you see the version, then git is successfully installed.
+---
 
-### Step 2: Fork the Repository
-- Navigate to [this repository](https://github.com/CodelineAtyab/oraclequantapi) provided by Codeline.
-- Click on the "Fork" button at the top-right corner of the page to create a copy of the repository under your own GitHub account.
+## Features
 
-### Step 3: Clone the Forked Repository
-- Open your terminal or command prompt.
-- Clone the forked repository to your local machine using the following command:
-  ```bash
-  git clone https://github.com/your-username/repo-name.git
-  ```
+Convert input strings into numeric output
+Save conversion history in Oracle XE
+Get all history records
+Get a history record by ID
+Update a history record
+Delete a history record
+REST API using Spring Boot
 
-### Step 4: Create a new branch
-- Navigate to the cloned repository directory
-  ```bash
-  cd repo-name
-  ```
-- Create a new branch for your code submissions (Replace your-name with your name in your-name-submission-branch):
-  ```bash
-  git checkout -b your-name-submission-branch
-  ```
+---
 
+## Technologies Used
 
-### Step 5: Add Your Code
-- Implement the API
+Java 17
+Spring Boot
+Maven
+Oracle XE
+Docker
+Postman
 
-### Step 6: Commit your changes
-- Run the following commands in order to commit your changes:
-  ```bash
-  git add *
-  git commit -m "Meaningful commit message here"
-  ```
+---
 
-### Step 7: Push Your Branch to GitHub
-- Run the following commands to upload the changes to the forked github repository (Replace your-name with your name in your-name-submission-branch):
-  ```bash
-  git push origin your-name-submission-branch
-  ```
+## API Endpoints
 
-### Step 8: Create a Pull Request
-- Go to your forked repository on GitHub.
-- You should see a prompt to create a pull request. Click on "Compare & pull request".
-- Provide a title and description for your pull request, then click "Create pull request".
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/convert-measurements?input=aa` | Convert input and save history |
+| GET | `/history` | Get all history |
+| GET | `/history/{id}` | Get history by ID |
+| PUT | `/history/{id}` | Update history |
+| DELETE | `/history/{id}` | Delete history |
 
-### Step 9: Notify Codeline
-- Notify on slack that you have created a PR for your solution.
+---
 
-## Note: If you face any issues in the process above, Please do the following:
-- Watch [this youtube tutorial](https://www.youtube.com/watch?v=a_FLqX3vGR4)
-- Contact Ikhlas or Atyab.
+## Example Request
+
+### Convert Input
+```http
+GET http://localhost:8080/convert-measurements?input=aa
+```
+
+### Example Response
+```json
+[1]
+```
+
+---
+
+## Update Example
+
+### Request
+```http
+PUT http://localhost:8080/history/1
+```
+
+### Body
+```json
+{
+  "input": "updated",
+  "output": "[99]",
+  "sourceIpAddress": "127.0.0.1",
+  "timestamp": "updated"
+}
+```
+
+---
+
+## Delete Example
+
+### Request
+```http
+DELETE http://localhost:8080/history/1
+```
+
+### Response
+```text
+History record deleted successfully
+```
+
+---
+
+## Database Configuration
+
+```properties
+spring.datasource.url=jdbc:oracle:thin:@localhost:1521/XEPDB1
+spring.datasource.username=system
+spring.datasource.password=29999login
+spring.datasource.driver-class-name=oracle.jdbc.OracleDriver
+
+spring.jpa.hibernate.ddl-auto=update
+spring.jpa.show-sql=true
+```
+
+---
+
+## Running the Project
+
+```bash
+mvn spring-boot:run
+```
+
+The application will run on:
+
+```text
+http://localhost:8080
+```
+
+---
+
+## Testing
+
+The API was tested using Postman for:
+GET
+PUT
+DELETE
+
+All endpoints worked successfully.
