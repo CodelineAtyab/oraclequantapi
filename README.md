@@ -1,61 +1,74 @@
-﻿## Submission Instructions
+# Oracle Quant Sequence API
 
-To submit your Oracle JAVA Spring Boot Maven project as a solution, please follow these steps:
+##  Overview
+This is a Spring Boot REST API that processes input character sequences using a custom stateful streaming algorithm.
 
-### Step 1: Install git on your PC
-- Install "git" as shown in this tutorial: [How to install git](https://youtu.be/iYkLrXobBbA?si=_l0haibv_X9NpIjJ)
-- Open command prompt and run
-  ```bash
-  git version
-  ```
-- If you see the version, then git is successfully installed.
+The system converts sequences into numeric package results, applies dynamic grouping logic based on control characters, and persists all transactions into an Oracle Database.
 
-### Step 2: Fork the Repository
-- Navigate to [this repository](https://github.com/CodelineAtyab/oraclequantapi) provided by Codeline.
-- Click on the "Fork" button at the top-right corner of the page to create a copy of the repository under your own GitHub account.
+---
 
-### Step 3: Clone the Forked Repository
-- Open your terminal or command prompt.
-- Clone the forked repository to your local machine using the following command:
-  ```bash
-  git clone https://github.com/your-username/repo-name.git
-  ```
+##  Core Concept
+The algorithm processes input as a **stream of characters**, not static chunks.
 
-### Step 4: Create a new branch
-- Navigate to the cloned repository directory
-  ```bash
-  cd repo-name
-  ```
-- Create a new branch for your code submissions (Replace your-name with your name in your-name-submission-branch):
-  ```bash
-  git checkout -b your-name-submission-branch
-  ```
+- The character `z` acts as a **control/boundary modifier**
+- The character `_` is treated as **neutral (value = 0)**
+- Processing is based on **stateful traversal and lookahead accumulation**
+- Groups are dynamically formed during runtime execution
+
+---
+
+##  Tech Stack
+- Java 17+
+- Spring Boot
+- Spring Web
+- Spring Data JPA
+- Oracle Database (XE / XEPDB1)
+- SLF4J Logging
+- Maven
+
+---
+
+##  Base URL
 
 
-### Step 5: Add Your Code
-- Implement the API
+http://localhost:8080/sequences
 
-### Step 6: Commit your changes
-- Run the following commands in order to commit your changes:
-  ```bash
-  git add *
-  git commit -m "Meaningful commit message here"
-  ```
 
-### Step 7: Push Your Branch to GitHub
-- Run the following commands to upload the changes to the forked github repository (Replace your-name with your name in your-name-submission-branch):
-  ```bash
-  git push origin your-name-submission-branch
-  ```
+---
 
-### Step 8: Create a Pull Request
-- Go to your forked repository on GitHub.
-- You should see a prompt to create a pull request. Click on "Compare & pull request".
-- Provide a title and description for your pull request, then click "Create pull request".
+##  API Endpoints
 
-### Step 9: Notify Codeline
-- Notify on slack that you have created a PR for your solution.
+### 1. Convert Measurements
+Processes a sequence and returns computed package totals.
 
-## Note: If you face any issues in the process above, Please do the following:
-- Watch [this youtube tutorial](https://www.youtube.com/watch?v=a_FLqX3vGR4)
-- Contact Ikhlas or Atyab.
+
+GET /sequences/convert-measurements?input=abbcc
+
+
+**Example Response**
+```json
+[2, 6]
+2. Get All History
+GET /sequences/history
+3. Get History By ID
+GET /sequences/history/{id}
+4. Update History
+PUT /sequences/history/{id}
+
+Body
+
+{
+  "input": "abc",
+  "output": "[2,6]",
+  "sourceIpAddress": "127.0.0.1"
+}
+5. Delete All History
+DELETE /sequences/history
+6. Delete History By ID
+DELETE /sequences/history/{id}
+    # Algorithm Behavior
+Input is processed as a continuous stream
+z acts as a state modifier / boundary controller
+_ contributes value 0 without breaking flow
+Output is generated using dynamic grouping + lookahead accumulation
+Final result is a list of computed package totals
