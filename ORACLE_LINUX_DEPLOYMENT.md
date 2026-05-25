@@ -1,167 +1,249 @@
-# Deploy `oraclequantapi.jar` on Oracle Linux with Oracle Database
+# OracleQuant API Deployment Guide
 
-This guide assumes the JAR is already copied to the Oracle Linux server as:
+This guide explains how to run **OracleQuant API** on **Oracle Linux VirtualBox** and connect it to an **Oracle Database Free Docker container running on Windows**.
 
-```bash
-/home/sulaiman/oraclequantapi.jar
+This setup is for a **local development / training deployment**, not public production hosting.
+
+---
+
+## 1. Final Working Setup
+
+| Part | Machine | Value |
+|---|---|---|
+| Oracle Database | Windows Docker | `container-registry.oracle.com/database/free:latest` |
+| Oracle DB Container Name | Windows | `oracle-db` |
+| Oracle DB Port | Windows | `1521` |
+| Oracle DB Service Name | Docker Oracle DB | `FREEPDB1` |
+| Oracle DB Admin User | Docker Oracle DB | `SYSTEM` |
+| Oracle DB Admin Password | Docker Oracle DB | `OracleAdmin7191` |
+| App DB User | Oracle DB | `ORACLEQUANTAPI` |
+| App DB Password | Oracle DB | `StrongPassword123` |
+| Spring Boot JAR | Oracle Linux | `/home/sulaiman/oraclequantapi.jar` |
+| API Port | Oracle Linux | `8080` |
+| Windows IP | Windows Wi-Fi | `172.20.10.2` |
+| Oracle Linux IP | VirtualBox Bridged Adapter | `172.20.10.3` |
+| API Base URL | Browser/Postman | `http://172.20.10.3:8080` |
+
+> Important: Your IPs can change after restarting Wi-Fi, Windows hotspot, or the VM. Always check them again if something stops working.
+
+---
+
+## 2. Where to Run Each Command
+
+| Command Type | Run It In |
+|---|---|
+| `docker ps`, `docker exec`, `docker logs` | Windows CMD |
+| `netsh advfirewall ...` | Windows CMD as Administrator |
+| `java -jar ...` | Oracle Linux terminal |
+| `ip addr` | Oracle Linux terminal |
+| `timeout 5 bash -c ...` | Oracle Linux terminal |
+| SQL commands | Inside `SQL>` prompt |
+| API testing | Windows browser or Postman |
+
+---
+
+## 3. Start Oracle Database on Windows
+
+Open **Windows CMD**.
+
+Check Docker:
+
+```cmd
+docker ps
 ```
 
-The application will be reachable at:
+If the container already exists but is stopped, start it:
+
+```cmd
+docker start oracle-db
+```
+
+If the container does not exist, create it:
+
+```cmd
+docker run -d --name oracle-db -p 1521:1521 -e ORACLE_PWD=OracleAdmin7191 container-registry.oracle.com/database/free:latest
+```
+
+Check that it is running:
+
+```cmd
+docker ps
+```
+
+Expected:
 
 ```text
-http://192.168.100.246:8080
+oracle-db
+0.0.0.0:1521->1521/tcp
+healthy
 ```
 
-Replace usernames, passwords, paths, and database connection details with your real values.
+Check logs:
 
-## Local and free setup
-
-This guide is for a local/free setup:
-
-- The Spring Boot app runs on your Oracle Linux machine.
-- The database runs on the same Oracle Linux machine, using `localhost`.
-- The app is accessed from your local network at `http://192.168.100.246:8080`.
-- You do not need Oracle Cloud Infrastructure for this guide.
-- You do not need a paid hosting service for this guide.
-- Use Oracle Database Express Edition, also called Oracle XE, if you want a free Oracle Database for local development/testing.
-
-Important: `192.168.100.246` is a private local network IP address. It works inside your home/lab network, but it is not a public internet deployment.
-
-## 1. SSH into Oracle Linux
-
-From your local machine:
-
-```bash
-ssh sulaiman@192.168.100.246
+```cmd
+docker logs -f oracle-db
 ```
 
-If you use a private key:
-
-```bash
-ssh -i /path/to/private-key sulaiman@192.168.100.246
-```
-
-Confirm the JAR exists:
-
-```bash
-ls -lh /home/sulaiman/oraclequantapi.jar
-```
-
-Because your terminal shows the file in your current home directory, this command should also work:
-
-```bash
-ls -lh ~/oraclequantapi.jar
-```
-
-## 2. Install Java 17
-
-Spring Boot 3 requires Java 17 or newer.
-
-```bash
-sudo dnf install -y java-17-openjdk
-java -version
-```
-
-Expected result should show Java 17.
-
-## 3. Important build note for Oracle Database
-
-The application must include the Oracle JDBC driver if you want to connect to Oracle Database.
-
-In `pom.xml`, add this dependency before building the JAR:
-
-```xml
-<dependency>
-    <groupId>com.oracle.database.jdbc</groupId>
-    <artifactId>ojdbc11</artifactId>
-    <scope>runtime</scope>
-</dependency>
-```
-
-Then rebuild locally:
-
-```bash
-./mvnw clean package
-```
-
-On Windows:
-
-```powershell
-.\mvnw.cmd clean package
-```
-
-Copy the rebuilt JAR to Oracle Linux again:
-
-```bash
-scp target/oraclequantapi-0.0.1-SNAPSHOT.jar sulaiman@192.168.100.246:/home/sulaiman/oraclequantapi.jar
-```
-
-If the JAR was built before adding the Oracle JDBC dependency, it may start with H2 but fail when configured for Oracle Database.
-
-## 4. Create Oracle Database user/schema
-
-Run these steps on the machine where Oracle Database is installed.
-
-In your case, because you are deploying on Oracle Linux, start from the Oracle Linux terminal after SSH:
-
-```bash
-ssh sulaiman@192.168.100.246
-```
-
-You should see a prompt like this:
+Wait until the database is ready. When done, press:
 
 ```text
-[sulaiman@localhost ~]$
+CTRL + C
 ```
 
-The `sqlplus` commands below run in the Oracle Linux terminal. The `CREATE USER` and `GRANT` commands run inside SQL*Plus after you connect.
+This only stops viewing logs. It does not stop the database.
 
-First, check if SQL*Plus is installed:
+---
 
-```bash
-sqlplus -v
+## 4. Test Oracle Database Inside Docker
+
+Run in **Windows CMD**:
+
+```cmd
+docker exec -it oracle-db sqlplus system/OracleAdmin7191@localhost:1521/FREEPDB1
 ```
 
-If you see a SQL*Plus version, continue.
+If connected, you will see:
 
-Connect to Oracle Database as an admin user. For Oracle XE, try:
-
-```bash
-sqlplus system@localhost:1521/XEPDB1
-```
-
-It will ask for the `system` password that was set when Oracle Database was installed.
-
-If that does not work and you have sudo/root access on the database server, try:
-
-```bash
-sudo su - oracle
-sqlplus / as sysdba
-```
-
-After connecting, your prompt will change to:
-
-```text
+```sql
 SQL>
 ```
 
-From this point, commands are SQL commands. Type them at the `SQL>` prompt.
-
-If you connected using `sqlplus / as sysdba`, switch to the pluggable database:
+Exit:
 
 ```sql
-ALTER SESSION SET CONTAINER = XEPDB1;
+EXIT;
 ```
 
-Create the application user. In Oracle, the user is also the schema.
+---
+
+## 5. Open Windows Firewall Port 1521
+
+Open **CMD as Administrator**.
+
+Run:
+
+```cmd
+netsh advfirewall firewall add rule name="Oracle DB 1521" dir=in action=allow protocol=TCP localport=1521
+```
+
+Expected:
+
+```text
+Ok.
+```
+
+This allows Oracle Linux to reach the Oracle Database running on Windows Docker.
+
+---
+
+## 6. Configure VirtualBox Network
+
+In **VirtualBox Manager**:
+
+1. Shut down Oracle Linux first:
+
+```bash
+sudo poweroff
+```
+
+2. Select your Oracle Linux VM.
+3. Go to:
+
+```text
+Settings -> Network
+```
+
+4. Adapter 1:
+
+```text
+Attached to: Bridged Adapter
+Name: Intel(R) Dual Band Wireless-AC 3165
+Cable Connected: checked
+```
+
+5. Click **OK**.
+6. Start Oracle Linux again.
+
+---
+
+## 7. Check Oracle Linux IP
+
+Run inside **Oracle Linux**:
+
+```bash
+ip addr
+```
+
+Look for `enp0s3`.
+
+Working example:
+
+```text
+inet 172.20.10.3/28
+```
+
+So your Linux API IP is:
+
+```text
+172.20.10.3
+```
+
+Your Windows IP from `ipconfig` is:
+
+```text
+172.20.10.2
+```
+
+Both must be on the same network:
+
+```text
+Windows:      172.20.10.2
+Oracle Linux: 172.20.10.3
+```
+
+---
+
+## 8. Test Windows Oracle DB Port From Oracle Linux
+
+Run this in **Oracle Linux**:
+
+```bash
+timeout 5 bash -c '</dev/tcp/172.20.10.2/1521' && echo "PORT OPEN" || echo "PORT CLOSED"
+```
+
+Expected:
+
+```text
+PORT OPEN
+```
+
+If it says `PORT CLOSED`, check:
+
+1. Docker container is running on Windows:
+
+```cmd
+docker ps
+```
+
+2. Windows firewall rule exists.
+3. VirtualBox network is set to Bridged Adapter.
+4. Windows IP is still `172.20.10.2`.
+
+---
+
+## 9. Create Oracle App User
+
+Run this in **Windows CMD**:
+
+```cmd
+docker exec -it oracle-db sqlplus system/OracleAdmin7191@localhost:1521/FREEPDB1
+```
+
+Inside `SQL>` run:
 
 ```sql
 CREATE USER ORACLEQUANTAPI IDENTIFIED BY "StrongPassword123";
-```
 
-Give the user permission to connect and create tables:
-
-```sql
 GRANT CREATE SESSION TO ORACLEQUANTAPI;
 GRANT CREATE TABLE TO ORACLEQUANTAPI;
 GRANT CREATE SEQUENCE TO ORACLEQUANTAPI;
@@ -169,33 +251,25 @@ GRANT CREATE VIEW TO ORACLEQUANTAPI;
 GRANT UNLIMITED TABLESPACE TO ORACLEQUANTAPI;
 ```
 
-Exit SQL*Plus:
+If `CREATE USER` says the user already exists, continue with the grants.
+
+Exit:
 
 ```sql
 EXIT;
 ```
 
-Summary of where to type commands:
+---
 
-- Windows PowerShell: only use this for SSH or copying the JAR with `scp`
-- Oracle Linux terminal: use this for `sqlplus`, `java -jar`, `systemctl`, and firewall commands
-- SQL*Plus `SQL>` prompt: use this for `CREATE USER`, `GRANT`, `CREATE TABLE`, and `SELECT`
+## 10. Create Application Table
 
-## 5. Create the application table
+Connect as the app user:
 
-Still on Oracle Linux, connect as the new application user:
-
-```bash
-sqlplus ORACLEQUANTAPI/"StrongPassword123"@localhost:1521/XEPDB1
+```cmd
+docker exec -it oracle-db sqlplus ORACLEQUANTAPI/StrongPassword123@localhost:1521/FREEPDB1
 ```
 
-You should now see:
-
-```text
-SQL>
-```
-
-Create the table by typing this at the `SQL>` prompt:
+Create the table:
 
 ```sql
 CREATE TABLE sequence_history (
@@ -206,72 +280,154 @@ CREATE TABLE sequence_history (
 );
 ```
 
-Check that the table exists:
+If it says table already exists, that is okay.
+
+Check the table:
 
 ```sql
-SELECT table_name FROM user_tables WHERE table_name = 'SEQUENCE_HISTORY';
+SELECT table_name
+FROM user_tables
+WHERE table_name = 'SEQUENCE_HISTORY';
 ```
 
-You should see:
+Expected:
 
 ```text
 SEQUENCE_HISTORY
 ```
 
-Exit SQL*Plus:
+Exit:
 
 ```sql
 EXIT;
 ```
 
-## 6. Configure the app for Oracle Database
+---
 
-You can configure Spring Boot from environment variables when starting the JAR.
+## 11. Copy JAR to Oracle Linux
 
-Use this JDBC URL format:
+If the JAR is not already on Oracle Linux, copy it from **Windows CMD or PowerShell**:
 
-```text
-jdbc:oracle:thin:@//HOST:PORT/SERVICE_NAME
+```cmd
+scp "C:\Users\Codeline\Documents\GitHub\oraclequantapi\target\oraclequantapi-0.0.1.jar" sulaiman@172.20.10.3:/home/sulaiman/oraclequantapi.jar
 ```
 
-Example:
+Check on Oracle Linux:
 
 ```bash
-export SPRING_DATASOURCE_URL='jdbc:oracle:thin:@//localhost:1521/XEPDB1'
+ls -lh /home/sulaiman/oraclequantapi.jar
+```
+
+---
+
+## 12. Check Java 17 on Oracle Linux
+
+Run:
+
+```bash
+java -version
+```
+
+If Java is missing:
+
+```bash
+sudo dnf install -y java-17-openjdk
+java -version
+```
+
+---
+
+## 13. Run Spring Boot API Manually
+
+Run this in **Oracle Linux**:
+
+```bash
+export SPRING_DATASOURCE_URL='jdbc:oracle:thin:@//172.20.10.2:1521/FREEPDB1'
 export SPRING_DATASOURCE_USERNAME='ORACLEQUANTAPI'
 export SPRING_DATASOURCE_PASSWORD='StrongPassword123'
 export SPRING_DATASOURCE_DRIVER_CLASS_NAME='oracle.jdbc.OracleDriver'
-export SPRING_JPA_DATABASE_PLATFORM='org.hibernate.dialect.OracleDialect'
 export SPRING_JPA_HIBERNATE_DDL_AUTO='validate'
 export SPRING_JPA_OPEN_IN_VIEW='false'
+
+java -jar /home/sulaiman/oraclequantapi.jar --server.address=0.0.0.0 --server.port=8080
 ```
 
-Use `validate` after you create the schema manually. If you want Hibernate to create/update tables automatically during development, use:
+Successful startup should include something like:
 
-```bash
-export SPRING_JPA_HIBERNATE_DDL_AUTO='update'
+```text
+HikariPool-1 - Added connection
+Tomcat started on port 8080
+Started PackageMeasurementApiApplication
 ```
 
-For production, prefer `validate` and manage schema changes with SQL migrations.
+Keep this terminal open while testing.
 
-## 7. Run the JAR manually
+---
 
-Start the application:
+## 14. Open Oracle Linux Firewall Port 8080
+
+In another Oracle Linux terminal:
 
 ```bash
-java -jar /home/sulaiman/oraclequantapi.jar
+sudo firewall-cmd --permanent --add-port=8080/tcp
+sudo firewall-cmd --reload
+sudo firewall-cmd --list-ports
 ```
 
-If you want it to listen specifically on port `8080`:
+---
 
-```bash
-java -jar /home/sulaiman/oraclequantapi.jar --server.port=8080
+## 15. Test API From Windows
+
+Open browser or Postman on Windows.
+
+Base URL:
+
+```text
+http://172.20.10.3:8080
 ```
 
-Run it in the background:
+Test history:
+
+```text
+http://172.20.10.3:8080/history
+```
+
+Test conversion:
+
+```text
+http://172.20.10.3:8080/convert-measurements?input=1kg
+```
+
+---
+
+## 16. Check Saved Data in Oracle Database
+
+Run in **Windows CMD**:
+
+```cmd
+docker exec -it oracle-db sqlplus ORACLEQUANTAPI/StrongPassword123@localhost:1521/FREEPDB1
+```
+
+Inside `SQL>`:
+
+```sql
+SELECT * FROM sequence_history ORDER BY timestamp DESC;
+```
+
+Exit:
+
+```sql
+EXIT;
+```
+
+---
+
+## 17. Run API in Background Temporarily
+
+For quick background testing on Oracle Linux:
 
 ```bash
-nohup java -jar /home/sulaiman/oraclequantapi.jar --server.port=8080 > /home/sulaiman/oraclequantapi.log 2>&1 &
+nohup java -jar /home/sulaiman/oraclequantapi.jar --server.address=0.0.0.0 --server.port=8080 > /home/sulaiman/oraclequantapi.log 2>&1 &
 ```
 
 Check logs:
@@ -280,91 +436,46 @@ Check logs:
 tail -f /home/sulaiman/oraclequantapi.log
 ```
 
-Check the process:
-
-```bash
-ps -ef | grep oraclequantapi.jar
-```
-
-Stop the process:
+Stop it:
 
 ```bash
 pkill -f oraclequantapi.jar
 ```
 
-## 8. Open port 8080 on Oracle Linux firewall
+---
 
-Check firewall status:
+## 18. Run API as a systemd Service
 
-```bash
-sudo firewall-cmd --state
-```
-
-Open port `8080`:
+Create environment file:
 
 ```bash
-sudo firewall-cmd --permanent --add-port=8080/tcp
-sudo firewall-cmd --reload
-sudo firewall-cmd --list-ports
+sudo vi /etc/oraclequantapi.env
 ```
 
-For this local/free setup, this is normally enough. You only need Oracle Cloud network rules if you later move the server to Oracle Cloud Infrastructure.
-
-## 9. Test from the server
-
-On the Oracle Linux server:
+Paste:
 
 ```bash
-curl http://localhost:8080
+SPRING_DATASOURCE_URL=jdbc:oracle:thin:@//172.20.10.2:1521/FREEPDB1
+SPRING_DATASOURCE_USERNAME=ORACLEQUANTAPI
+SPRING_DATASOURCE_PASSWORD=StrongPassword123
+SPRING_DATASOURCE_DRIVER_CLASS_NAME=oracle.jdbc.OracleDriver
+SPRING_JPA_HIBERNATE_DDL_AUTO=validate
+SPRING_JPA_OPEN_IN_VIEW=false
 ```
 
-Or test your API endpoints directly, for example:
+Protect it:
 
 ```bash
-curl http://localhost:8080/actuator/health
+sudo chmod 600 /etc/oraclequantapi.env
 ```
 
-If actuator is not enabled, test one of your real controller endpoints instead.
-
-## 10. Test from another machine
-
-From your browser or terminal:
-
-```text
-http://192.168.100.246:8080
-```
-
-Using curl:
-
-```bash
-curl http://192.168.100.246:8080
-```
-
-If it works locally on the server but not from another machine, check:
-
-- Oracle Linux firewall allows `8080/tcp`
-- Your other machine is on the same local network as `192.168.100.246`
-- The app is still running
-- The IP address is correct
-- No other process is using port `8080`
-
-Cloud network security rules are only needed if this server is later deployed in a cloud VM. They are not required for the local/free setup described here.
-
-Check port usage:
-
-```bash
-sudo ss -lntp | grep 8080
-```
-
-## 11. Run as a systemd service
-
-Create a service file:
+Create service file:
 
 ```bash
 sudo vi /etc/systemd/system/oraclequantapi.service
 ```
 
-Paste this:
+Paste:
 
 ```ini
 [Unit]
@@ -374,37 +485,20 @@ After=network.target
 [Service]
 User=sulaiman
 WorkingDirectory=/home/sulaiman
-ExecStart=/usr/bin/java -jar /home/sulaiman/oraclequantapi.jar --server.port=8080
+EnvironmentFile=/etc/oraclequantapi.env
+ExecStart=/usr/bin/java -jar /home/sulaiman/oraclequantapi.jar --server.address=0.0.0.0 --server.port=8080
 Restart=always
 RestartSec=10
-
-Environment=SPRING_DATASOURCE_URL=jdbc:oracle:thin:@//localhost:1521/XEPDB1
-Environment=SPRING_DATASOURCE_USERNAME=ORACLEQUANTAPI
-Environment=SPRING_DATASOURCE_PASSWORD=StrongPassword123
-Environment=SPRING_DATASOURCE_DRIVER_CLASS_NAME=oracle.jdbc.OracleDriver
-Environment=SPRING_JPA_DATABASE_PLATFORM=org.hibernate.dialect.OracleDialect
-Environment=SPRING_JPA_HIBERNATE_DDL_AUTO=validate
-Environment=SPRING_JPA_OPEN_IN_VIEW=false
 
 [Install]
 WantedBy=multi-user.target
 ```
 
-Reload systemd:
+Start service:
 
 ```bash
 sudo systemctl daemon-reload
-```
-
-Start the service:
-
-```bash
 sudo systemctl start oraclequantapi
-```
-
-Enable it on boot:
-
-```bash
 sudo systemctl enable oraclequantapi
 ```
 
@@ -420,63 +514,208 @@ View logs:
 journalctl -u oraclequantapi -f
 ```
 
-Restart after replacing the JAR:
+Restart after replacing JAR:
 
 ```bash
 sudo systemctl restart oraclequantapi
 ```
 
-## 12. Common problems
-
-### `ClassNotFoundException: oracle.jdbc.OracleDriver`
-
-The JAR does not include the Oracle JDBC driver. Add `ojdbc11` to `pom.xml`, rebuild, and upload the new JAR.
-
-### `ORA-01017: invalid username/password`
-
-The database username or password is wrong. Test manually:
+Stop service:
 
 ```bash
-sqlplus ORACLEQUANTAPI/"StrongPassword123"@localhost:1521/XEPDB1
+sudo systemctl stop oraclequantapi
 ```
 
-### `ORA-12514` or `ORA-12154`
+---
 
-The Oracle service name or connection URL is wrong. Check available services:
+## 19. Daily Start Checklist
+
+### On Windows
+
+Start Docker Desktop.
+
+Check Oracle DB:
+
+```cmd
+docker ps
+```
+
+If stopped:
+
+```cmd
+docker start oracle-db
+```
+
+### On Oracle Linux
+
+Check IP:
 
 ```bash
-lsnrctl status
+ip addr
 ```
 
-Use the service name shown by the listener, for example `XEPDB1`.
-
-### App starts locally but browser cannot access it
-
-Check that port `8080` is open:
+Test DB port:
 
 ```bash
-sudo firewall-cmd --list-ports
-sudo ss -lntp | grep 8080
+timeout 5 bash -c '</dev/tcp/172.20.10.2/1521' && echo "PORT OPEN" || echo "PORT CLOSED"
 ```
 
-Also check VM or cloud network rules.
-
-### Port `8080` already in use
-
-Find the process:
+Start API:
 
 ```bash
-sudo ss -lntp | grep 8080
+sudo systemctl start oraclequantapi
 ```
 
-Run on a different port:
-
-```bash
-java -jar /home/sulaiman/oraclequantapi.jar --server.port=8081
-```
-
-Then access:
+Check API:
 
 ```text
-http://192.168.100.246:8081
+http://172.20.10.3:8080/history
+```
+
+---
+
+## 20. Common Errors and Fixes
+
+### Error: `No such container: oracle-db`
+
+You are running Docker command in Oracle Linux, but the container is on Windows.
+
+Run Docker commands from:
+
+```text
+C:\Users\Codeline>
+```
+
+Not from:
+
+```text
+[sulaiman@localhost ~]$
+```
+
+---
+
+### Error: `NoRouteToHostException`
+
+Linux cannot reach Windows DB port.
+
+Fix:
+
+1. Use Bridged Adapter in VirtualBox.
+2. Make sure Windows and Linux are on same network.
+3. Open Windows firewall port `1521`.
+4. Test:
+
+```bash
+timeout 5 bash -c '</dev/tcp/172.20.10.2/1521' && echo "PORT OPEN" || echo "PORT CLOSED"
+```
+
+---
+
+### Error: `Unknown host specified.: WINDOWS_IP`
+
+You copied the placeholder `WINDOWS_IP`.
+
+Wrong:
+
+```text
+jdbc:oracle:thin:@//WINDOWS_IP:1521/FREEPDB1
+```
+
+Correct:
+
+```text
+jdbc:oracle:thin:@//172.20.10.2:1521/FREEPDB1
+```
+
+---
+
+### Error: `Schema-validation: missing table [sequence_history]`
+
+The API connected to DB, but the table does not exist.
+
+Create it:
+
+```sql
+CREATE TABLE sequence_history (
+    id RAW(16) PRIMARY KEY,
+    timestamp TIMESTAMP,
+    input VARCHAR2(2000),
+    output VARCHAR2(2000)
+);
+```
+
+---
+
+### Error: `New-NetFirewallRule is not recognized`
+
+You ran a PowerShell command in CMD.
+
+Either open PowerShell as Administrator, or use CMD as Administrator:
+
+```cmd
+netsh advfirewall firewall add rule name="Oracle DB 1521" dir=in action=allow protocol=TCP localport=1521
+```
+
+---
+
+### Error: API not opening from Windows browser
+
+Check if app is listening:
+
+```bash
+sudo ss -lntp | grep 8080
+```
+
+Open Linux firewall:
+
+```bash
+sudo firewall-cmd --permanent --add-port=8080/tcp
+sudo firewall-cmd --reload
+```
+
+Make sure app is started with:
+
+```text
+--server.address=0.0.0.0
+```
+
+---
+
+## 21. Important Notes
+
+- This setup is local only.
+- Do not expose these passwords publicly.
+- For real production, change all passwords.
+- Windows IP or Linux IP may change after restart.
+- If IP changes, update:
+    - `SPRING_DATASOURCE_URL`
+    - API test URL
+    - `/etc/oraclequantapi.env` if using systemd
+
+---
+
+## 22. Final Working URLs
+
+API base:
+
+```text
+http://172.20.10.3:8080
+```
+
+History endpoint:
+
+```text
+http://172.20.10.3:8080/history
+```
+
+Convert endpoint:
+
+```text
+http://172.20.10.3:8080/convert-measurements?input=za
+```
+
+Oracle JDBC URL used by Spring Boot:
+
+```text
+jdbc:oracle:thin:@//172.20.10.2:1521/FREEPDB1
 ```
