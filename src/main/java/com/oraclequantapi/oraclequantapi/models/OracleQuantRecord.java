@@ -16,10 +16,10 @@ public class OracleQuantRecord {
     @Column(name = "source_ip_address")
     private String sourceIpAddress;
 
-    @Column(columnDefinition = "TEXT")
+    @Lob
     private String input;
 
-    @Column(columnDefinition = "TEXT")
+    @Lob
     private String output;
 
     public OracleQuantRecord() {}

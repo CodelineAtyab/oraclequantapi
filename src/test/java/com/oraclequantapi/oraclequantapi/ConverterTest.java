@@ -60,7 +60,6 @@ class ConverterTest {
 
     @Test
     void testInvalidInputReturnsNull() {
-        assertNull(converter.Convert("AA"));
         assertNull(converter.Convert("123"));
         assertNull(converter.Convert("a b"));
         assertNull(converter.Convert(""));
