@@ -1,6 +1,6 @@
 ﻿# OracleQuant ERP - Package Measurement Conversion API
 
-Trainer-style Spring Boot API for converting encoded package measurement strings into package inflow totals. The application uses Java 17, Spring Boot, Maven, Spring Data JPA, and Oracle XE.
+Trainer-style Spring Boot API for converting encoded package measurement strings into package inflow totals. The application uses Java 17, Spring Boot, Maven, Oracle Linux, and Oracle XE.
 
 ## Features
 
@@ -9,7 +9,6 @@ Trainer-style Spring Boot API for converting encoded package measurement strings
 - History can be fetched, updated, and cleared through REST endpoints.
 - Console logs and rolling file logs are enabled.
 - Log files keep one week of history.
-- `CHANGELOG.md` and `version.txt` track released features.
 
 ## Project Structure
 
@@ -23,8 +22,6 @@ src/main/java/om/oraclequant/pkc_api/models/MeasurementSequence.java
 src/main/java/om/oraclequant/pkc_api/models/MeasurementHistory.java
 src/main/java/om/oraclequant/pkc_api/repositories/MeasurementHistoryRepository.java
 src/main/resources/application.properties
-src/main/resources/logback-spring.xml
-CHANGELOG.md
 version.txt
 ```
 
@@ -146,28 +143,6 @@ Clear all history:
 
 ```bash
 curl -X DELETE 'http://localhost:8080/history'
-```
-
-## Logging
-
-Logs are printed to the console and written to:
-
-```text
-logs/pkc-api.log
-```
-
-Rolling logs are configured in:
-
-```text
-src/main/resources/logback-spring.xml
-```
-
-The log policy keeps seven days of daily compressed log files:
-
-```text
-logs/pkc-api.log.2026-05-25.gz
-logs/pkc-api.log.2026-05-24.gz
-...
 ```
 
 ## Local No-Database Test
