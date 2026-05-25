@@ -20,3 +20,10 @@ All notable project changes are documented in this file.
 - Configured application logs to write to `logs/oraclequantapi.log` by default.
 - Configured rolling log retention for seven days.
 - Added unit and integration tests for conversion and API behavior.
+
+## 0.0.3-SNAPSHOT - 2026-05-21
+
+- Refactored the Java source structure into `controller`, `service`, `model`, and `repository` packages.
+- Renamed the main application class to `OracleQuantApiApplication`.
+- Renamed service and repository classes to match the requested project structure.
+- Updated unit and integration tests to match the new package structure.
