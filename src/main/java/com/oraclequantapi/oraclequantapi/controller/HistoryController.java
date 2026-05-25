@@ -11,12 +11,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
 @RestController // Marks this class as a REST controller
 @RequestMapping("/history") // Base URL path for all endpoints in this controller
 public class HistoryController {
+
     // Logger used for tracking API requests and actions
     private static final Logger log = LoggerFactory.getLogger(HistoryController.class);
 
@@ -44,14 +46,20 @@ public class HistoryController {
 
     // PUT endpoint for full update
     @PutMapping("/{id}")
-    public HistoryRecord put(@PathVariable Long id, @RequestBody HistoryUpdateRequest request) {
+    public HistoryRecord put(
+            @PathVariable Long id,
+            @RequestBody HistoryUpdateRequest request
+    ) {
         log.info("PUT update request received for history record {}", id);
         return update(id, request);
     }
 
     // PATCH endpoint for partial update
     @PatchMapping("/{id}")
-    public HistoryRecord patch(@PathVariable Long id, @RequestBody HistoryUpdateRequest request) {
+    public HistoryRecord patch(
+            @PathVariable Long id,
+            @RequestBody HistoryUpdateRequest request
+    ) {
         log.info("PATCH update request received for history record {}", id);
         return update(id, request);
     }
@@ -76,24 +84,42 @@ public class HistoryController {
 
     // Handles custom not found exceptions
     @ExceptionHandler(HistoryService.HistoryRecordNotFoundException.class)
-    public ResponseEntity<Map<String, Object>> historyNotFound(HistoryService.HistoryRecordNotFoundException exception) {
+    public ResponseEntity<Map<String, Object>> historyNotFound(
+            HistoryService.HistoryRecordNotFoundException exception
+    ) {
         log.warn("History record not found: {}", exception.getMessage());
         return error(HttpStatus.NOT_FOUND, exception.getMessage());
     }
 
     // Shared method for updating records
     private HistoryRecord update(Long id, HistoryUpdateRequest request) {
-        HistoryRecord record = historyService.update(id, request.timestamp(), request.sourceIpAddress(), request.input(), request.output());
+        HistoryRecord record = historyService.update(
+                id,
+                request.timestamp(),
+                request.sourceIpAddress(),
+                request.input(),
+                request.output()
+        );
+
         log.info("History record {} updated successfully", id);
         return record;
     }
 
     // Builds formatted error responses
     private ResponseEntity<Map<String, Object>> error(HttpStatus status, String message) {
-        return ResponseEntity.status(status).body(Map.of("timestamp", Instant.now().toString(), "status", status.value(), "error", status.getReasonPhrase(), "message", message));
+        return ResponseEntity.status(status).body(Map.of(
+                "timestamp", Instant.now().toString(),
+                "status", status.value(),
+                "error", status.getReasonPhrase(),
+                "message", message
+        ));
     }
 
     // Request body model for updates
-    public record HistoryUpdateRequest (Instant timestamp, @JsonProperty("source_ip_address") @JsonAlias("sourceIpAddress") String sourceIpAddress, String input, String output) {
+    public record HistoryUpdateRequest(
+            LocalDateTime timestamp,
+            @JsonProperty("source_ip_address")
+            @JsonAlias("sourceIpAddress")
+            String sourceIpAddress, String input, String output) {
     }
 }
