@@ -35,3 +35,11 @@ All notable project changes are documented in this file.
 - Added support for empty or missing `input` values, returning an empty list.
 - Updated history persistence to support empty request input values.
 - Updated tests for tolerant conversion behavior.
+
+## 0.0.5-SNAPSHOT - 2026-05-22
+
+- Reviewed the current project structure and database-related files.
+- Added `ConversionHistory` entity file for conversion history data modeling.
+- Added `ConversionHistoryRepository` for conversion history database access.
+- Kept the active API history flow using `HistoryRecord`, `HistoryRepository`, and `HistoryService`.
+- Updated `CHANGELOG.md` and `version.txt` to match the current project state.
