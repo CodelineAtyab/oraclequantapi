@@ -16,12 +16,36 @@ Oracle Quant API is a Spring Boot 3.5.14 / Java 17 REST API that decodes submitt
 
 **Prerequisites:** Java 17 JDK and an Oracle database configured in `application.yaml` (see Database Setup below).
 
+### Run from source
+
 ```bash
 # Windows
 mvnw.cmd spring-boot:run
 
 # macOS / Linux
 ./mvnw spring-boot:run
+```
+
+### Run the JAR (v1.0)
+
+A pre-built executable JAR is available in the `release/` folder.
+
+```bash
+# Windows
+java -jar release\oraclequantapi-1.0.jar
+
+# macOS / Linux
+java -jar release/oraclequantapi-1.0.jar
+```
+
+To override the datasource without modifying the bundled config, place an `application.yaml` in the same directory as the JAR — Spring Boot will pick it up automatically:
+
+```yaml
+spring:
+  datasource:
+    url: jdbc:oracle:thin:@//your-host:1521/your-service
+    username: YOUR_USERNAME
+    password: YOUR_PASSWORD
 ```
 
 The server starts on `http://localhost:8080`.
