@@ -1,0 +1,10 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Oracle XE" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+    <option name="ACTIVE_PROFILES" value="oracle" />
+    <module name="oraclequantapi" />
+    <option name="SPRING_BOOT_MAIN_CLASS" value="com.oraclequantapi.oraclequantapi.OraclequantapiApplication" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>

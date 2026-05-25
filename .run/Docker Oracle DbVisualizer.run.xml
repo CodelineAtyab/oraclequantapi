@@ -1,0 +1,10 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Docker Oracle DbVisualizer" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+    <option name="ACTIVE_PROFILES" value="docker" />
+    <module name="oraclequantapi" />
+    <option name="SPRING_BOOT_MAIN_CLASS" value="com.oraclequantapi.oraclequantapi.OraclequantapiApplication" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>

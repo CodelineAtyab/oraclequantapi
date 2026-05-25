@@ -1,5 +1,9 @@
 HELP.md
 target/
+logs/
+data/
+src/main/resources/application-oracle-local.properties
+src/main/resources/application-docker-local.properties
 .mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
