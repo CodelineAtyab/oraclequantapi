@@ -1,61 +1,163 @@
-﻿## Submission Instructions
+﻿# Measurement Conversion API
 
-To submit your Oracle JAVA Spring Boot Maven project as a solution, please follow these steps:
+A Spring Boot REST API that parses and converts encoded measurement sequences into numeric results and stores request history in an Oracle XE database.
 
-### Step 1: Install git on your PC
-- Install "git" as shown in this tutorial: [How to install git](https://youtu.be/iYkLrXobBbA?si=_l0haibv_X9NpIjJ)
-- Open command prompt and run
-  ```bash
-  git version
-  ```
-- If you see the version, then git is successfully installed.
+---
 
-### Step 2: Fork the Repository
-- Navigate to [this repository](https://github.com/CodelineAtyab/oraclequantapi) provided by Codeline.
-- Click on the "Fork" button at the top-right corner of the page to create a copy of the repository under your own GitHub account.
+##  Overview
 
-### Step 3: Clone the Forked Repository
-- Open your terminal or command prompt.
-- Clone the forked repository to your local machine using the following command:
-  ```bash
-  git clone https://github.com/your-username/repo-name.git
-  ```
+This service exposes endpoints to:
 
-### Step 4: Create a new branch
-- Navigate to the cloned repository directory
-  ```bash
-  cd repo-name
-  ```
-- Create a new branch for your code submissions (Replace your-name with your name in your-name-submission-branch):
-  ```bash
-  git checkout -b your-name-submission-branch
-  ```
+* Parse encoded measurement input strings
+* Convert them into numeric package totals
+* Store every request in an Oracle database
+* Retrieve, update, and delete conversion history
 
+---
 
-### Step 5: Add Your Code
-- Implement the API
+## Setup
 
-### Step 6: Commit your changes
-- Run the following commands in order to commit your changes:
-  ```bash
-  git add *
-  git commit -m "Meaningful commit message here"
-  ```
+* Java 17
+* Spring Boot 3.5.x
+* Spring Web
+* Spring Data JPA
+* Oracle XE (JDBC)
+* Maven
 
-### Step 7: Push Your Branch to GitHub
-- Run the following commands to upload the changes to the forked github repository (Replace your-name with your name in your-name-submission-branch):
-  ```bash
-  git push origin your-name-submission-branch
-  ```
+---
 
-### Step 8: Create a Pull Request
-- Go to your forked repository on GitHub.
-- You should see a prompt to create a pull request. Click on "Compare & pull request".
-- Provide a title and description for your pull request, then click "Create pull request".
+##  API Endpoints
 
-### Step 9: Notify Codeline
-- Notify on slack that you have created a PR for your solution.
+### Convert Measurements
 
-## Note: If you face any issues in the process above, Please do the following:
-- Watch [this youtube tutorial](https://www.youtube.com/watch?v=a_FLqX3vGR4)
-- Contact Ikhlas or Atyab.
+**GET** `/convert-measurements?input={string}`
+
+Converts encoded measurement input into numeric results.
+
+**Example:**
+
+```
+GET /convert-measurements?input=abczz_a
+```
+
+**Response:**
+
+```json
+[3, 28]
+```
+
+---
+
+### History API
+
+Base path: `/input`
+
+#### Get all history
+
+```
+GET /input
+```
+
+#### Get history by ID
+
+```
+GET /input/{id}
+```
+
+#### Full update (PUT)
+
+```
+PUT /input/{id}
+```
+
+#### Partial update (PATCH)
+
+```
+PATCH /input/{id}
+```
+
+#### Delete all history
+
+```
+DELETE /input
+```
+
+---
+
+## Encoding Rules
+
+* `a = 1, b = 2, ..., z = 26`
+* `_ = 0`
+* First character of each package = counter (number of value slots)
+* `'z'` introduces chaining: adds 26 + next character value recursively
+
+Example:
+
+```
+dz_a_a → 28
+```
+
+---
+
+## Database Setup
+
+Uses Oracle XE with JPA.
+
+Table: `MEASUREMENT_HISTORY`
+
+Fields:
+
+* ID (UUID)
+* TIMESTAMP
+* SOURCE_IP_ADDRESS
+* INPUT
+* OUTPUT
+
+---
+
+## Configuration
+
+Update `application.properties`:
+
+```properties
+spring.datasource.url=jdbc:oracle:thin:@<host>:1521/XEPDB1
+spring.datasource.username=system
+spring.datasource.password=your_password
+```
+
+---
+
+## Run Application
+
+```bash
+mvn spring-boot:run
+```
+
+Or:
+
+```bash
+mvn clean package
+java -jar target/measurement-conversion-2.0.0.jar
+```
+
+---
+
+## Project Structure
+
+* `controllers` → REST endpoints
+* `services` → business logic
+* `models` → domain + entity classes
+* `repositories` → JPA + in-memory store
+
+---
+
+## Logging
+
+* Request logging via SLF4J
+* Debug logs for parsing and conversion steps
+
+---
+
+## License
+
+Internal / educational use (update as needed).
