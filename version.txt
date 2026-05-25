@@ -1,0 +1,58 @@
+Current Documentation Version: 0.0.11-SNAPSHOT
+Maven Artifact Version: 0.0.1-SNAPSHOT
+Last Updated: 2026-05-25
+
+Version History:
+
+0.0.7-SNAPSHOT - 2026-05-25
+- application-oracle.properties documentation updated
+- Oracle XE profile configuration documented
+- SPRING_PROFILES_ACTIVE=oracle usage documented
+- logback-spring.xml documentation updated
+- Console logging, rolling file logging, and seven-day log retention documented
+- Default log file path documented as logs/oraclequantapi.log
+
+0.0.6-SNAPSHOT - 2026-05-23
+- Logging documentation updated
+- Logback console logging documented
+- Logback rolling file logging documented
+- Default log file path documented as logs/oraclequantapi.log
+- Seven-day rolling log retention documented
+
+0.0.5-SNAPSHOT - 2026-05-22
+- Project reviewed after database model updates
+- ConversionHistory entity added
+- ConversionHistoryRepository added
+- Active history API still uses HistoryRecord, HistoryRepository, and HistoryService
+- CHANGELOG.md and version.txt updated
+
+0.0.4-SNAPSHOT - 2026-05-22
+- Invalid characters count as 0
+- Missing measured values count as 0
+- Empty or missing input returns an empty list
+- History persistence supports empty request input values
+- Tests updated for tolerant conversion behavior
+
+0.0.3-SNAPSHOT - 2026-05-21
+- Project refactored into controller, service, model, and repository packages
+- Main application class renamed to OracleQuantApiApplication
+- Services and repositories renamed to match the requested structure
+- Tests updated for the new structure
+
+0.0.2-SNAPSHOT - 2026-05-21
+- Conversion REST API added
+- Measurement conversion algorithm added
+- Request history persistence added
+- History REST endpoints added
+- Oracle XE database profile added
+- Local H2 development database added
+- Logback console logging added
+- Logback daily rolling file logging added
+- Default log file path added as logs/oraclequantapi.log
+- Seven-day rolling log retention added
+- Unit and integration tests added
+
+0.0.1-SNAPSHOT - 2026-05-21
+- Initial Spring Boot Maven project created
+- Basic application entry point added
+- Initial README added
