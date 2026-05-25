@@ -1,0 +1,7 @@
+v0.0.1 - 2026-05-24
+- Added GET /convert-measurements endpoint to parse measurement input string
+- Added history tracking with Oracle XE database
+- Added GET /history to retrieve all history records
+- Added GET /history/{id} to retrieve a specific history record
+- Added PUT /history/{id} to update a history record
+- Added DELETE /history to clear all history records
