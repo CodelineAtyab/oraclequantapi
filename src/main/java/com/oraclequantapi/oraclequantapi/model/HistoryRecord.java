@@ -2,9 +2,10 @@ package com.oraclequantapi.oraclequantapi.model;
 
 import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonProperty;
+
 import jakarta.persistence.*;
 
-import java.time.Instant;
+import java.time.LocalDateTime;
 
 @Entity // Marks this class as a database entity
 @Table(name = "CONVERSION_HISTORY") // Maps this entity to the CONVERSION_HISTORY table
@@ -12,26 +13,22 @@ public class HistoryRecord {
 
     @Id // Primary key of the table
     @GeneratedValue(strategy = GenerationType.IDENTITY) // Auto generate ID values
-
     @Column(name = "ID") // Maps the field to the ID column
     private Long id;
 
     @Column(name = "CREATED_AT", nullable = false) // Stores the record creation timestamp
-
-    private Instant timestamp;
+    private LocalDateTime timestamp;
 
     @Column(name = "SOURCE_IP_ADDRESS", nullable = false, length = 128) // Stores the source IP address
-
     @JsonProperty("source_ip_address") // JSON property name when sending response
-
     @JsonAlias("sourceIpAddress") // Accept alternative JSON field name
     private String sourceIpAddress;
 
-    // Stores request input text. Empty Oracle strings are treated as null by the database.
+    // Stores request input text
     @Column(name = "INPUT", length = 4000)
     private String input;
 
-    // Stores generated output JSON.
+    // Stores generated output JSON
     @Column(name = "OUTPUT", nullable = false, length = 4000)
     private String output;
 
@@ -51,7 +48,7 @@ public class HistoryRecord {
     void onCreate() {
         // Set current timestamp if it is empty
         if (timestamp == null) {
-            timestamp = Instant.now();
+            timestamp = LocalDateTime.now();
         }
     }
 
@@ -61,12 +58,12 @@ public class HistoryRecord {
     }
 
     // Returns the creation timestamp
-    public Instant getTimestamp() {
+    public LocalDateTime getTimestamp() {
         return timestamp;
     }
 
     // Updates the timestamp
-    public void setTimestamp(Instant timestamp) {
+    public void setTimestamp(LocalDateTime timestamp) {
         this.timestamp = timestamp;
     }
 
