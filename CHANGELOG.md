@@ -43,3 +43,10 @@ All notable project changes are documented in this file.
 - Added `ConversionHistoryRepository` for conversion history database access.
 - Kept the active API history flow using `HistoryRecord`, `HistoryRepository`, and `HistoryService`.
 - Updated `CHANGELOG.md` and `version.txt` to match the current project state.
+
+## 0.0.6-SNAPSHOT - 2026-05-23
+
+- Updated logging documentation in `CHANGELOG.md` and `version.txt`.
+- Documented that the application uses Logback for console and file logging.
+- Documented that logs are written to `logs/oraclequantapi.log` by default.
+- Documented that rolling log files are retained for seven days.
