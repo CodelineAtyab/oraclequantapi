@@ -9,15 +9,17 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
-// Encapsulates all business logic for sequence enquiries; validates inputs and delegates persistence to Oracle.
+/**
+ * Business logic layer — validates inputs, runs the decoder algorithm,
+ * and delegates all persistence to Oracle via Sequence_DATABASE.
+ */
 @org.springframework.stereotype.Service
 public class Service {
 
     @Autowired
     private Sequence_DATABASE sequenceDb;
 
-    //------[DB] Delegates to Sequence_DATABASE.persist() — stores validated enquiry in Oracle
-    // Stores enquiry after validating input contains only a-z and underscore, and does not start with _
+    //------[DB] Validates input, computes output, then persists the new enquiry
     public DATABASE addSequence(DATABASE db) {
         String input = db.getInput();
         if (input == null || !input.matches("^[a-z_]+$")) {
@@ -30,8 +32,7 @@ public class Service {
         return sequenceDb.persist(db);
     }
 
-    //------[DB] Delegates to Sequence_DATABASE.update() — validates, refreshes time/output, persists to Oracle
-    // Finds enquiry by id, validates new input, re-runs decoder, and updates the stored entry
+    //------[DB] Validates new input, refreshes timestamp and output, then overwrites the record
     public DATABASE updateSequence(DATABASE request) {
         String newInput = request.getInput();
         if (newInput == null || !newInput.matches("^[a-z_]+$") || newInput.charAt(0) == '_') {
@@ -42,28 +43,25 @@ public class Service {
         return sequenceDb.update(request);
     }
 
-    //------[DB] Delegates to Sequence_DATABASE.remove() — removes enquiry by id from Oracle
-    // Removes the enquiry matching the given id; returns true if found and deleted
+    //------[DB] Removes the enquiry matching the given id; returns true if deleted, false if not found
     public boolean deleteSequence(String id) {
         return sequenceDb.remove(id);
     }
 
-    //------[DB] Delegates to Sequence_DATABASE.retrieveAll() — loads all rows from Oracle, recomputes @Transient output
-    // Returns all stored enquiries; output is recomputed from input since it is not persisted in Oracle
+    //------[DB] Loads all rows from Oracle and recomputes @Transient output from each stored input
     public List<DATABASE> getAllSequences() {
         List<DATABASE> list = sequenceDb.retrieveAll();
         list.forEach(db -> db.setOutput(sequenceLogicAlgorithm(db.getInput())));
         return list;
     }
 
-    // Decodes an input string using a self-delimiting length-encoded parser:
-    // reads header chars (z=26 each, final non-z char adds its value a=1..z=26, _=0)
-    // then sums exactly that many following chars, appending each block total to output.
+    // Self-delimiting length-encoded parser:
+    //   Header — leading 'z' chars each add 26 to blockLength; the first non-z char adds its value (a=1..z=26, _=0)
+    //   Data   — consume exactly blockLength chars, sum their values, append total to output
     private List<Integer> sequenceLogicAlgorithm(String input) {
         List<Integer> output = new ArrayList<>();
         int i = 0;
         while (i < input.length()) {
-            // Header phase: consecutive 'z' chars each contribute 26; final non-z char adds its value
             int blockLength = 0;
             while (i < input.length() && input.charAt(i) == 'z') {
                 blockLength += 26;
@@ -73,7 +71,6 @@ public class Service {
                 char h = input.charAt(i++);
                 blockLength += (h == '_') ? 0 : (h - 'a' + 1);
             }
-            // Data phase: consume blockLength chars and sum their values
             int sum = 0;
             for (int j = 0; j < blockLength && i < input.length(); j++, i++) {
                 char c = input.charAt(i);

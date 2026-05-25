@@ -12,8 +12,11 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.UUID;
 
-//------[DB] JPA entity — maps to SEQUENCE_ENQUIRIES table; owns all persistence and API serialization annotations
-//------[DB] UUID and timestamp are auto-generated in the no-arg constructor for new records
+/**
+ * JPA entity mapped to the SEQUENCE_ENQUIRIES Oracle table.
+ * Owns all persistence column mappings and JSON serialization rules,
+ * keeping the domain model (Sequence) annotation-free.
+ */
 @Entity
 @Table(name = "SEQUENCE_ENQUIRIES")
 public class DATABASE {
@@ -22,6 +25,7 @@ public class DATABASE {
     @Column(name = "ID", nullable = false, unique = true)
     private String id;
 
+    //------[DB] Write-only in JSON — accepted on requests, excluded from all responses
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @Column(name = "INPUT")
     private String input;
@@ -29,10 +33,11 @@ public class DATABASE {
     @Column(name = "CURRENT_TIME")
     private String currentTime;
 
-    //------[DB] Transient field — not stored in Oracle; recomputed from input on every retrieval
+    //------[DB] Not persisted — recomputed from input on every retrieval
     @Transient
     private List<Integer> output;
 
+    //------[DB] No-arg constructor auto-generates id and timestamp for new records
     public DATABASE() {
         this.id = UUID.randomUUID().toString();
         this.currentTime = LocalDateTime.now()

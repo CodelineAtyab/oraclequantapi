@@ -5,6 +5,10 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * Domain model — a plain representation of a sequence enquiry.
+ * No framework annotations; all persistence and serialization rules live in DATABASE.
+ */
 public class Sequence {
 
     private String id;

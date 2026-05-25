@@ -6,16 +6,18 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 import java.util.Optional;
 
-//------[DB] Persistence layer — wraps all Oracle DB operations with exception handling
-//------[DB] Safe to instantiate without a live DB; methods fail gracefully with clear messages
+/**
+ * Oracle persistence wrapper — guards every DB call against an unconfigured datasource.
+ * Safe to instantiate without a live DB; failures surface as descriptive RuntimeExceptions.
+ */
 @Component
 public class Sequence_DATABASE {
 
-    //------[DB] required = false — bean is null when DB auto-config is excluded in application.yaml
+    //------[DB] Null when datasource auto-config is excluded; checked before every operation
     @Autowired(required = false)
     private Repository repository;
 
-    //------[DB] Guard — called before every DB operation to detect unconfigured datasource
+    //------[DB] Throws if the datasource is not configured — called at the top of every method
     private void checkAvailable() {
         if (repository == null) {
             throw new IllegalStateException(
@@ -24,7 +26,7 @@ public class Sequence_DATABASE {
         }
     }
 
-    //------[DB] Persists a new DATABASE entity to Oracle via repository.save()
+    //------[DB] Save a new record to Oracle
     public DATABASE persist(DATABASE db) {
         checkAvailable();
         try {
@@ -34,7 +36,7 @@ public class Sequence_DATABASE {
         }
     }
 
-    //------[DB] Retrieves all DATABASE records from Oracle via repository.findAll()
+    //------[DB] Load all records from Oracle
     public List<DATABASE> retrieveAll() {
         checkAvailable();
         try {
@@ -44,7 +46,7 @@ public class Sequence_DATABASE {
         }
     }
 
-    //------[DB] Looks up a single DATABASE record by UUID primary key via repository.findById()
+    //------[DB] Find a single record by UUID primary key
     public Optional<DATABASE> retrieveById(String id) {
         checkAvailable();
         try {
@@ -54,7 +56,7 @@ public class Sequence_DATABASE {
         }
     }
 
-    //------[DB] Updates an existing DATABASE record — checks existsById first, then overwrites via repository.save()
+    //------[DB] Overwrite an existing record; returns null if the id does not exist
     public DATABASE update(DATABASE db) {
         checkAvailable();
         if (!repository.existsById(db.getId())) {
@@ -67,7 +69,7 @@ public class Sequence_DATABASE {
         }
     }
 
-    //------[DB] Removes a DATABASE record by UUID — checks existsById first, then issues repository.deleteById()
+    //------[DB] Delete a record by id; returns false if the id does not exist
     public boolean remove(String id) {
         checkAvailable();
         if (!repository.existsById(id)) {
