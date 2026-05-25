@@ -28,14 +28,14 @@ mvnw.cmd spring-boot:run
 
 ### Run the JAR (v1.0)
 
-A pre-built executable JAR is available in the `release/` folder.
+A pre-built executable JAR is available.
 
 ```bash
 # Windows
-java -jar release\oraclequantapi-1.0.jar
+java -jar oraclequantapi-1.0.jar
 
 # macOS / Linux
-java -jar release/oraclequantapi-1.0.jar
+java -jar oraclequantapi-1.0.jar
 ```
 
 To override the datasource without modifying the bundled config, place an `application.yaml` in the same directory as the JAR — Spring Boot will pick it up automatically:
