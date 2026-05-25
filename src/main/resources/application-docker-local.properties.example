@@ -1,0 +1,8 @@
+# cp application-docker-local.properties.example application-docker-local.properties
+
+ORACLE_JDBC_URL=jdbc:oracle:thin:@//localhost:1521/XEPDB1
+ORACLE_USER=pkc_user
+ORACLE_PASSWORD=PkcPassword1
+
+# Docker SYSTEM password (only for manual SQL setup script)
+# ORACLE_SYSTEM_PASSWORD=29999login

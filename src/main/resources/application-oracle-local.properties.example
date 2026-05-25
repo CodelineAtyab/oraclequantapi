@@ -1,0 +1,15 @@
+# Copy to application-oracle-local.properties and set your real Oracle password.
+# cp application-oracle-local.properties.example application-oracle-local.properties
+
+# Mac Oracle XE 21c+ (pluggable DB — most common):
+# ORACLE_JDBC_URL=jdbc:oracle:thin:@//localhost:1521/XEPDB1
+
+# Older Oracle XE (SID XE) — uncomment if XEPDB1 does not work:
+# ORACLE_JDBC_URL=jdbc:oracle:thin:@localhost:1521:XE
+
+ORACLE_USER=pkc_user
+ORACLE_PASSWORD=PkcPassword1
+
+# Or use SYSTEM while testing (not recommended for production):
+# ORACLE_USER=system
+# ORACLE_PASSWORD=the_password_you_set_at_install
