@@ -5,7 +5,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.UUID;
 
-// Pure domain model — represents a decoded sequence enquiry with no framework dependencies
 public class Sequence {
 
     private String id;
