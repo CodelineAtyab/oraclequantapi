@@ -26,3 +26,10 @@
 - Extracted JPA entity to DATABASE.java in repository package (SRP)
 - Stripped all framework annotations from Sequence.java — pure domain POJO
 - Updated Controller, Service, Sequence_DATABASE, Repository to use DATABASE throughout
+
+[1.0] 26/05/26
+- Promoted Sequence.java as the sole JPA entity — DATABASE.java removed
+- Removed dead code: retrieveById, DATABASE all-args constructor, empty test stub
+- Polished comments across all source files (JavaDoc + //------[DB] style)
+- Updated README: reflect Oracle persistence, JAR run instructions
+- Built and released executable JAR
