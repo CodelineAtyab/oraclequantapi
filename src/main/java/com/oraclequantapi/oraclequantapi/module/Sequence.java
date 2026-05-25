@@ -1,31 +1,46 @@
 package com.oraclequantapi.oraclequantapi.module;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
+
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.UUID;
 
 /**
- * Domain model — a plain representation of a sequence enquiry.
- * No framework annotations; all persistence and serialization rules live in DATABASE.
+ * JPA entity and domain model for a sequence enquiry.
+ * Owns all persistence column mappings and JSON serialization rules.
  */
+@Entity
+@Table(name = "SEQUENCE_ENQUIRIES")
 public class Sequence {
 
+    @Id
+    @Column(name = "ID", nullable = false, unique = true)
     private String id;
+
+    //------[DB] Write-only in JSON — accepted on requests, excluded from all responses
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @Column(name = "INPUT")
     private String input;
+
+    @Column(name = "CURRENT_TIME")
     private String currentTime;
+
+    //------[DB] Not persisted — recomputed from input on every retrieval
+    @Transient
     private List<Integer> output;
 
+    //------[DB] No-arg constructor auto-generates id and timestamp for new records
     public Sequence() {
         this.id = UUID.randomUUID().toString();
         this.currentTime = LocalDateTime.now()
                 .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-    }
-
-    public Sequence(String id, String input, String currentTime) {
-        this.id = id;
-        this.input = input;
-        this.currentTime = currentTime;
     }
 
     public String getId() {

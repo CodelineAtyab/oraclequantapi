@@ -1,6 +1,6 @@
 package com.oraclequantapi.oraclequantapi.services;
 
-import com.oraclequantapi.oraclequantapi.repository.DATABASE;
+import com.oraclequantapi.oraclequantapi.module.Sequence;
 import com.oraclequantapi.oraclequantapi.repository.Sequence_DATABASE;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -20,20 +20,20 @@ public class Service {
     private Sequence_DATABASE sequenceDb;
 
     //------[DB] Validates input, computes output, then persists the new enquiry
-    public DATABASE addSequence(DATABASE db) {
-        String input = db.getInput();
+    public Sequence addSequence(Sequence sequence) {
+        String input = sequence.getInput();
         if (input == null || !input.matches("^[a-z_]+$")) {
             return null;
         }
         if (input.charAt(0) == '_') {
             return null;
         }
-        db.setOutput(sequenceLogicAlgorithm(input));
-        return sequenceDb.persist(db);
+        sequence.setOutput(sequenceLogicAlgorithm(input));
+        return sequenceDb.persist(sequence);
     }
 
     //------[DB] Validates new input, refreshes timestamp and output, then overwrites the record
-    public DATABASE updateSequence(DATABASE request) {
+    public Sequence updateSequence(Sequence request) {
         String newInput = request.getInput();
         if (newInput == null || !newInput.matches("^[a-z_]+$") || newInput.charAt(0) == '_') {
             return null;
@@ -49,9 +49,9 @@ public class Service {
     }
 
     //------[DB] Loads all rows from Oracle and recomputes @Transient output from each stored input
-    public List<DATABASE> getAllSequences() {
-        List<DATABASE> list = sequenceDb.retrieveAll();
-        list.forEach(db -> db.setOutput(sequenceLogicAlgorithm(db.getInput())));
+    public List<Sequence> getAllSequences() {
+        List<Sequence> list = sequenceDb.retrieveAll();
+        list.forEach(seq -> seq.setOutput(sequenceLogicAlgorithm(seq.getInput())));
         return list;
     }
 

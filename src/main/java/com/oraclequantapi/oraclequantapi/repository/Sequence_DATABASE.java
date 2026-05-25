@@ -1,10 +1,10 @@
 package com.oraclequantapi.oraclequantapi.repository;
 
+import com.oraclequantapi.oraclequantapi.module.Sequence;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.Optional;
 
 /**
  * Oracle persistence wrapper — guards every DB call against an unconfigured datasource.
@@ -27,17 +27,17 @@ public class Sequence_DATABASE {
     }
 
     //------[DB] Save a new record to Oracle
-    public DATABASE persist(DATABASE db) {
+    public Sequence persist(Sequence sequence) {
         checkAvailable();
         try {
-            return repository.save(db);
+            return repository.save(sequence);
         } catch (Exception e) {
             throw new RuntimeException("Unable to save your request — a database error occurred.", e);
         }
     }
 
     //------[DB] Load all records from Oracle
-    public List<DATABASE> retrieveAll() {
+    public List<Sequence> retrieveAll() {
         checkAvailable();
         try {
             return repository.findAll();
@@ -46,24 +46,14 @@ public class Sequence_DATABASE {
         }
     }
 
-    //------[DB] Find a single record by UUID primary key
-    public Optional<DATABASE> retrieveById(String id) {
-        checkAvailable();
-        try {
-            return repository.findById(id);
-        } catch (Exception e) {
-            throw new RuntimeException("Unable to find the requested record — a database error occurred.", e);
-        }
-    }
-
     //------[DB] Overwrite an existing record; returns null if the id does not exist
-    public DATABASE update(DATABASE db) {
+    public Sequence update(Sequence sequence) {
         checkAvailable();
-        if (!repository.existsById(db.getId())) {
+        if (!repository.existsById(sequence.getId())) {
             return null;
         }
         try {
-            return repository.save(db);
+            return repository.save(sequence);
         } catch (Exception e) {
             throw new RuntimeException("Unable to update your request — a database error occurred.", e);
         }

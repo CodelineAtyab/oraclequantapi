@@ -1,5 +1,6 @@
 package com.oraclequantapi.oraclequantapi.repository;
 
+import com.oraclequantapi.oraclequantapi.module.Sequence;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
@@ -7,5 +8,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
  * Auto-proxied at startup when JPA auto-config is active.
  * Provides: save, findAll, findById, existsById, deleteById.
  */
-public interface Repository extends JpaRepository<DATABASE, String> {
+public interface Repository extends JpaRepository<Sequence, String> {
 }
