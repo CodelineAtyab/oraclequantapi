@@ -1,0 +1,19 @@
+spring:
+  datasource:
+    # TODO: Replace with your Oracle DB connection URL
+    # Example: jdbc:oracle:thin:@//prod-db.company.com:1521/ORCLPDB1
+    url: jdbc:oracle:thin:@//localhost:1521/ORCLPDB1
+    # TODO: Replace with your Oracle DB username
+    # Example: QUANT_USER
+    username: QUANT_USER
+    # TODO: Replace with your Oracle DB password
+    # Example: Str0ngP@ssw0rd!
+    password: Str0ngP@ssw0rd!
+    driver-class-name: oracle.jdbc.OracleDriver
+  jpa:
+    database-platform: org.hibernate.dialect.OracleDialect
+    hibernate:
+      # 'update' creates table on first connect, alters schema on changes — switch to 'validate' in production
+      ddl-auto: update
+    show-sql: true
+    open-in-view: false

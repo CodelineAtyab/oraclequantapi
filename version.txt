@@ -1,0 +1,35 @@
+[0.1] 24/05/26
+- Initialized Spring Boot REST API project
+- Added in-memory sequence storage endpoint
+- Implemented clean controller-service architecture
+
+[0.2] 24/05/26
+- Added underscore-prefix input rejection rule
+- Implemented length-encoded sequence parser algorithm
+- Output array now exposed on POST and GET responses
+
+[0.3] 24/05/26
+- Moved Sequence model to dedicated Module package
+- Added PUT endpoint for updating stored enquiries
+- Added DELETE endpoint for removing stored enquiries
+
+[0.4] 24/05/26
+- Added Oracle JPA dependency and datasource scaffold
+- Created Repository interface for Spring Data JPA operations
+- Implemented Sequence_DATABASE with full exception handling
+
+[0.5] 24/05/26
+- Wired Sequence_DATABASE into Service — all CRUD operations now persist to Oracle
+- Recompute @Transient output field on retrieval from DB
+
+[0.6] 24/05/26
+- Extracted JPA entity to DATABASE.java in repository package (SRP)
+- Stripped all framework annotations from Sequence.java — pure domain POJO
+- Updated Controller, Service, Sequence_DATABASE, Repository to use DATABASE throughout
+
+[1.0] 26/05/26
+- Promoted Sequence.java as the sole JPA entity — DATABASE.java removed
+- Removed dead code: retrieveById, DATABASE all-args constructor, empty test stub
+- Polished comments across all source files (JavaDoc + //------[DB] style)
+- Updated README: reflect Oracle persistence, JAR run instructions
+- Built and released executable JAR
