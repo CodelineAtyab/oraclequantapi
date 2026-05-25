@@ -50,22 +50,35 @@ v1.1.0 - Added measurement history retrieval endpoint
 
 -----------------------------------------------
 
+v1.2.0 - Added measurement history CRUD operations:
 
-
------------------------------------------------
-
-
-
------------------------------------------------
-
-
+* GET measurement history by id
+* UPDATE measurement history via PUT
+* DELETE measurement history records
 
 -----------------------------------------------
 
+v1.3.0 - Added request metadata persistence:
 
+* timestamp tracking
+* source IP address tracking
+* Oracle XE history persistence improvements
 
 -----------------------------------------------
 
+v1.4.0 - Improved parser validation and exception handling:
 
+* custom InvalidMeasurementInputException
+* invalid character validation
+* centralized error responses
+
+-----------------------------------------------
+
+v1.5.0 - Production deployment completed:
+
+* Maven runnable fat JAR packaging
+* Oracle Linux deployment
+* SSH/SCP deployment workflow
+* REST API validation via curl
 
 -----------------------------------------------

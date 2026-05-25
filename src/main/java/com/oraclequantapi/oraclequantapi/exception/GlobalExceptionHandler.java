@@ -10,10 +10,11 @@ import java.util.Map;
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(IllegalArgumentException.class)
+    @ExceptionHandler(InvalidMeasurementInputException.class)
     public ResponseEntity<Map<String, String>>
-    handleIllegalArgumentException(
-            IllegalArgumentException exception
+    handleInvalidMeasurementInputException(
+            InvalidMeasurementInputException exception
+
     ) {
 
         return ResponseEntity

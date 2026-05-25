@@ -1,16 +1,20 @@
 package com.oraclequantapi.oraclequantapi.parser;
 
+import com.oraclequantapi.oraclequantapi.exception.InvalidMeasurementInputException;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class MeasurementParser {
 
     public List<Integer> parseMeasurements(String input) {
+
         List<Integer> results = new ArrayList<>();
 
         int currentIndex = 0;
 
         while (currentIndex < input.length()) {
+
             DecodedNumber packageCountResult =
                     readEncodedNumber(input, currentIndex);
 
@@ -38,35 +42,39 @@ public class MeasurementParser {
         return results;
     }
 
-    public static void main(String[] args) {
+    private DecodedNumber readEncodedNumber(
+            String input,
+            int currentIndex
 
-        MeasurementParser parser = new MeasurementParser();
+    ) {
 
-        System.out.println(
-                parser.parseMeasurements("za_a_a_a_a_a_a_a_a_a_a_a_a_azaaa")
-        );
-    }
-
-
-    private DecodedNumber readEncodedNumber(String input, int currentIndex) {
         char currentCharacter = input.charAt(currentIndex);
+
+        if (!(currentCharacter == '_'
+                || (currentCharacter >= 'a'
+                && currentCharacter <= 'z'))) {
+
+            throw new InvalidMeasurementInputException(
+                    "Invalid character in measurement input"
+            );
+        }
+
         int value = 0;
 
         if (currentCharacter == 'z') {
+
             while (currentIndex < input.length()
                     && input.charAt(currentIndex) == 'z') {
 
                 value += 26;
                 currentIndex++;
+
             }
 
             if (currentIndex < input.length()) {
                 char terminatingCharacter = input.charAt(currentIndex);
 
-                if (terminatingCharacter == '_') {
-                    value += 0;
-                }
-                else {
+                if (terminatingCharacter != '_') {
                     value += (terminatingCharacter - 'a') + 1;
                 }
                 currentIndex++;
@@ -76,6 +84,7 @@ public class MeasurementParser {
         else {
             if (currentCharacter == '_') {
                 value = 0;
+
             } else {
                 value = (currentCharacter - 'a') + 1;
             }

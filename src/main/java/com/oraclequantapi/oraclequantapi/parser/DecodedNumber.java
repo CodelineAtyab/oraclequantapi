@@ -2,9 +2,9 @@ package com.oraclequantapi.oraclequantapi.parser;
 
 public class DecodedNumber {
 
-    private int value;
+    private final int value;
 
-    private int nextIndex;
+    private final int nextIndex;
 
     public DecodedNumber(int value, int nextIndex) {
         this.value = value;
